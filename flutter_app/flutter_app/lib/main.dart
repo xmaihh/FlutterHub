@@ -24,14 +24,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
+    _tabController = TabController(vsync: this, length: 5);
   }
 
   @override
   Widget build(BuildContext context) {
+    var listitems = new List<String>.generate(300, (i) => "第$i行");
     return Scaffold(
       appBar: AppBar(
-        title: Text('自定义TabController'),
+        title: Text('TabController'),
         bottom: TabBar(
           tabs: <Widget>[
             Tab(
@@ -43,6 +44,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
             Tab(
               text: '科技',
             ),
+            Tab(
+              text: '时政',
+            ),
+            Tab(
+              text: '军事',
+            ),
           ],
           controller: _tabController, //1
         ),
@@ -51,9 +58,65 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          Center(child: Text('热点')),
-          Center(child: Text('体育')),
-          Center(child: Text('科技')),
+          ListView(children: _items),
+          ListView.builder(
+              itemCount: listitems.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Icon(Icons.book),
+                  title: Text('${listitems[index]}'),
+                );
+              }),
+          ListView.separated(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Icon(Icons.access_time),
+                  title: Text('${listitems[index]}'),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Container(
+                  constraints: BoxConstraints.tightFor(height: 1),
+                  color: Colors.black45,
+                );
+              },
+              itemCount: listitems.length),
+          GridView.count(
+            crossAxisCount: 3,
+            children: <Widget>[
+              ListTile(
+                title: Text('item1'),
+              ),
+              ListTile(
+                title: Text('item2'),
+              ),
+              ListTile(
+                title: Text('item3'),
+              ),
+              ListTile(
+                title: Text('item4'),
+              )
+            ],
+          ),
+          PageView(
+            onPageChanged: (index) {
+              print('当前为第 $index 页');
+            },
+            children: <Widget>[
+              ListTile(
+                title: Text('第0页'),
+                subtitle: Text('subtitle'),
+              ),
+              ListTile(
+                title: Text('第1页'),
+                subtitle: Text('subtitle'),
+              ),
+              ListTile(
+                title: Text('第2页'),
+                subtitle: Text('subtitle'),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -85,6 +148,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
         ),
       );
 
+  //实现ListView Item
+  get _items => <Widget>[
+        ListTile(
+          leading: Icon(Icons.access_time),
+          title: Text('正标题'),
+          subtitle: Text('副标题'),
+        ),
+        ListTile(
+          leading: Icon(Icons.access_time),
+          title: Text('正标题'),
+          subtitle: Text('副标题'),
+        ),
+        ListTile(
+          leading: Icon(Icons.access_time),
+          title: Text('正标题'),
+          subtitle: Text('副标题'),
+        ),
+      ];
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -97,7 +179,7 @@ class MyTabController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             title: Text('DefaultTabController示例'),
@@ -111,6 +193,9 @@ class MyTabController extends StatelessWidget {
               Tab(
                 text: '科技',
               ),
+              Tab(
+                text: '教育',
+              ),
             ]),
           ),
           body: TabBarView(children: <Widget>[
@@ -122,6 +207,9 @@ class MyTabController extends StatelessWidget {
             ),
             Center(
               child: Text('科技'),
+            ),
+            Center(
+              child: Text('教育'),
             ),
           ]),
         ));
