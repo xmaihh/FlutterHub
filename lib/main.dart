@@ -7,7 +7,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    home: LoginPage(),
+      home: LoginPage(),
+      theme: ThemeData(
+//        brightness: Brightness.dark,
+        primaryColor: Colors.blueAccent[200],
+        accentColor: Colors.redAccent[200],
+        fontFamily: 'Montserrat',
+      ),
     );
   }
 }

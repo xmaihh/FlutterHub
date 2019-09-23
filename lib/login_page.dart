@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/home_page.dart';
+import 'package:flutter_app/home.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 
 class LoginPage extends StatefulWidget {
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.all(8.0),
       child: Text(
         'Login',
-        style: TextStyle(fontSize: 42.0),
+        style: TextStyle(fontSize: 42.0,color: Colors.blueAccent[200],),
       ),
     );
   }
@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Align(
         alignment: Alignment.bottomLeft,
         child: Container(
-          color: Colors.black,
+          color: Colors.blueAccent[200],
           width: 40.0,
           height: 2.0,
         ),
@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(fontSize: 14.0, color: Colors.grey),
           ),
           onPressed: () {
-            Navigator.pop(context);
+//            Navigator.pop(context);
           },
         ),
       ),
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
             'Login',
             style: Theme.of(context).primaryTextTheme.headline,
           ),
-          color: Colors.black,
+          color: Colors.blueAccent[200],
           onPressed: () {
             if (_formKey.currentState.validate()) {
               /// 只有输入内容符合通过要求才能到达此处
@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                   new MaterialPageRoute(builder: (context) => HomePage()));
             }
           },
-          shape: StadiumBorder(side: BorderSide()),
+          shape: StadiumBorder(side: BorderSide(color: Colors.blueAccent[200],)),
         ),
       ),
     );
@@ -221,12 +221,12 @@ class _LoginPageState extends State<LoginPage> {
             GestureDetector(
               child: Text(
                 '点击注册',
-                style: TextStyle(color: Colors.green),
+                style: TextStyle(color: Colors.blueAccent[200],),
               ),
               onTap: () {
                 /// TODO 跳转到注册页面
                 print('去注册');
-                Navigator.pop(context);
+//                Navigator.pop(context);
               },
             ),
           ],
