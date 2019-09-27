@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/home.dart';
+import 'package:flutter_app/home_page.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 
 class LoginPage extends StatefulWidget {

@@ -27,6 +27,7 @@ dependencies:
   #//*
   groovin_material_icons: ^1.1.6
   flutter_bloc: ^0.21.0
+  transparent_image: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -46,9 +47,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - empty.png
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
+    - assets/images/
+#    - assets/images/empty.png
+#    - assets/images/banner0.png
+#    - assets/images/banner1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
