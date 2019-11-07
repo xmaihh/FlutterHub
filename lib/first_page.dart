@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/banner/BannerWidget.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FirstPage extends StatefulWidget {
   @override
@@ -20,8 +21,8 @@ class _FirstPageState extends State<FirstPage> {
     bannerList
       ..add(BannerItem.defaultBannerItem('assets/images/banner1.png', ''''''));
 
-    sohuList..add(BannerItem.defaultSohoItem('''关于系统维护的通知'''));
-    sohuList..add(BannerItem.defaultSohoItem('''关于系统升级的通知'''));
+    sohuList..add(BannerItem.defaultSohoItem('''系统升级维护'''));
+    sohuList..add(BannerItem.defaultSohoItem('''交易平台正式上线'''));
 
     super.initState();
   }
@@ -46,12 +47,14 @@ class _FirstPageState extends State<FirstPage> {
 //            ),
             Image.asset(
               'assets/images/scan.png',
-              width: 36,
+              width: 32,
+              height: 32,
               color: Colors.grey[900],
             ),
             Image.asset(
               'assets/images/collect.png',
-              width: 36,
+              width: 32,
+              height: 32,
               color: Colors.grey[900],
             ),
           ],
@@ -62,7 +65,7 @@ class _FirstPageState extends State<FirstPage> {
         children: <Widget>[
           Container(
             child: BannerWidget(
-              160.0,
+              120.0,
               bannerList,
               unSelectedColor: Colors.white,
               selectedColor: Colors.redAccent[200],
@@ -127,7 +130,7 @@ class _FirstPageState extends State<FirstPage> {
                 Colors.grey[700],
                 '我要出售',
                 Colors.green[700]),
-            margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+            margin: const EdgeInsets.fromLTRB(8, 0, 8, 4),
           ),
           Container(
             decoration: BoxDecoration(
@@ -135,7 +138,7 @@ class _FirstPageState extends State<FirstPage> {
               Radius.circular(10.0),
             )),
             child: _getAboutWidget(),
-            margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+            margin: const EdgeInsets.fromLTRB(8, 0, 8, 4),
           ),
         ],
       ),

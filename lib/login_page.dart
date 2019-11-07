@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/home_page.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -31,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    //设置字体大小根据系统的“字体大小”辅助选项来进行缩放,默认为false
+  ScreenUtil.instance = ScreenUtil(width: 1080, height: 1920, allowFontScaling: false)..init(context);
     return Scaffold(
         body: Form(
             key: _formKey,
