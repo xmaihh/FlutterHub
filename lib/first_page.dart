@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/pages/home/wallet_page.dart';
 import 'package:flutter_app/widget/banner/BannerWidget.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
+
+import 'pages/home/qr_page.dart';
 
 class FirstPage extends StatefulWidget {
   @override
@@ -45,17 +48,29 @@ class _FirstPageState extends State<FirstPage> {
 //              color: Colors.grey[900],
 //              size: 36,
 //            ),
-            Image.asset(
-              'assets/images/scan.png',
-              width: ScreenUtil.getInstance().setWidth(30),
-              height: ScreenUtil.getInstance().setHeight(30),
-              color: Colors.grey[900],
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => qrScanPage()));
+              },
+              child: Image.asset(
+                'assets/images/scan.png',
+                width: ScreenUtil.getInstance().setWidth(30),
+                height: ScreenUtil.getInstance().setHeight(30),
+                color: Colors.grey[900],
+              ),
             ),
-            Image.asset(
-              'assets/images/collect.png',
-              width: ScreenUtil.getInstance().setWidth(30),
-              height: ScreenUtil.getInstance().setHeight(30),
-              color: Colors.grey[900],
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => WalletPage()));
+              },
+              child: Image.asset(
+                'assets/images/collect.png',
+                width: ScreenUtil.getInstance().setWidth(30),
+                height: ScreenUtil.getInstance().setHeight(30),
+                color: Colors.grey[900],
+              ),
             ),
           ],
         ),
@@ -76,7 +91,7 @@ class _FirstPageState extends State<FirstPage> {
               isHorizontal: true,
               textBackgroundColor: Colors.transparent,
             ),
-            margin: const EdgeInsets.fromLTRB(8,8,8,8),
+            margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           ),
           Container(
             decoration: BoxDecoration(
@@ -98,7 +113,7 @@ class _FirstPageState extends State<FirstPage> {
               isHorizontal: false,
               build: _getNoticeWidget,
             ),
-            margin: const EdgeInsets.fromLTRB(8,0,8,8),
+            margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
           ),
           Container(
             decoration: BoxDecoration(
@@ -271,8 +286,8 @@ class _FirstPageState extends State<FirstPage> {
         ),
         Expanded(
           flex: 1,
-          child: _buildAbout(const EdgeInsets.only(left: 4), Colors.brown[50], '新手指引',
-              'assets/images/guide.png'),
+          child: _buildAbout(const EdgeInsets.only(left: 4), Colors.brown[50],
+              '新手指引', 'assets/images/guide.png'),
         )
       ],
     );

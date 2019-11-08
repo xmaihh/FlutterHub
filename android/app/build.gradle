@@ -65,3 +65,25 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
+
+// 解决androidx依赖包不一致
+//subprojects {
+//    project.configurations.all {
+//        resolutionStrategy.eachDependency { details ->
+//            if (details.requested.group == 'androidx.core'
+//                    && !details.requested.name.contains('androidx') ) {
+//                details.useVersion "1.0.1"
+//            }
+//
+//            if (details.requested.group == 'androidx.appcompat'
+//                && !details.requested.name.contains('androidx')){
+//                details.useVersion "1.0.2"
+//            }
+//
+//            if (details.requested.group == 'androidx.vectordrawable'
+//            && !details.requested.name.contains('androidx')){
+//                details.useVersion "1.0.1"
+//            }
+//        }
+//    }
+//}
