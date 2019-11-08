@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     //设置字体大小根据系统的“字体大小”辅助选项来进行缩放,默认为false
-  ScreenUtil.instance = ScreenUtil(width: 1080, height: 1920, allowFontScaling: false)..init(context);
+  ScreenUtil.instance = ScreenUtil(width: 375, height: 667, allowFontScaling: false)..init(context);
     return Scaffold(
         body: Form(
             key: _formKey,

@@ -192,7 +192,7 @@ class _BannerState extends State<BannerWidget> {
           Expanded(
             flex: 0,
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               children: _getBannerIndicator(),
             ),
           ),

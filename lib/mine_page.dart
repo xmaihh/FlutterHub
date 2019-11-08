@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -19,15 +19,29 @@ class _MinePageState extends State<MinePage> {
         children: <Widget>[
           _getMineWidget(context),
           _getSubMenuWidget(),
-          _getSettingWidget(const EdgeInsets.only(top: 10),
-              GroovinMaterialIcons.wallet, '我的资产'),
-          _getSettingWidget(const EdgeInsets.only(), GroovinMaterialIcons.raspberrypi, '安全中心'),
-          _getSettingWidget(const EdgeInsets.only(), GroovinMaterialIcons.clipboard_text, '申诉列表'),
-          _getSettingWidget(const EdgeInsets.only(), GroovinMaterialIcons.account_multiple, '客服咨询'),
-          _getSettingWidget(const EdgeInsets.only(top: 8),
-              GroovinMaterialIcons.credit_card, '绑定银行卡'),
-          _getSettingWidget(const EdgeInsets.only(top: 8),
-              GroovinMaterialIcons.settings_box, '设置'),
+          SingleChildScrollView(   //防止bottom overflowed by xxx PIXELS
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: 120.0,
+              ),
+              child: Column(
+                children: <Widget>[
+                  _getSettingWidget(const EdgeInsets.only(top: 10),
+                      GroovinMaterialIcons.wallet, '我的资产'),
+                  _getSettingWidget(const EdgeInsets.only(),
+                      GroovinMaterialIcons.raspberrypi, '安全中心'),
+                  _getSettingWidget(const EdgeInsets.only(),
+                      GroovinMaterialIcons.clipboard_text, '申诉列表'),
+                  _getSettingWidget(const EdgeInsets.only(),
+                      GroovinMaterialIcons.account_multiple, '客服咨询'),
+                  _getSettingWidget(const EdgeInsets.only(top: 8),
+                      GroovinMaterialIcons.credit_card, '绑定银行卡'),
+                  _getSettingWidget(const EdgeInsets.only(top: 8),
+                      GroovinMaterialIcons.settings_box, '设置'),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -36,7 +50,7 @@ class _MinePageState extends State<MinePage> {
   /// 个人信息
   _getMineWidget(BuildContext context) {
     return Container(
-      height: 100,
+      height: ScreenUtil.getInstance().setHeight(76),
       color: Theme.of(context).primaryColor,
       margin: const EdgeInsets.only(),
       child: Row(
@@ -45,16 +59,16 @@ class _MinePageState extends State<MinePage> {
           Row(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 14,bottom: 10),
+                padding: const EdgeInsets.only(left: 16, bottom: 10),
                 child: CircleAvatar(
                   //头像半径
-                  radius: 36,
+                  radius: ScreenUtil.getInstance().setWidth(30),
                   //头像图片 -> NetworkImage网络图片，AssetImage项目资源包图片, FileImage本地存储图片
                   backgroundImage: AssetImage('assets/images/avatar.png'),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 14,bottom: 10),
+                padding: const EdgeInsets.only(left: 16, bottom: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,14 +76,15 @@ class _MinePageState extends State<MinePage> {
                     Text(
                       '登录/注册',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: ScreenUtil.getInstance().setSp(18),
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       '立即登录可查看更多信息',
                       style: TextStyle(
-                          fontSize: 14,
+                          height: 1.8,
+                          fontSize: ScreenUtil.getInstance().setSp(14),
                           color: Colors.white,
                           fontWeight: FontWeight.w100),
                     ),
@@ -79,10 +94,10 @@ class _MinePageState extends State<MinePage> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 14,bottom: 10),
+            padding: const EdgeInsets.only(right: 16, bottom: 10),
             child: Icon(
               GroovinMaterialIcons.chevron_right,
-              size: 32,
+              size: ScreenUtil.getInstance().setWidth(30),
               color: Colors.white,
             ),
           )
@@ -95,8 +110,8 @@ class _MinePageState extends State<MinePage> {
   _getSubMenuWidget() {
     return Container(
       color: Colors.white,
-      height: 80,
-      padding: const EdgeInsets.only(top: 14),
+      height: ScreenUtil.getInstance().setHeight(70),
+      padding: const EdgeInsets.only(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -124,13 +139,15 @@ class _MinePageState extends State<MinePage> {
       children: <Widget>[
         Image.asset(
           img,
-          width: 36,
+          width: ScreenUtil.getInstance().setWidth(30),
+          height: ScreenUtil.getInstance().setHeight(30),
         ),
         Text(
           text,
           style: TextStyle(
               color: Colors.grey[900],
-              fontSize: 18,
+              height: 1.5,
+              fontSize: ScreenUtil.getInstance().setSp(14),
               fontWeight: FontWeight.w100),
         ),
       ],
@@ -141,7 +158,7 @@ class _MinePageState extends State<MinePage> {
   _getSettingWidget(EdgeInsetsGeometry margin, IconData img, String text) {
     return Container(
       color: Colors.white,
-      height: 50,
+      height: ScreenUtil.getInstance().setHeight(50),
       margin: margin,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,21 +171,25 @@ class _MinePageState extends State<MinePage> {
                 padding: const EdgeInsets.only(left: 10),
                 child: Icon(
                   img,
-                  size: 26,
+                  size: ScreenUtil.getInstance().setWidth(24),
                   color: Colors.blueAccent[200],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(text),
+                child: Text(
+                  text,
+                  style:
+                      TextStyle(fontSize: ScreenUtil.getInstance().setSp(14)),
+                ),
               ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 14),
             child: Icon(
               GroovinMaterialIcons.chevron_right,
-              size: 32,
+              size: ScreenUtil.getInstance().setWidth(30),
               color: Colors.grey[500],
             ),
           )

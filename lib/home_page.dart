@@ -29,9 +29,9 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         onTap: onTabTapped,
-        iconSize: 32,
-        unselectedFontSize: 14,
-        selectedFontSize: 14,
+        iconSize: ScreenUtil.getInstance().setWidth(30),
+        unselectedFontSize: ScreenUtil.getInstance().setSp(12),
+        selectedFontSize: ScreenUtil.getInstance().setSp(12),
         selectedItemColor: Colors.blueAccent[200],
         unselectedItemColor: Colors.grey[600],
         items: [

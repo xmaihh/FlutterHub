@@ -46,7 +46,7 @@ class _OrderPageState extends State<OrderPage>
         centerTitle: true,
         title: Text(
           "订单",
-          style: TextStyle(color: Colors.grey[900]),
+          style: TextStyle(fontSize: ScreenUtil.getInstance().setSp(18),color: Colors.grey[900]),
         ),
         bottom: TabBar(
 //          isScrollable: true,

@@ -29,6 +29,7 @@ class _TransferPageState extends State<TransferPage> {
               textColor: _buyTextColor,
               child: Text(
                 "购买",
+                style: TextStyle(fontSize: ScreenUtil.getInstance().setSp(14)),
               ),
               shape: BeveledRectangleBorder(
                   borderRadius: BorderRadius.circular(0.0),
@@ -53,6 +54,7 @@ class _TransferPageState extends State<TransferPage> {
               textColor: _saleTextColor,
               child: Text(
                 "出售",
+                style: TextStyle(fontSize: ScreenUtil.getInstance().setSp(14)),
               ),
               shape: BeveledRectangleBorder(
                   borderRadius: BorderRadius.circular(0.0),

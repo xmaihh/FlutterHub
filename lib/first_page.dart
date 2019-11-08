@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/banner/BannerWidget.dart';
+import 'package:flutter_app/widget/banner/BannerWidget.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -47,14 +47,14 @@ class _FirstPageState extends State<FirstPage> {
 //            ),
             Image.asset(
               'assets/images/scan.png',
-              width: 32,
-              height: 32,
+              width: ScreenUtil.getInstance().setWidth(30),
+              height: ScreenUtil.getInstance().setHeight(30),
               color: Colors.grey[900],
             ),
             Image.asset(
               'assets/images/collect.png',
-              width: 32,
-              height: 32,
+              width: ScreenUtil.getInstance().setWidth(30),
+              height: ScreenUtil.getInstance().setHeight(30),
               color: Colors.grey[900],
             ),
           ],
@@ -65,7 +65,7 @@ class _FirstPageState extends State<FirstPage> {
         children: <Widget>[
           Container(
             child: BannerWidget(
-              120.0,
+              ScreenUtil.getInstance().setHeight(120.0),
               bannerList,
               unSelectedColor: Colors.white,
               selectedColor: Colors.redAccent[200],
@@ -76,7 +76,7 @@ class _FirstPageState extends State<FirstPage> {
               isHorizontal: true,
               textBackgroundColor: Colors.transparent,
             ),
-            margin: const EdgeInsets.all(8),
+            margin: const EdgeInsets.fromLTRB(8,8,8,8),
           ),
           Container(
             decoration: BoxDecoration(
@@ -86,7 +86,7 @@ class _FirstPageState extends State<FirstPage> {
               ),
             ),
             child: BannerWidget(
-              40,
+              ScreenUtil.getInstance().setHeight(40),
               sohuList,
               bannerItemClick: (pos, item) {
                 /// TODO 执行点击公告操作的方法
@@ -98,7 +98,7 @@ class _FirstPageState extends State<FirstPage> {
               isHorizontal: false,
               build: _getNoticeWidget,
             ),
-            margin: const EdgeInsets.all(8),
+            margin: const EdgeInsets.fromLTRB(8,0,8,8),
           ),
           Container(
             decoration: BoxDecoration(
@@ -156,6 +156,7 @@ class _FirstPageState extends State<FirstPage> {
             child: Icon(
               GroovinMaterialIcons.access_point,
               color: Colors.blueAccent[200],
+              size: ScreenUtil.getInstance().setHeight(20),
             ),
             margin: const EdgeInsets.fromLTRB(8, 0, 0, 0),
           ),
@@ -164,17 +165,17 @@ class _FirstPageState extends State<FirstPage> {
               '最新公告: ',
               style: TextStyle(
                   color: Colors.grey[800],
-                  fontSize: 16,
+                  fontSize: ScreenUtil.getInstance().setSp(14),
                   fontWeight: FontWeight.bold),
             ),
-            margin: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+            margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
           ),
           Container(
             child: Text(
               entity.textContext,
               style: TextStyle(
                 color: Colors.grey[800],
-                fontSize: 16,
+                fontSize: ScreenUtil.getInstance().setSp(14),
               ),
             ),
             margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -197,7 +198,7 @@ class _FirstPageState extends State<FirstPage> {
       Color btnBG) {
     return Container(
       color: Colors.grey[100],
-      height: 90,
+      height: ScreenUtil.getInstance().setHeight(90),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -207,7 +208,8 @@ class _FirstPageState extends State<FirstPage> {
               children: <Widget>[
                 Image.asset(
                   img,
-                  width: 40,
+                  width: ScreenUtil.getInstance().setWidth(40),
+                  height: ScreenUtil.getInstance().setHeight(40),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
@@ -220,13 +222,14 @@ class _FirstPageState extends State<FirstPage> {
                         style: TextStyle(
                             color: mainTextColor,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                            fontSize: ScreenUtil.getInstance().setSp(16)),
                       ),
                       Text(
                         subText,
                         style: TextStyle(
+                            height: 1.5,
                             color: subTextColor,
-                            fontSize: 16,
+                            fontSize: ScreenUtil.getInstance().setSp(14),
                             fontWeight: FontWeight.normal),
                       ),
                     ],
@@ -236,13 +239,15 @@ class _FirstPageState extends State<FirstPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 10.0),
             child: Align(
               alignment: Alignment.centerRight,
               child: RaisedButton(
                 child: Text(
                   btnText,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                      fontSize: ScreenUtil.getInstance().setSp(14),
+                      color: Colors.white),
                 ),
                 color: btnBG,
                 onPressed: () {},
@@ -261,12 +266,12 @@ class _FirstPageState extends State<FirstPage> {
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: _buildAbout(const EdgeInsets.only(right: 8), Colors.indigo[50],
+          child: _buildAbout(const EdgeInsets.only(right: 4), Colors.indigo[50],
               '关于我们', 'assets/images/about.png'),
         ),
         Expanded(
           flex: 1,
-          child: _buildAbout(const EdgeInsets.only(), Colors.brown[50], '新手指引',
+          child: _buildAbout(const EdgeInsets.only(left: 4), Colors.brown[50], '新手指引',
               'assets/images/guide.png'),
         )
       ],
@@ -276,19 +281,19 @@ class _FirstPageState extends State<FirstPage> {
   Widget _buildAbout(
       EdgeInsetsGeometry margin, Color bg, String text, String img) {
     return Container(
-      height: 65,
+      height: ScreenUtil.getInstance().setHeight(72),
       color: bg,
       margin: margin,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 15),
             child: Text(
               text,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: ScreenUtil.getInstance().setSp(16),
                   color: Colors.grey[800]),
             ),
           ),
@@ -299,7 +304,7 @@ class _FirstPageState extends State<FirstPage> {
               children: <Widget>[
                 Image.asset(
                   img,
-                  width: 20,
+                  width: ScreenUtil.getInstance().setWidth(20),
                 ),
               ],
             ),
