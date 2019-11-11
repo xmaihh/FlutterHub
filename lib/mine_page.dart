@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 
 class MinePage extends StatefulWidget {
+  final String _result;
+
+  MinePage(this._result);
+
   @override
   _MinePageState createState() => _MinePageState();
 }
@@ -19,7 +25,8 @@ class _MinePageState extends State<MinePage> {
         children: <Widget>[
           _getMineWidget(context),
           _getSubMenuWidget(),
-          SingleChildScrollView(   //防止bottom overflowed by xxx PIXELS
+          SingleChildScrollView(
+            //防止bottom overflowed by xxx PIXELS
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: 120.0,
@@ -49,6 +56,12 @@ class _MinePageState extends State<MinePage> {
 
   /// 个人信息
   _getMineWidget(BuildContext context) {
+    Map<String, dynamic> user = json.decode(widget._result);
+
+    var name = user['email'];
+    var index = name.indexOf('@');
+    var strName = name.substring(0, name.indexOf('@'));
+
     return Container(
       height: ScreenUtil.getInstance().setHeight(76),
       color: Theme.of(context).primaryColor,
@@ -74,16 +87,16 @@ class _MinePageState extends State<MinePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '登录/注册',
+                      strName,
                       style: TextStyle(
                           fontSize: ScreenUtil.getInstance().setSp(18),
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '立即登录可查看更多信息',
+                      user['password'],
                       style: TextStyle(
-                          height: 1.8,
+                          height: 2.0,
                           fontSize: ScreenUtil.getInstance().setSp(14),
                           color: Colors.white,
                           fontWeight: FontWeight.w100),

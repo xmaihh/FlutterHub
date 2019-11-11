@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/home_page.dart';
 import 'package:flutter_app/login_page.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'app_route.dart';
+import 'package:fluro/fluro.dart';
 
 void main() {
+  router.define('home/:data', handler: new Handler(
+      handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+        return new HomePage(params['data'][0]);
+      }));
   runApp(MyApp());
 
   if (Platform.isAndroid) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/app_route.dart';
 import 'package:flutter_app/home_page.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -165,8 +166,11 @@ class _LoginPageState extends State<LoginPage> {
               /// TODO 执行登录方法
               print('email:$_email, password:$_password');
 
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => HomePage()));
+//              Navigator.push(context,
+//                  new MaterialPageRoute(builder: (context) => HomePage(email:_email,password: '欢迎登录',)));
+//              var bodyjson = '{"email":"$_email","password":"$_password"}';
+              var bodyjson = '{"email":"$_email","password":"欢迎登录"}';
+              router.navigateTo(context, 'home/$bodyjson');
             }
           },
           shape: StadiumBorder(side: BorderSide(color: Colors.blueAccent[200],)),
