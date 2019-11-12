@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 
+import 'pages/home/wallet_page.dart';
+
 class MinePage extends StatefulWidget {
   final String _result;
 
@@ -91,7 +93,7 @@ class _MinePageState extends State<MinePage> {
                       style: TextStyle(
                           fontSize: ScreenUtil.getInstance().setSp(18),
                           color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.w900),
                     ),
                     Text(
                       user['password'],
@@ -137,7 +139,13 @@ class _MinePageState extends State<MinePage> {
             flex: 1,
           ),
           Expanded(
-            child: _singleItemWidget('理财计划', 'assets/images/pocket.png'),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => WalletPage()));
+              },
+              child: _singleItemWidget('理财计划', 'assets/images/pocket.png'),
+            ),
             flex: 1,
           ),
         ],

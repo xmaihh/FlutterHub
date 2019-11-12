@@ -4,7 +4,9 @@ import 'package:flutter_app/pages/home/wallet_page.dart';
 import 'package:flutter_app/widget/banner/BannerWidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
-
+import 'package:barcode_scan/barcode_scan.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
 import 'pages/home/qr_page.dart';
 
 class FirstPage extends StatefulWidget {
@@ -16,6 +18,8 @@ class _FirstPageState extends State<FirstPage> {
   List<BannerItem> bannerList = [];
 
   List<BannerItem> sohuList = [];
+
+  String barcode = "";
 
   @override
   void initState() {
@@ -50,8 +54,9 @@ class _FirstPageState extends State<FirstPage> {
 //            ),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    new MaterialPageRoute(builder: (context) => qrScanPage()));
+//                Navigator.push(context,
+//                    new MaterialPageRoute(builder: (context) => qrScanPage()));
+              scan();
               },
               child: Image.asset(
                 'assets/images/scan.png',
@@ -327,5 +332,31 @@ class _FirstPageState extends State<FirstPage> {
         ],
       ),
     );
+  }
+
+
+  Future scan() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() {
+        return this.barcode = barcode;
+      });
+    } on PlatformException catch(e){
+      if(e.code == BarcodeScanner.CameraAccessDenied){
+        setState(() {
+          return this.barcode = 'The user did not grant the camera permission!';
+        });
+      }else{
+        setState(() {
+          return this.barcode = 'Unknown error: $e';
+        });
+      }
+    } on FormatException{
+      setState(() {
+        setState(() => this.barcode = 'null (User returned using the "back"-button before scanning anything. Result)');
+      });
+    }catch(e){
+      setState(() => this.barcode = 'Unknown error: $e');
+    }
   }
 }
