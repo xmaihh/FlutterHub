@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/dial_page.dart';
+import 'package:flutter_compass/pie/pie_chart_sample2.dart';
+import 'package:flutter_compass/sunrise_painter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
       home: const DialPage(),
+      // home: const PieChartSample2(),
     );
   }
 }
