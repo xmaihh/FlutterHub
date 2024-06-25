@@ -1,8 +1,8 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_compass/compass_painter.dart';
+import 'package:flutter_compass/dial_painter.dart';
+import 'package:flutter_compass/sunrise_painter.dart';
 
 class DialPage extends StatefulWidget {
   const DialPage({Key? key}) : super(key: key);
@@ -12,8 +12,6 @@ class DialPage extends StatefulWidget {
 }
 
 class _DialPageState extends State<DialPage> {
-
-
   @override
   void initState() {
     super.initState();
@@ -30,12 +28,13 @@ class _DialPageState extends State<DialPage> {
     return Container(
       color: const Color.fromARGB(255, 35, 36, 38),
       child: Center(
-        child: CustomPaint( // 使用CustomPaint
+        child: CustomPaint(
+          // 使用CustomPaint
           size: Size(width, width),
-          painter: CirclePainter(texts: ['东', '南', '西', '北']),
+          // painter: DialPainter(),
+          painter: SunburstPainter(),
         ),
       ),
     );
   }
 }
-

@@ -42,53 +42,54 @@ class PieChart2State extends State {
                     },
                   ),
                   borderData: FlBorderData(
-                    show: false,
+                    show: true,
+                    border: Border.all(color: Colors.black, width: 10.0, style: BorderStyle.solid),
                   ),
-                  sectionsSpace: 0,
+                  sectionsSpace: 2,
                   centerSpaceRadius: 40,
                   sections: showingSections(),
                 ),
               ),
             ),
           ),
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Indicator(
-                color: AppColors.contentColorBlue,
-                text: 'First',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: AppColors.contentColorYellow,
-                text: 'Second',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: AppColors.contentColorPurple,
-                text: 'Third',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: AppColors.contentColorGreen,
-                text: 'Fourth',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 18,
-              ),
-            ],
-          ),
+          // const Column(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: <Widget>[
+          //     Indicator(
+          //       color: AppColors.contentColorBlue,
+          //       text: 'First',
+          //       isSquare: true,
+          //     ),
+          //     SizedBox(
+          //       height: 4,
+          //     ),
+          //     Indicator(
+          //       color: AppColors.contentColorYellow,
+          //       text: 'Second',
+          //       isSquare: true,
+          //     ),
+          //     SizedBox(
+          //       height: 4,
+          //     ),
+          //     Indicator(
+          //       color: AppColors.contentColorPurple,
+          //       text: 'Third',
+          //       isSquare: true,
+          //     ),
+          //     SizedBox(
+          //       height: 4,
+          //     ),
+          //     Indicator(
+          //       color: AppColors.contentColorGreen,
+          //       text: 'Fourth',
+          //       isSquare: true,
+          //     ),
+          //     SizedBox(
+          //       height: 18,
+          //     ),
+          //   ],
+          // ),
           const SizedBox(
             width: 28,
           ),
@@ -102,17 +103,17 @@ class PieChart2State extends State {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
       final radius = isTouched ? 60.0 : 50.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+      const shadows = [Shadow(color: Colors.black, blurRadius: 10)];
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: AppColors.contentColorBlue,
-            value: 40,
-            title: '40%',
+            color: Colors.white,
+            value: 45,
+            title: '东',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.normal,
               color: AppColors.mainTextColor1,
               shadows: shadows,
             ),
@@ -120,8 +121,8 @@ class PieChart2State extends State {
         case 1:
           return PieChartSectionData(
             color: AppColors.contentColorYellow,
-            value: 30,
-            title: '30%',
+            value: 45,
+            title: '南',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -133,8 +134,8 @@ class PieChart2State extends State {
         case 2:
           return PieChartSectionData(
             color: AppColors.contentColorPurple,
-            value: 15,
-            title: '15%',
+            value: 45,
+            title: '西',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -146,8 +147,8 @@ class PieChart2State extends State {
         case 3:
           return PieChartSectionData(
             color: AppColors.contentColorGreen,
-            value: 15,
-            title: '15%',
+            value: 45,
+            title: '北',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
