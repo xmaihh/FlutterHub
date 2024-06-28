@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_compass/pie/app_colors.dart';
-import 'package:flutter_compass/pie/indicator.dart';
+import 'package:flutter_compass/widgets/pie/app_colors.dart';
 
 class PieChartSample2 extends StatefulWidget {
   const PieChartSample2({super.key});

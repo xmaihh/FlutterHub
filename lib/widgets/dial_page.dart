@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_compass/dial_painter.dart';
-import 'package:flutter_compass/sunrise_painter.dart';
+import 'package:flutter_compass/widgets/sunrise_painter.dart';
 
 class DialPage extends StatefulWidget {
   const DialPage({Key? key}) : super(key: key);
