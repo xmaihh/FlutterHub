@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'widgets/dial_page.dart';
+import 'package:flutter_compass/route/english_words.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      // initialRoute: '/',
+      // routes: {
+      //   // "new_page": (context) => Newroute(),
+      //   "/":(context) => const MyHomePage(title: 'Flutter Demo Home Page')
+      // },
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -33,8 +37,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: const DialPage(),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: const DialPage(),
       // home: const PieChartSample2(),
       // home: const SunriseChart(),
     );
@@ -117,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            const RandomWordsWidget(),
           ],
         ),
       ),
@@ -268,6 +273,7 @@ class _TapboxCState extends State<TapboxC> {
     return GestureDetector(
       onTapDown: _handleTapDown,
       onTapUp: _handleTapUp,
+      onTap: _handleTap,
       onTapCancel: _handleTapCancel,
       child: Container(
         width: 200.0,
