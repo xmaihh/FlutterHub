@@ -1,0 +1,30 @@
+{
+  "data": {
+    "coinInfo": {
+      "coinCount": 0,
+      "level": 1,
+      "nickname": "",
+      "rank": "3",
+      "userId": 2,
+      "username": "w**a"
+    },
+    "userInfo": {
+      "admin": false,
+      "chapterTops": [],
+      "coinCount": 0,
+      "collectIds": [
+      ],
+      "email": "16@qq.com",
+      "icon": "",
+      "id": 162789,
+      "nickname": "wana",
+      "password": "",
+      "publicName": "wana",
+      "token": "",
+      "type": 0,
+      "username": "wana"
+    }
+  },
+  "errorCode": 0,
+  "errorMsg": ""
+}
