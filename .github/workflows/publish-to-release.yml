@@ -40,11 +40,12 @@ jobs:
         id: generate_version
         shell: bash
         run: |
-          TAG_VERSION=$(echo ${{ github.ref }} | sed 's/refs\/tags\/v//') # 提取标签中的版本号
+          TAG_VERSION=$(echo ${{ github.ref }} | sed -E 's/refs\/tags\/(v)?//') # 提取标签中的版本号
           COMMIT_COUNT=$(git rev-list --count HEAD) # 计算提交数量
           SHORT_HASH=$(git rev-parse --short HEAD) # 获取最近一次提交的短哈希
           FULL_VERSION="${TAG_VERSION}.${COMMIT_COUNT}.${SHORT_HASH}" # 组合成完整的版本号
           echo "FULL_VERSION=${FULL_VERSION}" >> $GITHUB_OUTPUT # 设置输出变量
+          echo "Generated FULL_VERSION: ${FULL_VERSION}" # 打印完整的版本号
 
       # 设置Flutter环境
       - name: Set up Flutter
