@@ -63,7 +63,7 @@ jobs:
       # 更新pubspec.yaml中的版本号
       - name: Update version in pubspec.yaml
         run: |
-          sed -i 's/^version: .*/version: ${{ steps.generate_version.outputs.FULL_VERSION }}/' pubspec.yaml
+          sed -i 's#^version: .*#version: ${{ steps.generate_version.outputs.FULL_VERSION }}#' pubspec.yaml
         shell: bash
 
       # 根据矩阵配置，为不同平台执行构建命令
