@@ -1,31 +1,38 @@
 name: Clean up old releases
 
+# 触发条件：手动触发
+# 提供了一个手动触发该工作流的选项，这通常用于执行需要管理员介入的任务，如清理旧的发布。
 on:
   workflow_dispatch:
 
 jobs:
   build:
+    # 指定运行环境为最新版本的Ubuntu
     runs-on: ubuntu-latest
     steps:
-        - name: Clean up old releases
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            # 获取所有release，按创建时间排序
-            releases=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-              "https://api.github.com/repos/${{ github.repository }}/releases" | \
-              jq -r '.[] | [.id, .created_at, .tag_name] | @tsv' | \
-              sort -k2 -r)
-            
-            # 保留最新的5个releases
-            keep_count=5
-            count=0
-            
-            echo "$releases" | while read id created_at tag_name; do
-              count=$((count+1))
-              if [ $count -gt $keep_count ]; then
-                echo "Deleting release $tag_name"
-                curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
-                  "https://api.github.com/repos/${{ github.repository }}/releases/$id"
-              fi
-            done
+      - name: Clean up old releases
+        # 设置环境变量，这里使用了GitHub提供的GITHUB_TOKEN，用于API认证
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 使用curl和GitHub API获取所有发布的信息，然后使用jq处理JSON数据
+          # 获取所有release，并按创建时间排序，输出为制表符分隔的值（ID、创建时间、标签名）
+          releases=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/releases" | \
+            jq -r '.[] | [.id, .created_at, .tag_name] | @tsv' | \
+            sort -k2 -r)
+          
+          # 设置保留的最新发布数量
+          keep_count=5
+          count=0
+          
+          # 遍历所有发布，保留最新的5个，删除其余的
+          echo "$releases" | while read id created_at tag_name; do
+            count=$((count+1))
+            if [ $count -gt $keep_count ]; then
+              echo "Deleting release $tag_name"
+              # 使用curl命令调用GitHub API删除旧的发布
+              curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
+                "https://api.github.com/repos/${{ github.repository }}/releases/$id"
+            fi
+          done
