@@ -1,0 +1,143 @@
+name: Flutter Debug Build CI/CD
+
+on:
+  push:
+    branches:
+      - fl_wan
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - name: android
+            os: ubuntu-latest
+          - name: android-aab
+            os: ubuntu-latest
+          - name: web
+            os: ubuntu-latest
+          - name: linux
+            os: ubuntu-latest
+          - name: windows
+            os: windows-latest
+          - name: ios
+            os: macos-latest
+          - name: macos
+            os: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # 获取所有历史记录以便正确计算提交数量
+
+      - name: Generate Version Number
+        id: generate_version
+        run: |
+          TAG_VERSION=$(echo ${{ github.ref }} | sed 's/refs\/tags\/v//')
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          SHORT_HASH=$(git rev-parse --short HEAD)
+          FULL_VERSION="${TAG_VERSION}.${COMMIT_COUNT}.${SHORT_HASH}"
+          echo "FULL_VERSION=${FULL_VERSION}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Update version in pubspec.yaml
+        run: |
+          sed -i 's/^version: .*/version: ${{ steps.generate_version.outputs.FULL_VERSION }}/' pubspec.yaml
+        shell: bash
+
+      # 各平台的构建步骤保持不变
+      - name: Build Android APK
+        if: matrix.name == 'android'
+        run: flutter build apk --debug
+
+      - name: Build Android App Bundle
+        if: matrix.name == 'android-aab'
+        run: flutter build appbundle --debug
+
+      - name: Build Web
+        if: matrix.name == 'web'
+        run: flutter build web --debug
+
+      - name: Install Linux dependencies
+        if: matrix.name == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libgtk-3-dev
+      - name: Build Linux
+        if: matrix.name == 'linux'
+        run: flutter build linux --debug
+
+      - name: Build Windows
+        if: matrix.name == 'windows'
+        run: flutter build windows --debug
+
+      - name: Build iOS
+        if: matrix.name == 'ios'
+        run: flutter build ios --debug --no-codesign
+
+      - name: Build macOS
+        if: matrix.name == 'macos'
+        run: flutter build macos --debug
+
+      # 新增：部署 Web 产物到 GitHub Pages
+      - name: Deploy to GitHub Pages
+        if: matrix.name == 'web'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          publish_branch: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy to GitHub Pages: ${{ steps.generate_version.outputs.FULL_VERSION }}'
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Debug Release ${{ steps.generate_version.outputs.FULL_VERSION }}
+          draft: false
+          prerelease: true
+
+      - name: Compress Build
+        run: |
+          if [ "${{ matrix.name }}" = "android" ]; then
+            mv build/app/outputs/flutter-apk/app-debug.apk ./app-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.apk
+          elif [ "${{ matrix.name }}" = "android-aab" ]; then
+            mv build/app/outputs/bundle/debug/app-debug.aab ./app-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.aab
+          elif [ "${{ matrix.name }}" = "web" ]; then
+            zip -r web-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip build/web
+          elif [ "${{ matrix.name }}" = "linux" ]; then
+            zip -r linux-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip build/linux/debug/bundle
+          elif [ "${{ matrix.name }}" = "windows" ]; then
+            powershell Compress-Archive build/windows/runner/Debug windows-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip
+          elif [ "${{ matrix.name }}" = "ios" ]; then
+            zip -r ios-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip build/ios/Debug-iphonesimulator
+          elif [ "${{ matrix.name }}" = "macos" ]; then
+            zip -r macos-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Debug
+          fi
+        shell: bash
+
+      - name: Upload Build
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ matrix.name }}-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
+          asset_name: ${{ matrix.name }}-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
+          asset_content_type: ${{ matrix.name == 'android' && 'application/vnd.android.package-archive' || matrix.name == 'android-aab' && 'application/vnd.android.package-archive' || 'application/zip' }}

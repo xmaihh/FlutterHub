@@ -1,0 +1,31 @@
+name: Clean up old releases
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Clean up old releases
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            # 获取所有release，按创建时间排序
+            releases=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/${{ github.repository }}/releases" | \
+              jq -r '.[] | [.id, .created_at, .tag_name] | @tsv' | \
+              sort -k2 -r)
+            
+            # 保留最新的5个releases
+            keep_count=5
+            count=0
+            
+            echo "$releases" | while read id created_at tag_name; do
+              count=$((count+1))
+              if [ $count -gt $keep_count ]; then
+                echo "Deleting release $tag_name"
+                curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
+                  "https://api.github.com/repos/${{ github.repository }}/releases/$id"
+              fi
+            done
