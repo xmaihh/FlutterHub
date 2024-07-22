@@ -38,6 +38,7 @@ jobs:
       # 生成版本号
       - name: Generate Version Number
         id: generate_version
+        shell: bash
         run: |
           TAG_VERSION=$(echo ${{ github.ref }} | sed 's/refs\/tags\/v//') # 提取标签中的版本号
           COMMIT_COUNT=$(git rev-list --count HEAD) # 计算提交数量
