@@ -84,7 +84,7 @@ jobs:
           echo "FULL_VERSION=${FULL_VERSION}"
           
           # 更新新版本号到pubspec.yaml文件
-          sed -i ‘s/^version: .*/version: ${FULL_VERSION}/' pubspec.yaml
+          sed -i 's/^version: .*/version: ${FULL_VERSION}/' pubspec.yaml
           echo "Updated pubspec.yaml content:"
           cat pubspec.yaml
           
