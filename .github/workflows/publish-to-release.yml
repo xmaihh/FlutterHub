@@ -38,7 +38,6 @@ jobs:
       # 生成版本号
       - name: Generate Version Number
         id: generate_version
-        shell: bash
         run: |
           if [[ ${{ github.ref }} == refs/tags/* ]]; then
             # 这是一个标签
@@ -60,9 +59,30 @@ jobs:
           echo "TAG_VERSION=$TAG_VERSION" 
           COMMIT_COUNT=$(git rev-list --count HEAD) # 计算提交数量
           SHORT_HASH=$(git rev-parse --short HEAD) # 获取最近一次提交的短哈希
-          FULL_VERSION="${TAG_VERSION}.${COMMIT_COUNT}.${SHORT_HASH}" # 组合成完整的版本号
+          BUILD_VERSION="${COMMIT_COUNT}+${TAG_VERSION}.${SHORT_HASH}" # 组合成完整的构建版本号
+          echo "BUILD_VERSION=${BUILD_VERSION}" >> $GITHUB_OUTPUT # 设置输出变量
+          echo "Generated BUILD_VERSION: ${BUILD_VERSION}" # 打印完整的构建版本号 (e.g. 34+fl_wan.c761fc9)
+        shell: bash
+
+      # 更新pubspec.yaml中的版本号
+      - name: Update version in pubspec.yaml
+        id: update_version_in_pubspec
+        run: |
+          # 从pubspec.yaml中提取主版本号,(e.g. version: 1.0.0+1，提取1.0.0)
+          MAIN_VERSION=$(grep "^version:" pubspec.yaml | sed -E 's/version: ([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          # 组合新的完整版本号 (e.g. 1.0.0-34+fl_wan.c761fc9)
+          FULL_VERSION="${MAIN_VERSION}-${{ steps.generate_version.outputs.BUILD_VERSION }}"
+          # 更新新版本号到pubspec.yaml文件
+          sed -i 's#^version: .*#version: ${FULL_VERSION}#' pubspec.yaml
+          # 验证更新
+          if grep -q "^version: ${FULL_VERSION}" pubspec.yaml; then
+            echo "Version updated successfully to ${FULL_VERSION}"
+          else
+            echo "Failed to update version"
+            exit 1
+          fi
           echo "FULL_VERSION=${FULL_VERSION}" >> $GITHUB_OUTPUT # 设置输出变量
-          echo "Generated FULL_VERSION: ${FULL_VERSION}" # 打印完整的版本号
+        shell: bash
 
       # 设置Flutter环境
       - name: Set up Flutter
@@ -77,12 +97,6 @@ jobs:
       # 安装Flutter依赖
       - name: Install dependencies
         run: flutter pub get
-
-      # 更新pubspec.yaml中的版本号
-      - name: Update version in pubspec.yaml
-        run: |
-          sed -i 's#^version: .*#version: ${{ steps.generate_version.outputs.FULL_VERSION }}#' pubspec.yaml
-        shell: bash
 
       # 根据矩阵配置，为不同平台执行构建命令
       - name: Build Android APK
@@ -128,7 +142,7 @@ jobs:
           publish_branch: gh-pages
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy to GitHub Pages: ${{ steps.generate_version.outputs.FULL_VERSION }}'
+          commit_message: 'Deploy to GitHub Pages: ${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}'
 
       # 创建GitHub Release
       - name: Create Release
@@ -138,7 +152,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Debug Release ${{ steps.generate_version.outputs.FULL_VERSION }}
+          release_name: Debug Release ${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}
           draft: false
           prerelease: true
 
@@ -148,19 +162,19 @@ jobs:
       - name: Compress Build
         run: |
           if [ "${{ matrix.name }}" = "android" ]; then
-            mv build/app/outputs/flutter-apk/app-debug.apk ./app-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.apk
+            mv build/app/outputs/flutter-apk/app-debug.apk ./app-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.apk
           elif [ "${{ matrix.name }}" = "android-aab" ]; then
-            mv build/app/outputs/bundle/debug/app-debug.aab ./app-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.aab
+            mv build/app/outputs/bundle/debug/app-debug.aab ./app-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.aab
           elif [ "${{ matrix.name }}" = "web" ]; then
-            zip -r web-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip build/web
+            zip -r web-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip build/web
           elif [ "${{ matrix.name }}" = "linux" ]; then
-            zip -r linux-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip build/linux/debug/bundle
+            zip -r linux-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip build/linux/debug/bundle
           elif [ "${{ matrix.name }}" = "windows" ]; then
-            powershell Compress-Archive build/windows/runner/Debug windows-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip
+            powershell Compress-Archive build/windows/runner/Debug windows-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip
           elif [ "${{ matrix.name }}" = "ios" ]; then
-            zip -r ios-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip build/ios/Debug-iphonesimulator
+            zip -r ios-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip build/ios/Debug-iphonesimulator
           elif [ "${{ matrix.name }}" = "macos" ]; then
-            zip -r macos-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Debug
+            zip -r macos-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Debug
           fi
         shell: bash
 
@@ -171,6 +185,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ matrix.name }}-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
-          asset_name: ${{ matrix.name }}-debug-${{ steps.generate_version.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
+          asset_path: ./${{ matrix.name }}-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
+          asset_name: ${{ matrix.name }}-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
           asset_content_type: ${{ matrix.name == 'android' && 'application/vnd.android.package-archive' || matrix.name == 'android-aab' && 'application/vnd.android.package-archive' || 'application/zip' }}
