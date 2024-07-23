@@ -39,19 +39,23 @@ jobs:
       - name: Generate Version Number
         id: generate_version
         run: |
+          # 标签触发 (e.g. v1.0或1.0) 移除 refs/tags/ 前缀和可选的 'v' 前缀
           if [[ ${{ github.ref }} == refs/tags/* ]]; then
-            # 这是一个标签
             TAG_VERSION=$(echo ${{ github.ref }} | sed -E 's/^refs\/tags\/(v)?//')
             echo "This is a tag release: $TAG_VERSION"
+          
+          # 分支触发 (e.g. main或feature/new-feature) 移除 refs/heads/ 前缀
           elif [[ ${{ github.ref }} == refs/heads/* ]]; then
-            # 这是一个分支
             TAG_VERSION=$(echo ${{ github.ref }} | sed -E 's/^refs\/heads\///' | sed 's/\//-/g')
             echo "This is a branch push: $TAG_VERSION"
+          
+          # Pull Request触发 (e.g. pr-123) 提取PR的编号 pr-<number>
           elif [[ ${{ github.ref }} == refs/pull/* ]]; then
-            # 这是一个 Pull Request
             PR_NUMBER=$(echo ${{ github.ref }} | sed -E 's/^refs\/pull\/([0-9]+)\/merge$/\1/')
             TAG_VERSION="pr-$PR_NUMBER"
             echo "This is a Pull Request: $TAG_VERSION"
+          
+          # 其他情况：直接使用 github.ref 的值 包含任何 "/"会被替换为 "-"
           else
             TAG_VERSION=$(echo ${{ github.ref }} | sed 's/\//-/g')
             echo "This is another trigger: $TAG_VERSION"
@@ -68,12 +72,22 @@ jobs:
       - name: Update version in pubspec.yaml
         id: update_version_in_pubspec
         run: |
+          echo "Current pubspec.yaml content:"
+          cat pubspec.yaml
+          
           # 从pubspec.yaml中提取主版本号,(e.g. version: 1.0.0+1，提取1.0.0)
           MAIN_VERSION=$(grep "^version:" pubspec.yaml | sed -E 's/version: ([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          echo "MAIN_VERSION=${MAIN_VERSION}"
+          
           # 组合新的完整版本号 (e.g. 1.0.0-34+fl_wan.c761fc9)
           FULL_VERSION="${MAIN_VERSION}-${{ steps.generate_version.outputs.BUILD_VERSION }}"
+          echo "FULL_VERSION=${FULL_VERSION}"
+          
           # 更新新版本号到pubspec.yaml文件
-          sed -i 's#^version: .*#version: ${FULL_VERSION}#' pubspec.yaml
+          sed -i ‘s/^version: .*/version: ${FULL_VERSION}/' pubspec.yaml
+          echo "Updated pubspec.yaml content:"
+          cat pubspec.yaml
+          
           # 验证更新
           if grep -q "^version: ${FULL_VERSION}" pubspec.yaml; then
             echo "Version updated successfully to ${FULL_VERSION}"
@@ -81,6 +95,7 @@ jobs:
             echo "Failed to update version"
             exit 1
           fi
+          
           echo "FULL_VERSION=${FULL_VERSION}" >> $GITHUB_OUTPUT # 设置输出变量
         shell: bash
 
@@ -116,6 +131,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ninja-build libgtk-3-dev
+
       - name: Build Linux
         if: matrix.name == 'linux'
         run: flutter build linux --release
