@@ -1,5 +1,7 @@
 # flutter_compass
 
+[![publish-to-release](https://github.com/xmaihh/FlutterTrainingThings/actions/workflows/publish-to-release.yml/badge.svg?branch=fl_wan)](https://github.com/xmaihh/FlutterTrainingThings/actions/workflows/publish-to-release.yml)
+
 A new Flutter project.
 
 ## Getting Started
