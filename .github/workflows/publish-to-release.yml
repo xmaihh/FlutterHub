@@ -129,6 +129,13 @@ jobs:
           cat _build_env.config
         shell: bash
 
+      - name: Read FULL_VERSION from _build_env.config
+        id: read_build_env
+        run: |
+          echo "Reading version from _build_env.config..."
+          FULL_VERSION=$(grep 'FULL_VERSION=' _build_env.config | cut -d '=' -f2)
+          echo "FULL_VERSION=${FULL_VERSION}" >> $GITHUB_OUTPUT # 设置输出变量
+
       # 设置Flutter环境
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -185,7 +192,8 @@ jobs:
           publish_branch: gh-pages
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy to GitHub Pages: ${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}'
+          commit_message: 'Deploy to GitHub Pages: ${{ steps.read_build_env.outputs.FULL_VERSION }}'
+
 
       # 创建GitHub Release
       - name: Create Release
@@ -195,7 +203,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Debug Release ${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}
+          release_name: Debug Release ${{ steps.read_build_env.outputs.FULL_VERSION }}
           draft: false
           prerelease: true
 
@@ -205,19 +213,19 @@ jobs:
       - name: Compress Build
         run: |
           if [ "${{ matrix.name }}" = "android" ]; then
-            mv build/app/outputs/flutter-apk/app-debug.apk ./app-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.apk
+            mv build/app/outputs/flutter-apk/app-debug.apk ./app-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
           elif [ "${{ matrix.name }}" = "android-aab" ]; then
-            mv build/app/outputs/bundle/debug/app-debug.aab ./app-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.aab
+            mv build/app/outputs/bundle/debug/app-debug.aab ./app-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.aab
           elif [ "${{ matrix.name }}" = "web" ]; then
-            zip -r web-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip build/web
+            zip -r web-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/web
           elif [ "${{ matrix.name }}" = "linux" ]; then
-            zip -r linux-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip build/linux/debug/bundle
+            zip -r linux-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/linux/debug/bundle
           elif [ "${{ matrix.name }}" = "windows" ]; then
-            powershell Compress-Archive build/windows/runner/Debug windows-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip
+            powershell Compress-Archive build/windows/runner/Debug windows-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip
           elif [ "${{ matrix.name }}" = "ios" ]; then
-            zip -r ios-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip build/ios/Debug-iphonesimulator
+            zip -r ios-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/ios/Debug-iphonesimulator
           elif [ "${{ matrix.name }}" = "macos" ]; then
-            zip -r macos-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Debug
+            zip -r macos-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Debug
           fi
         shell: bash
 
@@ -228,6 +236,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ matrix.name }}-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
-          asset_name: ${{ matrix.name }}-debug-${{ steps.update_version_in_pubspec.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
+          asset_path: ./${{ matrix.name }}-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
+          asset_name: ${{ matrix.name }}-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
           asset_content_type: ${{ matrix.name == 'android' && 'application/vnd.android.package-archive' || matrix.name == 'android-aab' && 'application/vnd.android.package-archive' || 'application/zip' }}
