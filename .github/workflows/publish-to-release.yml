@@ -78,15 +78,17 @@ jobs:
             grep "^version:" pubspec.yaml
             exit 1
           fi
-          
-          echo "FULL_VERSION=${FULL_VERSION}" >> $GITHUB_OUTPUT # 设置输出变量
+              
+          echo "FULL_VERSION=${FULL_VERSION}" > _build_env.config
         shell: bash
 
       - name: Upload updated pubspec.yaml
         uses: actions/upload-artifact@v2
         with:
-          name: pubspec
-          path: pubspec.yaml
+          name: build_env_files
+          path: |
+            pubspec.yaml
+            _build_env.config
 
   build_app:
     needs: build_env
@@ -117,12 +119,14 @@ jobs:
       - name: Download updated pubspec.yaml
         uses: actions/download-artifact@v2
         with:
-          name: temp_pubspec
+          name: build_env_files
 
       - name: Replace pubspec.yaml
         run: |
-          mv temp_pubspec/pubspec.yaml ./pubspec.yaml
-          rm -rf temp_pubspec
+          ls
+          mv build_env_files/pubspec.yaml ./pubspec.yaml
+          pwd
+          cat build_env_files/_build_env.config
         shell: bash
 
       # 设置Flutter环境
