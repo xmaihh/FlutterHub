@@ -83,7 +83,7 @@ jobs:
         shell: bash
 
       - name: Upload updated pubspec.yaml
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build_env_files
           path: |
@@ -117,14 +117,14 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download updated pubspec.yaml
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build_env_files
 
       - name: Replace pubspec.yaml
         run: |
           ls
-          mv build_env_files/pubspec.yaml ./pubspec.yaml
+          cat pubspec.yaml
           pwd
           cat build_env_files/_build_env.config
         shell: bash
