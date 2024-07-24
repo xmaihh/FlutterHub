@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # 检出代码
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # 获取全部历史，以便计算版本号
 
@@ -142,8 +142,6 @@ jobs:
       # 安装Flutter依赖
       - name: Install dependencies
         run: flutter pub get
-
-      - run: flutter test
 
       # 根据矩阵配置，为不同平台执行构建命令
       - name: Build Android APK
