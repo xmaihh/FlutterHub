@@ -8,27 +8,11 @@ on:
   workflow_dispatch: # 允许手动触发工作流，便于管理和测试
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }} # 使用矩阵策略中指定的操作系统进行构建
-    strategy:
-      matrix:
-        include:
-          # 定义不同的构建任务，每个任务对应一个平台
-          - name: android
-            os: ubuntu-latest
-          - name: android-aab
-            os: ubuntu-latest
-          - name: web
-            os: ubuntu-latest
-          - name: linux
-            os: ubuntu-latest
-          - name: windows
-            os: windows-latest
-          - name: ios
-            os: macos-latest
-          - name: macos
-            os: macos-latest
-
+  # 在 Ubuntu 环境中运行，避免了 macOS 的 sed 问题
+  # 更新 pubspec.yaml 中的版本号
+  # 将新版本号作为输出，供其他 job 使用
+  build_env:  # 更新pubspec.yaml中的版本号:
+    runs-on: ubuntu-latest
     steps:
       # 检出代码
       - uses: actions/checkout@v3
@@ -72,9 +56,6 @@ jobs:
       - name: Update version in pubspec.yaml
         id: update_version_in_pubspec
         run: |
-          echo "Current pubspec.yaml content:"
-          cat pubspec.yaml
-          
           # 从pubspec.yaml中提取主版本号,(e.g. version: 1.0.0+1，提取1.0.0)
           MAIN_VERSION=$(grep "^version:" pubspec.yaml | sed -E 's/version: ([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
           echo "MAIN_VERSION=${MAIN_VERSION}"
@@ -84,8 +65,7 @@ jobs:
           echo "FULL_VERSION=${FULL_VERSION}"
           
           # 更新新版本号到pubspec.yaml文件
-          printf -v ESCAPED_VERSION "%q" "${FULL_VERSION}"
-          sed -i "s/^version: .*/version: ${ESCAPED_VERSION}/" pubspec.yaml
+          sed -i "s/^version: .*/version: ${FULL_VERSION}/" pubspec.yaml
           echo "Updated pubspec.yaml content:"
           cat pubspec.yaml
           
@@ -102,11 +82,54 @@ jobs:
           echo "FULL_VERSION=${FULL_VERSION}" >> $GITHUB_OUTPUT # 设置输出变量
         shell: bash
 
+      - name: Upload updated pubspec.yaml
+        uses: actions/upload-artifact@v2
+        with:
+          name: pubspec
+          path: pubspec.yaml
+
+  build_app:
+    needs: build_env
+    runs-on: ${{ matrix.os }} # 使用矩阵策略中指定的操作系统进行构建
+    strategy:
+      matrix:
+        include:
+          # 定义不同的构建任务，每个任务对应一个平台
+          - name: android
+            os: ubuntu-latest
+          - name: android-aab
+            os: ubuntu-latest
+          - name: web
+            os: ubuntu-latest
+          - name: linux
+            os: ubuntu-latest
+          - name: windows
+            os: windows-latest
+          - name: ios
+            os: macos-latest
+          - name: macos
+            os: macos-latest
+
+    steps:
+      # 检出代码
+      - uses: actions/checkout@v4
+
+      - name: Download updated pubspec.yaml
+        uses: actions/download-artifact@v2
+        with:
+          name: temp_pubspec
+
+      - name: Replace pubspec.yaml
+        run: |
+          mv temp_pubspec/pubspec.yaml ./pubspec.yaml
+          rm -rf temp_pubspec
+        shell: bash
+
       # 设置Flutter环境
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable' # 使用Flutter的稳定版
+          channel: stable  # 使用Flutter的稳定版
 
       # 显示Flutter版本信息
       - name: Check Flutter version
@@ -116,32 +139,31 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - run: flutter test
+
       # 根据矩阵配置，为不同平台执行构建命令
       - name: Build Android APK
         if: matrix.name == 'android'
-        run: flutter build apk --release
+        run: flutter build apk
 
       - name: Build Android App Bundle
         if: matrix.name == 'android-aab'
-        run: flutter build appbundle --release
+        run: flutter build appbundle
 
       - name: Build Web
         if: matrix.name == 'web'
-        run: flutter build web --release
-
-      - name: Install Linux dependencies
-        if: matrix.name == 'linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ninja-build libgtk-3-dev
+        run: flutter build web
 
       - name: Build Linux
         if: matrix.name == 'linux'
-        run: flutter build linux --release
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
+          flutter build linux
 
       - name: Build Windows
         if: matrix.name == 'windows'
-        run: flutter build windows --release
+        run: flutter build windows
 
       - name: Build iOS
         if: matrix.name == 'ios'
@@ -149,7 +171,7 @@ jobs:
 
       - name: Build macOS
         if: matrix.name == 'macos'
-        run: flutter build macos --release
+        run: flutter build macos
 
       # 部署Web平台构建产物到GitHub Pages
       - name: Deploy to GitHub Pages
