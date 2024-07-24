@@ -186,7 +186,7 @@ jobs:
       # 部署Web平台构建产物到GitHub Pages
       - name: Deploy to GitHub Pages
         if: matrix.name == 'web'
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
@@ -199,11 +199,11 @@ jobs:
       # 创建GitHub Release
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ steps.read_build_env.outputs.FULL_VERSION }}
           release_name: Debug Release ${{ steps.read_build_env.outputs.FULL_VERSION }}
           draft: false
           prerelease: true
