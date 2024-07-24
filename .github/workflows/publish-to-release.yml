@@ -126,7 +126,7 @@ jobs:
           ls
           cat pubspec.yaml
           pwd
-          cat build_env_files/_build_env.config
+          cat _build_env.config
         shell: bash
 
       # 设置Flutter环境
