@@ -135,6 +135,7 @@ jobs:
           echo "Reading version from _build_env.config..."
           FULL_VERSION=$(grep 'FULL_VERSION=' _build_env.config | cut -d '=' -f2)
           echo "FULL_VERSION=${FULL_VERSION}" >> $GITHUB_OUTPUT # 设置输出变量
+        shell: bash
 
       # 设置Flutter环境
       - name: Set up Flutter
