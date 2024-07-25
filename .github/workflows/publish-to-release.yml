@@ -209,7 +209,7 @@ jobs:
           elif [ "${{ matrix.name }}" = "linux" ]; then
             zip -r linux-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/linux/x64/release/bundle
           elif [ "${{ matrix.name }}" = "windows" ]; then
-            powershell Compress-Archive build/windows/runner/Release windows-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip
+            powershell Compress-Archive build\windows\x64\runner\Release windows-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip
           elif [ "${{ matrix.name }}" = "ios" ]; then
             zip -r ios-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/ios/iphoneos
           elif [ "${{ matrix.name }}" = "macos" ]; then
