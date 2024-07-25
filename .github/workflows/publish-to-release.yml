@@ -195,19 +195,6 @@ jobs:
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: 'Deploy to GitHub Pages: ${{ steps.read_build_env.outputs.FULL_VERSION }}'
 
-
-      # 创建GitHub Release
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.read_build_env.outputs.FULL_VERSION }}
-          release_name: Debug Release ${{ steps.read_build_env.outputs.FULL_VERSION }}
-          draft: false
-          prerelease: true
-
       # 根据平台压缩构建产物，为上传做准备
       # 使用不同的命令和文件路径根据平台进行压缩
       # 这里使用了不同的shell命令和条件判断来处理不同的操作系统和构建产物
@@ -230,13 +217,25 @@ jobs:
           fi
         shell: bash
 
-      # 上传构建产物到GitHub Release
-      - name: Upload Build
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ matrix.name }}-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
-          asset_name: ${{ matrix.name }}-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
-          asset_content_type: ${{ matrix.name == 'android' && 'application/vnd.android.package-archive' || matrix.name == 'android-aab' && 'application/vnd.android.package-archive' || 'application/zip' }}
+#      # 创建GitHub Release
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ steps.read_build_env.outputs.FULL_VERSION }}
+#          release_name: Debug Release ${{ steps.read_build_env.outputs.FULL_VERSION }}
+#          draft: false
+#          prerelease: true
+#
+#      # 上传构建产物到GitHub Release
+#      - name: Upload Build
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: ./${{ matrix.name }}-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
+#          asset_name: ${{ matrix.name }}-debug-${{ steps.read_build_env.outputs.FULL_VERSION }}.${{ matrix.name == 'android' && 'apk' || matrix.name == 'android-aab' && 'aab' || 'zip' }}
+#          asset_content_type: ${{ matrix.name == 'android' && 'application/vnd.android.package-archive' || matrix.name == 'android-aab' && 'application/vnd.android.package-archive' || 'application/zip' }}
