@@ -1,6 +1,6 @@
 {
-    "name": "flutter_compass",
-    "short_name": "flutter_compass",
+    "name": "flutter_hub",
+    "short_name": "flutter_hub",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
