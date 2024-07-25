@@ -209,10 +209,15 @@ jobs:
           elif [ "${{ matrix.name }}" = "linux" ]; then
             zip -r linux-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/linux/x64/release/bundle
           elif [ "${{ matrix.name }}" = "windows" ]; then
-            powershell Compress-Archive build\windows\x64\runner\Release windows-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip
+            powershell Compress-Archive build/windows/x64/runner/Release windows-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip
           elif [ "${{ matrix.name }}" = "ios" ]; then
+            mkdir Payload
+            cp -r build/ios/iphoneos/Runner.app Payload/
+            zip -r ios-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.ipa Payload/
             zip -r ios-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/ios/iphoneos
           elif [ "${{ matrix.name }}" = "macos" ]; then
+            npm install -g create-dmg
+            create-dmg 'build/macos/Build/Products/Release/flutter_hub.app' --overwrite
             zip -r macos-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Release
           fi
         shell: bash
@@ -224,6 +229,7 @@ jobs:
           path: |
             *.apk
             *.aab
+            *.ipa
             *.zip
           if-no-files-found: error
 
