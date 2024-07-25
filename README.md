@@ -1,6 +1,7 @@
 # flutter_hub
 
-[![publish-to-release](https://github.com/xmaihh/FlutterTrainingThings/actions/workflows/publish-to-release.yml/badge.svg?branch=fl_wan)](https://github.com/xmaihh/FlutterTrainingThings/actions/workflows/publish-to-release.yml)
+[![Release](https://img.shields.io/github/v/release/xmaihh/FlutterHub)](https://github.com/xmaihh/FlutterHub/releases)
+[![CI](https://github.com/xmaihh/FlutterHub/actions/workflows/publish-to-release.yml/badge.svg?branch=fl_wan)](https://github.com/xmaihh/FlutterHub/actions/)
 
 A new Flutter project.
 

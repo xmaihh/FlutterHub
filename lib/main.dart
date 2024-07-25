@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_compass/routes/home_page.dart';
+import 'package:flutter_hub/routes/home_page.dart';
 
 void main()  => runApp(const MyApp());
 
