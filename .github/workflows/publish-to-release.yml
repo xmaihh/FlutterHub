@@ -221,8 +221,6 @@ jobs:
             zip -r ios-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.ipa Payload/
             zip -r ios-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/ios/iphoneos
           elif [ "${{ matrix.name }}" = "macos" ]; then
-#            npm install -g create-dmg
-#            create-dmg 'build/macos/Build/Products/Release/flutter_hub.app' --overwrite
             zip -r macos-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Release
           fi
         shell: bash
