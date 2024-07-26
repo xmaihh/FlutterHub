@@ -204,9 +204,9 @@ jobs:
         run: |
           if [ "${{ matrix.name }}" = "android" ]; then
             mv build/app/outputs/flutter-apk/app-release.apk ./app-release-all-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
-               build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ./app-release-armeabi-v7a-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
-               build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ./app-release-arm64-v8a-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
-               build/app/outputs/flutter-apk/app-x86_64-release.apk ./app-release-x86_64-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
+            mv build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ./app-release-armeabi-v7a-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
+            mv build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ./app-release-arm64-v8a-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
+            mv build/app/outputs/flutter-apk/app-x86_64-release.apk ./app-release-x86_64-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
           elif [ "${{ matrix.name }}" = "android-aab" ]; then
             mv build/app/outputs/bundle/release/app-release.aab ./app-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.aab
           elif [ "${{ matrix.name }}" = "web" ]; then
@@ -269,7 +269,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          for artifact in artifacts/*/*.{apk,aab,zip}
+          for artifact in artifacts/*/*.{apk,aab,ipa,zip}
           do
             if [ -f "$artifact" ]; then
               asset_name=$(basename "$artifact")
