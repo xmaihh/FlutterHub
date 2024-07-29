@@ -10,7 +10,7 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile()
   ..user = json['user'] == null
       ? null
       : User.fromJson(json['user'] as Map<String, dynamic>)
-  ..token = json['token'] as String?
+  ..cookie = json['cookie'] as String?
   ..theme = json['theme'] as num
   ..cache = json['cache'] == null
       ? null
@@ -20,7 +20,7 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile()
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'user': instance.user,
-      'token': instance.token,
+      'cookie': instance.cookie,
       'theme': instance.theme,
       'cache': instance.cache,
       'lastLogin': instance.lastLogin,

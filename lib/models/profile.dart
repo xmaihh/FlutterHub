@@ -8,7 +8,7 @@ class Profile {
   Profile();
 
   User? user;
-  String? token;
+  String? cookie;
   late num theme;
   CacheConfig? cache;
   String? lastLogin;

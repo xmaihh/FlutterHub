@@ -3,85 +3,44 @@
 
 Json文件转Dart Model的方案采用官方推荐的[json_serializable package](https://pub.dartlang.org/packages/json_serializable)包
 
-## 注册信息
+## 注册/登录信息 => 返回用户信息
 ```json
 {
-  "data": {
-    "admin": false,
-    "chapterTops": [],
-    "coinCount": 0,
-    "collectIds": [],
-    "email": "",
-    "icon": "",
-    "id": 162789,
-    "nickname": "wana",
-    "password": "",
-    "publicName": "wana",
-    "token": "",
-    "type": 0,
-    "username": "wana"
-  },
-  "errorCode": 0,
-  "errorMsg": ""
+  "admin": false,
+  "chapterTops": [],
+  "coinCount": 10,
+  "collectIds": [],
+  "email": "",
+  "icon": "",
+  "id": 162789,
+  "nickname": "wana",
+  "password": "",
+  "publicName": "wana",
+  "token": "",
+  "type": 0,
+  "username": "wana"
 }
 ```
-保存在“jsons”目录下的“register.json”文件。
+保存在“jsons”目录下的“userInfo.json”文件。
 
-## 登录信息
+## 积分排名信息 => 通过请求个人信息接口获得
 ```json
 {
-  "data": {
-    "admin": false,
-    "chapterTops": [],
-    "coinCount": 0,
-    "collectIds": [],
-    "email": "",
-    "icon": "",
-    "id": 162789,
-    "nickname": "wana",
-    "password": "",
-    "publicName": "wana",
-    "token": "",
-    "type": 0,
-    "username": "wana"
-  },
-  "errorCode": 0,
-  "errorMsg": ""
+  "coinCount": 0,
+  "level": 1,
+  "nickname": "",
+  "rank": "3",
+  "userId": 2,
+  "username": "w**a"
 }
 ```
-保存在“jsons”目录下的“login.json”文件。
+保存在“jsons”目录下的“coinInfo.json”文件。
 
-## 用户信息
+## 个人信息接口
 ```json
 {
-  "data": {
-    "coinInfo": {
-      "coinCount": 10,
-      "level": 1,
-      "nickname": "",
-      "rank": "3",
-      "userId": 162789,
-      "username": "w**a"
-    },
-    "userInfo": {
-      "admin": false,
-      "chapterTops": [],
-      "coinCount": 10,
-      "collectIds": [
-      ],
-      "email": "xxxx@qq.com",
-      "icon": "",
-      "id": 162789,
-      "nickname": "wana",
-      "password": "",
-      "publicName": "wana",
-      "token": "",
-      "type": 0,
-      "username": "wana"
-    }
-  },
-  "errorCode": 0,
-  "errorMsg": ""
+  "coinInfo?": "$coinInfo",
+  "userInfo?": "$userInfo"
 }
 ```
 保存在“jsons”目录下的“user.json”文件。
@@ -105,7 +64,7 @@ Json文件转Dart Model的方案采用官方推荐的[json_serializable package]
 ```json
 {
   "user?":"$user", //账号信息，结构见"user.json"
-  "token?":"", // 登录用户的token(oauth)或密码
+  "cookie?":"", // 登录用户的token(oauth)或密码
   "theme":0, //主题索引
   "cache?":"$cacheConfig", // 缓存策略信息，结构见"cacheConfig.json"
   "lastLogin?":"", //最近一次的注销登录的用户名
@@ -138,20 +97,20 @@ flutter packages pub get
 
 需要的Json数据已经定义完毕，现在只需要运行json_model package提供的命令来通过json文件生成相应的Dart类：
 ```bash
-flutter packages pub run json_model
+dart run json_model
 ```
 命令执行成功后，可以看到lib/models文件夹下会生成相应的Dart Model类：
 ```agsl
 ├── models
 │   ├── cacheConfig.dart
 │   ├── cacheConfig.g.dart
+│   ├── coinInfo.dart
+│   ├── coinInfo.g.dart
 │   ├── index.dart
-│   ├── login.dart
-│   ├── login.g.dart
 │   ├── profile.dart
 │   ├── profile.g.dart
-│   ├── register.dart
-│   ├── register.g.dart
 │   ├── user.dart
-│   └── user.g.dart
+│   ├── user.g.dart
+│   ├── userInfo.dart
+│   └── userInfo.g.dart
 ```

@@ -1,5 +1,5 @@
 export 'cacheConfig.dart' ; 
-export 'login.dart' ; 
+export 'coinInfo.dart' ; 
 export 'profile.dart' ; 
-export 'register.dart' ; 
 export 'user.dart' ; 
+export 'userInfo.dart' ; 
