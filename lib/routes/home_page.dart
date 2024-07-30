@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hub/l10n/localization_intl.dart';
+import 'package:flutter_hub/states/profile_change_notifier.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,8 +15,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
     final ThemeData theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Appbar"),
+      ),
+      drawer: MyDrawer(),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -125,3 +133,85 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class MyDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: MediaQuery.removePadding(
+          context: context,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(), //构建抽屉菜单头部
+              Expanded(child: _buildMenus()), //构建功能菜单
+            ],
+          )),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Consumer<UserModel>(
+      builder: (BuildContext context, UserModel value, Widget? child) {
+        return GestureDetector(
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            padding: EdgeInsets.only(top: 40, bottom: 20),
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: ClipOval(
+                    // 如果已登录，则显示用户头像；若未登录，则显示默认头像
+                    child: value.isLogin
+                        ? FlutterLogo(
+                            size: 80,
+                          )
+                        : FlutterLogo(
+                            size: 80,
+                          ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMenus() {
+    return Consumer<UserModel>(
+        builder: (BuildContext context, UserModel value, Widget? child) {
+      return Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView(
+              children: <Widget>[
+                ListTile(
+                  title: Text(WanLocalizations.of(context).theme),
+                  leading: const Icon(Icons.color_lens),
+                  onTap: () => Navigator.pushNamed(context, "themes"),
+                ),
+                ListTile(
+                  title: Text(WanLocalizations.of(context).language),
+                  leading: const Icon(Icons.language),
+                  onTap: () => Navigator.pushNamed(context, "language"),
+                ),
+                // 添加更多 ListTile 项目
+              ],
+            ),
+          ),
+          const ListTile(
+            title: Text(
+              "v1.0.0+46",
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+          )
+        ],
+      );
+    });
+  }
+}

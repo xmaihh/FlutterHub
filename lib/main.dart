@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hub/l10n/localization_intl.dart';
 import 'package:flutter_hub/routes/home_page.dart';
+import 'package:flutter_hub/routes/language_page.dart';
+import 'package:flutter_hub/routes/login_page.dart';
+import 'package:flutter_hub/routes/theme_page.dart';
+import 'package:flutter_hub/states/profile_change_notifier.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
-void main()  => runApp(const MyApp());
+import 'common/global.dart';
+
+void main() => Global.init().then((e) => runApp(const MyApp()));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -9,10 +18,57 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      home: const HomePage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeModel()),
+        ChangeNotifierProvider(create: (_) => LocaleModel()),
+        ChangeNotifierProvider(create: (_) => UserModel()),
+      ],
+      child: Consumer2<ThemeModel, LocaleModel>(
+        builder: (BuildContext context, ThemeModel themeModel,
+            LocaleModel localeModel, Widget? child) {
+          return MaterialApp(
+            theme: ThemeData(primarySwatch: themeModel.theme),
+            onGenerateTitle: (context) {
+              return WanLocalizations.of(context).title;
+            },
+            home: HomePage(),
+            locale: localeModel.getLocale(),
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('zh', "CN"),
+            ],
+            localizationsDelegates: const [
+              // 本地化的代理类
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              WanLocalizationsDelegate(),
+            ],
+            localeResolutionCallback: (_locale, supportedLocales) {
+              if (localeModel.getLocale() != null) {
+                //如果已经选定语言，则不跟随系统
+                return localeModel.getLocale();
+              } else {
+                //跟随系统
+                Locale locale;
+                if (supportedLocales.contains(_locale)) {
+                  locale = _locale!;
+                } else {
+                  //如果系统语言不是中文简体或美国英语，则默认使用美国英语
+                  locale = const Locale('en', 'US');
+                }
+                return locale;
+              }
+            },
+            // 注册路由表
+            routes: <String, WidgetBuilder>{
+              "login": (context) => LoginPage(),
+              "themes":(context) => const ThemeChangePage(),
+              "language":(context) => const LanguagePage(),
+            },
+          );
+        },
+      ),
     );
   }
 }
-
