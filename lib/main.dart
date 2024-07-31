@@ -28,7 +28,12 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, ThemeModel themeModel,
             LocaleModel localeModel, Widget? child) {
           return MaterialApp(
-            theme: ThemeData(primarySwatch: themeModel.theme),
+            theme: ThemeData(
+              // colorScheme: ColorScheme.fromSeed(seedColor: themeModel.theme),
+              // useMaterial3: true, // Optional: enables Material 3 design
+              primaryColor: themeModel.theme,
+              colorScheme: const ColorScheme.light().copyWith(primary: themeModel.theme),
+            ),
             onGenerateTitle: (context) {
               return WanLocalizations.of(context).title;
             },
