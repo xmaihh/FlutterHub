@@ -14,7 +14,7 @@ class LanguagePage extends StatelessWidget {
       return ListTile(
         title: Text(
           lan,
-          // 对App当前语言高亮显示
+          // 对APP当前语言进行高亮显示
           style: TextStyle(color: localeModel.locale == value ? color : null),
         ),
         trailing:
@@ -33,8 +33,8 @@ class LanguagePage extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           _buildLanguageItem("中文", "zh_CN"),
-          _buildLanguageItem("Endlish", "en"),
-          _buildLanguageItem("System", "Auto"),
+          _buildLanguageItem("Endlish", "en_US"),
+          _buildLanguageItem(WanLocalizations.of(context).auto, null),
         ],
       ),
     );

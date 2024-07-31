@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../generated/intl/messages_all.dart';
+import 'messages_all.dart';
 
 class WanLocalizations {
   static Future<WanLocalizations> load(Locale locale) {

@@ -19,11 +19,14 @@ typedef String MessageIfAbsent(String? messageStr, List<Object>? args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(howMany) => "${Intl.plural(howMany, zero: 'There are no emails left', one: 'There is ${howMany} email left', other: 'There are ${howMany} emails left')}";
-
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
-    "remainingEmailsMessage" : m0,
+    "auto" : MessageLookupByLibrary.simpleMessage("Auto"),
+    "home" : MessageLookupByLibrary.simpleMessage("FlutterHub"),
+    "language" : MessageLookupByLibrary.simpleMessage("Language"),
+    "login" : MessageLookupByLibrary.simpleMessage("Login"),
+    "setting" : MessageLookupByLibrary.simpleMessage("Setting"),
+    "theme" : MessageLookupByLibrary.simpleMessage("Theme"),
     "title" : MessageLookupByLibrary.simpleMessage("Flutter APP")
   };
 }
