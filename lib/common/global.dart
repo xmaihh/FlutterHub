@@ -28,7 +28,7 @@ class Global {
   static List<MaterialColor> get themes => _themes;
 
   // 是否为release版本
-  static bool get isRelease => bool.fromEnvironment('dart.vm.product');
+  static bool get isRelease => const bool.fromEnvironment('dart.vm.product');
 
   //初始化全局信息
   static Future init() async {

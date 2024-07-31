@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Appbar"),
+        title: Text(WanLocalizations.of(context).title),
       ),
       drawer: MyDrawer(),
       bottomNavigationBar: NavigationBar(
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.amber,
+        indicatorColor: theme.primaryColor,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(

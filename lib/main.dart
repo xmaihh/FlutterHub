@@ -32,16 +32,17 @@ class MyApp extends StatelessWidget {
             onGenerateTitle: (context) {
               return WanLocalizations.of(context).title;
             },
-            home: HomePage(),
+            home: const HomePage(),
             locale: localeModel.getLocale(),
             supportedLocales: const [
               Locale('en', 'US'),
-              Locale('zh', "CN"),
+              Locale('zh', 'CN'),
             ],
             localizationsDelegates: const [
               // 本地化的代理类
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
               WanLocalizationsDelegate(),
             ],
             localeResolutionCallback: (_locale, supportedLocales) {

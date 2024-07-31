@@ -11,7 +11,7 @@ class CacheObject {
   int timeStamp;
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(other) {
     return response.hashCode == other.hashCode;
   }
 
@@ -24,7 +24,7 @@ class NetCache extends Interceptor {
   var cache = LinkedHashMap<String, CacheObject>();
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     if (!Global.profile.cache!.enable) {
       return handler.next(options);
     }
@@ -60,8 +60,8 @@ class NetCache extends Interceptor {
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    //如果启用缓存，将返回结果保存到缓存
+  onResponse(Response response, ResponseInterceptorHandler handler) async {
+    // 如果启用缓存，将返回结果保存到缓存
     if (Global.profile.cache!.enable) {
       _saveCache(response);
     }
