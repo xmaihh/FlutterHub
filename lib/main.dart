@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
+import 'package:flutter_hub/routes/about_page.dart';
 import 'package:flutter_hub/routes/home_page.dart';
 import 'package:flutter_hub/routes/language_page.dart';
 import 'package:flutter_hub/routes/login_page.dart';
@@ -25,17 +26,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserModel()),
       ],
       child: Consumer2<ThemeModel, LocaleModel>(
-        builder: (BuildContext context, ThemeModel themeModel,
-            LocaleModel localeModel, Widget? child) {
+        builder: (BuildContext context, ThemeModel themeModel, LocaleModel localeModel, Widget? child) {
           return MaterialApp(
             theme: ThemeData(
               // colorScheme: ColorScheme.fromSeed(seedColor: themeModel.theme),
-              // useMaterial3: true, // Optional: enables Material 3 design
-              primaryColor: themeModel.theme,
+              useMaterial3: true, // Optional: enables Material 3 design
+              primaryColor: themeModel.theme, primarySwatch: themeModel.theme,
               colorScheme: const ColorScheme.light().copyWith(primary: themeModel.theme),
             ),
             onGenerateTitle: (context) {
-              return WanLocalizations.of(context).title;
+              return WanLocalizations.of(context).app_name;
             },
             home: const HomePage(),
             locale: localeModel.getLocale(),
@@ -69,8 +69,9 @@ class MyApp extends StatelessWidget {
             // 注册路由表
             routes: <String, WidgetBuilder>{
               "login": (context) => LoginPage(),
-              "themes":(context) => const ThemeChangePage(),
-              "language":(context) => const LanguagePage(),
+              "themes": (context) => const ThemeChangePage(),
+              "language": (context) => const LanguagePage(),
+              "about": (context) => AboutPage(),
             },
           );
         },

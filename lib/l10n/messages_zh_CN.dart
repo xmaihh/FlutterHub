@@ -19,14 +19,29 @@ typedef String MessageIfAbsent(String? messageStr, List<Object>? args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_CN';
 
+  static m0(version) => "发现新版本 ${version}，是否更新？";
+
+  static m1(retryTime) => "速率限制，请在 ${retryTime} 后重试";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
-    "auto" : MessageLookupByLibrary.simpleMessage("自动"),
-    "home" : MessageLookupByLibrary.simpleMessage("FlutterHub"),
-    "language" : MessageLookupByLibrary.simpleMessage("语言"),
-    "login" : MessageLookupByLibrary.simpleMessage("登录"),
-    "setting" : MessageLookupByLibrary.simpleMessage("设置"),
-    "theme" : MessageLookupByLibrary.simpleMessage("主题"),
-    "title" : MessageLookupByLibrary.simpleMessage("Flutter应用")
+    "app_name" : MessageLookupByLibrary.simpleMessage("Flutter应用"),
+    "nav_home" : MessageLookupByLibrary.simpleMessage("首页"),
+    "nav_login" : MessageLookupByLibrary.simpleMessage("登录"),
+    "nav_settings" : MessageLookupByLibrary.simpleMessage("设置"),
+    "settings_about" : MessageLookupByLibrary.simpleMessage("关于"),
+    "settings_app_license" : MessageLookupByLibrary.simpleMessage("开源许可"),
+    "settings_app_version" : MessageLookupByLibrary.simpleMessage("版本"),
+    "settings_check_for_updates" : MessageLookupByLibrary.simpleMessage("检查更新"),
+    "settings_language" : MessageLookupByLibrary.simpleMessage("语言"),
+    "settings_language_auto" : MessageLookupByLibrary.simpleMessage("自动"),
+    "settings_theme" : MessageLookupByLibrary.simpleMessage("主题"),
+    "settings_update_action_cancel" : MessageLookupByLibrary.simpleMessage("取消"),
+    "settings_update_action_update" : MessageLookupByLibrary.simpleMessage("更新"),
+    "settings_update_msg_app_up_to_date" : MessageLookupByLibrary.simpleMessage("您的应用已经是最新版本"),
+    "settings_update_msg_check_failed" : MessageLookupByLibrary.simpleMessage("检查更新失败，请稍后再试"),
+    "settings_update_msg_new_version_found" : m0,
+    "settings_update_msg_rate_limit" : m1,
+    "settings_update_title_new_version_available" : MessageLookupByLibrary.simpleMessage("有新版本可用")
   };
 }

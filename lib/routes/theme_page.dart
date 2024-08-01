@@ -12,7 +12,7 @@ class ThemeChangePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(WanLocalizations.of(context).theme),
+        title: Text(WanLocalizations.of(context).settings_theme),
       ),
       body: ListView(
         //显示主题色块

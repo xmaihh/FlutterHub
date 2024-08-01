@@ -1,45 +1,118 @@
 {
-  "@@last_modified": "2024-07-30T16:26:23.169252",
+  "@@last_modified": "2024-08-01T15:12:36.447615",
   "@@locale":"zh_CN",
-  "title": "Flutter应用",
-  "@title": {
-    "description": "Title for the Demo application",
+  "app_name": "Flutter应用",
+  "@app_name": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "home": "FlutterHub",
-  "@home": {
+  "nav_home": "首页",
+  "@nav_home": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "language": "语言",
-  "@language": {
+  "nav_login": "登录",
+  "@nav_login": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login": "登录",
-  "@login": {
+  "nav_settings": "设置",
+  "@nav_settings": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "auto": "自动",
-  "@auto": {
+  "settings_theme": "主题",
+  "@settings_theme": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "setting": "设置",
-  "@setting": {
+  "settings_language": "语言",
+  "@settings_language": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "theme": "主题",
-  "@theme": {
+  "settings_language_auto": "自动",
+  "@settings_language_auto": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_about": "关于",
+  "@settings_about": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_app_version": "版本",
+  "@settings_app_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_check_for_updates": "检查更新",
+  "@settings_check_for_updates": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_msg_rate_limit": "速率限制，请在 {retryTime} 后重试",
+  "@settings_update_msg_rate_limit": {
+    "type": "text",
+    "placeholders_order": [
+      "retryTime"
+    ],
+    "placeholders": {
+      "retryTime": {}
+    }
+  },
+  "settings_update_msg_app_up_to_date": "您的应用已经是最新版本",
+  "@settings_update_msg_app_up_to_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_msg_check_failed": "检查更新失败，请稍后再试",
+  "@settings_update_msg_check_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_title_new_version_available": "有新版本可用",
+  "@settings_update_title_new_version_available": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_msg_new_version_found": "发现新版本 {version}，是否更新？",
+  "@settings_update_msg_new_version_found": {
+    "type": "text",
+    "placeholders_order": [
+      "version"
+    ],
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "settings_update_action_cancel": "取消",
+  "@settings_update_action_cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_action_update": "更新",
+  "@settings_update_action_update": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_app_license": "开源许可",
+  "@settings_app_license": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

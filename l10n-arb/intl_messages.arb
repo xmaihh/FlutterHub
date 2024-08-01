@@ -1,45 +1,117 @@
 {
-  "@@last_modified": "2024-07-30T16:32:04.976202",
-  "@@locale":"en",
-  "title": "Flutter APP",
-  "@title": {
-    "description": "Title for the Demo application",
+  "@@last_modified": "2024-08-01T16:13:11.858980",
+  "app_name": "FlutterHub",
+  "@app_name": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "home": "FlutterHub",
-  "@home": {
+  "nav_home": "Home",
+  "@nav_home": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "language": "Language",
-  "@language": {
+  "nav_login": "Login",
+  "@nav_login": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login": "Login",
-  "@login": {
+  "nav_settings": "Settings",
+  "@nav_settings": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "auto": "Auto",
-  "@auto": {
+  "settings_theme": "Theme",
+  "@settings_theme": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "setting": "Setting",
-  "@setting": {
+  "settings_language": "Language",
+  "@settings_language": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "theme": "Theme",
-  "@theme": {
+  "settings_language_auto": "Auto",
+  "@settings_language_auto": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_about": "About",
+  "@settings_about": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_app_version": "Version",
+  "@settings_app_version": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_check_for_updates": "Check for updates",
+  "@settings_check_for_updates": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_msg_rate_limit": "Rate limit exceeded, please retry after {retryTime} ",
+  "@settings_update_msg_rate_limit": {
+    "type": "text",
+    "placeholders_order": [
+      "retryTime"
+    ],
+    "placeholders": {
+      "retryTime": {}
+    }
+  },
+  "settings_update_msg_app_up_to_date": "Your application is up to date",
+  "@settings_update_msg_app_up_to_date": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_msg_check_failed": "Update check failed, please try again later",
+  "@settings_update_msg_check_failed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_title_new_version_available": "New version available",
+  "@settings_update_title_new_version_available": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_msg_new_version_found": "A new version {version} is available, do you want to update?",
+  "@settings_update_msg_new_version_found": {
+    "type": "text",
+    "placeholders_order": [
+      "version"
+    ],
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "settings_update_action_cancel": "Cancel",
+  "@settings_update_action_cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_update_action_update": "Update",
+  "@settings_update_action_update": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_app_license": "License",
+  "@settings_app_license": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

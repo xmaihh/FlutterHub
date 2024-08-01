@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
 import 'package:flutter_hub/states/profile_change_notifier.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,9 +18,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
     final ThemeData theme = Theme.of(context);
+    final lan = WanLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(WanLocalizations.of(context).title),
+        title: Text(lan.app_name),
       ),
       drawer: MyDrawer(),
       bottomNavigationBar: NavigationBar(
@@ -37,15 +39,10 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Badge(child: Icon(Icons.notifications_sharp)),
-            label: 'Notifications',
-          ),
-          NavigationDestination(
             icon: Badge(
-              label: Text('2'),
-              child: Icon(Icons.messenger_sharp),
+              child: Icon(Icons.person_sharp),
             ),
-            label: 'Messages',
+            label: 'Mine',
           ),
         ],
       ),
@@ -64,7 +61,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
 
-        /// Notifications page
+        /// Mine page
         const Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
@@ -85,48 +82,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        ),
-
-        /// Messages page
-        ListView.builder(
-          reverse: true,
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    'Hello',
-                    style: theme.textTheme.bodyLarge!
-                        .copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ),
-              );
-            }
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  'Hi!',
-                  style: theme.textTheme.bodyLarge!
-                      .copyWith(color: theme.colorScheme.onPrimary),
-                ),
-              ),
-            );
-          },
         ),
       ][currentPageIndex],
     );
@@ -180,33 +135,48 @@ class MyDrawer extends StatelessWidget {
   }
 
   Widget _buildMenus() {
-    return Consumer<UserModel>(
-        builder: (BuildContext context, UserModel value, Widget? child) {
+    return Consumer<UserModel>(builder: (BuildContext context, UserModel value, Widget? child) {
+      var lan = WanLocalizations.of(context);
       return Column(
         children: <Widget>[
           Expanded(
             child: ListView(
               children: <Widget>[
                 ListTile(
-                  title: Text(WanLocalizations.of(context).theme),
+                  title: Text(lan.settings_theme),
                   leading: const Icon(Icons.color_lens),
                   onTap: () => Navigator.pushNamed(context, "themes"),
                 ),
                 ListTile(
-                  title: Text(WanLocalizations.of(context).language),
+                  title: Text(lan.settings_language),
                   leading: const Icon(Icons.language),
                   onTap: () => Navigator.pushNamed(context, "language"),
+                ),
+                ListTile(
+                  title: Text(lan.settings_about),
+                  leading: const Icon(Icons.info),
+                  onTap: () => Navigator.pushNamed(context, "about"),
                 ),
                 // 添加更多 ListTile 项目
               ],
             ),
           ),
-          const ListTile(
-            title: Text(
-              "v1.0.0+46",
-              textAlign: TextAlign.center,
-            ),
-          ),
+          FutureBuilder(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final version = snapshot.data!.version;
+                  final buildNumber = snapshot.data!.buildNumber;
+                  return ListTile(
+                    title: Text(
+                      "Version: $version+$buildNumber",
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                } else {
+                  return const SizedBox(); // Or a loading indicator
+                }
+              }),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 8),
           )

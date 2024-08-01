@@ -9,13 +9,7 @@ import '../models/profile.dart';
 import 'net_cache.dart';
 
 // 提供可选主题色
-const _themes = <MaterialColor>[
-  Colors.blue,
-  Colors.cyan,
-  Colors.teal,
-  Colors.green,
-  Colors.red
-];
+const _themes = <MaterialColor>[Colors.blue, Colors.cyan, Colors.teal, Colors.green, Colors.red];
 
 class Global {
   static late SharedPreferences _prefs;
@@ -57,6 +51,15 @@ class Global {
   }
 
   //持久化Profile信息
-  static saveProfile() =>
-      _prefs.setString("profile", jsonEncode(profile.toJson()));
+  static saveProfile() => _prefs.setString("profile", jsonEncode(profile.toJson()));
+
+  //持久化上次更新的时间信息
+  static set lastShowUpdate(DateTime time) => _prefs.setString('lastShowUpdate', time.toIso8601String());
+
+  // 获取上次更新的时间信息
+  static DateTime get lastShowUpdate {
+    String? lastShowUpdateStr = _prefs.getString('lastShowUpdate');
+    if (lastShowUpdateStr == null) return DateTime(1970, 1, 1);
+    return DateTime.parse(lastShowUpdateStr);
+  }
 }
