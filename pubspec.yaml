@@ -55,7 +55,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
   # json_serializable
-  build_runner: ^2.3.3
+  build_runner: ^2.4.11
   json_serializable: ^6.8.0
   # json_model
   json_model: ^1.0.0
