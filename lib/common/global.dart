@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/cacheConfig.dart';
 import '../models/profile.dart';
-import 'net_cache.dart';
+import '../utils/logger.dart';
+import '../api/net_cache.dart';
 
 // 提供可选主题色
 const _themes = <MaterialColor>[Colors.blue, Colors.cyan, Colors.teal, Colors.green, Colors.red];
@@ -48,6 +49,9 @@ class Global {
 
     //初始化网络请求相关配置
     Wan.init();
+
+    //初始化日志
+    Log.init();
   }
 
   //持久化Profile信息

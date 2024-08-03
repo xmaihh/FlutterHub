@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../common/app_version.dart';
-import '../common/check_update.dart';
-import '../l10n/localization_intl.dart';
-import '../widgets/link_icon.dart';
+import '../../utils/app_version.dart';
+import '../../utils/check_update.dart';
+import '../../l10n/localization_intl.dart';
+import '../../widgets/link_icon.dart';
 
 class AboutPage extends StatefulWidget {
   @override

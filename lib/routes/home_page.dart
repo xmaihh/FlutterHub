@@ -53,9 +53,11 @@ class _HomePageState extends State<HomePage> {
           margin: const EdgeInsets.all(8.0),
           child: SizedBox.expand(
             child: Center(
-              child: Text(
-                'Home page',
-                style: theme.textTheme.titleLarge,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed("login");
+                },
+                child: Text("Login"),
               ),
             ),
           ),

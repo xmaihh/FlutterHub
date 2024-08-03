@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/common/wan_api.dart';
-import 'package:flutter_hub/models/index.dart';
 
-import '../common/global.dart';
-import '../l10n/localization_intl.dart';
+import '../../common/global.dart';
+import '../../utils/logger.dart';
+import '../../l10n/localization_intl.dart';
+import '../../models/index.dart';
+import '../../models/userInfo.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -91,13 +95,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLogin() async {
+    Log.info("点击Loign");
     // 先验证各个表单字段是否合法
+    Log.info("先验证各个表单字段是否合法");
+    Log.error("usname: ${_unameController.text}");
+    Log.error("passwd: ${_pwdController.text}");
     if ((_formKey.currentState as FormState).validate()) {
+      Log.info("校验通过！");
       UserInfo? user;
+
+      ResponseModel<UserInfo> res = await Wan(context).login(_unameController.text, _pwdController.text);
+      // 因为登录页返回后，首页会build，所以我们传false，更新user后不触发更新
+      // Provider.of<UserModel>(context, listen: false).user = user;
+      Log.warning(res.toString());
+
       try {
-        user = await Wan(context).login(_unameController.text, _pwdController.text);
+        ResponseModel<UserInfo> res = await Wan(context).login(_unameController.text, _pwdController.text);
         // 因为登录页返回后，首页会build，所以我们传false，更新user后不触发更新
         // Provider.of<UserModel>(context, listen: false).user = user;
+        Log.warning(res.toString());
       } on DioException catch (e) {
         //登录失败则提示
         if (e.response?.statusCode == 401) {
@@ -106,12 +122,14 @@ class _LoginPageState extends State<LoginPage> {
         }
       } finally {
         // 隐藏loading框
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
       }
       //登录成功则返回
       if (user != null) {
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
       }
+    }else{
+      Log.error("校验失败!!!");
     }
   }
 }

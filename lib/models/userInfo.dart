@@ -22,4 +22,9 @@ class UserInfo {
   
   factory UserInfo.fromJson(Map<String,dynamic> json) => _$UserInfoFromJson(json);
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
+
+  @override
+  String toString() {
+    return 'UserInfo(admin: $admin, chapterTops: $chapterTops, coinCount: $coinCount, collectIds: $collectIds, email: $email, icon: $icon, id: $id, nickname: $nickname, password: $password, publicName: $publicName, token: $token, type: $type, username: $username)';
+  }
 }

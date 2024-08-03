@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
-import 'package:flutter_hub/routes/about_page.dart';
+import 'package:flutter_hub/routes/settings/about_page.dart';
 import 'package:flutter_hub/routes/home_page.dart';
-import 'package:flutter_hub/routes/language_page.dart';
-import 'package:flutter_hub/routes/login_page.dart';
-import 'package:flutter_hub/routes/theme_page.dart';
+import 'package:flutter_hub/routes/settings/language_page.dart';
+import 'package:flutter_hub/routes/user/login_page.dart';
+import 'package:flutter_hub/routes/settings/theme_page.dart';
 import 'package:flutter_hub/states/profile_change_notifier.dart';
+import 'package:flutter_hub/states/theme_state.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeModel()),
         ChangeNotifierProvider(create: (_) => LocaleModel()),
         ChangeNotifierProvider(create: (_) => UserModel()),
+        ChangeNotifierProvider(create: (_) => ThemeState()),
       ],
       child: Consumer2<ThemeModel, LocaleModel>(
         builder: (BuildContext context, ThemeModel themeModel, LocaleModel localeModel, Widget? child) {
