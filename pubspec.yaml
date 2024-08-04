@@ -44,6 +44,7 @@ dependencies:
   package_info_plus: ^8.0.1
   url_launcher: ^6.3.0
   icons_plus: ^5.0.0
+  logging: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -101,3 +102,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+scripts:
+  # To generate .g files:
+  build:runner: dart run build_runner watch --delete-conflicting-outputs
