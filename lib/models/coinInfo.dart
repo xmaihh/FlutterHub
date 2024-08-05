@@ -15,4 +15,9 @@ class CoinInfo {
   
   factory CoinInfo.fromJson(Map<String,dynamic> json) => _$CoinInfoFromJson(json);
   Map<String, dynamic> toJson() => _$CoinInfoToJson(this);
+
+  @override
+  String toString() {
+    return 'CoinInfo(coinCount: $coinCount, level: $level, nickname: $nickname, rank: $rank, userId: $userId, username: $username)';
+  }
 }

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_hub/common/wan_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/cacheConfig.dart';
 import '../models/profile.dart';
+import '../services/service_locator.dart';
 import '../utils/logger.dart';
 import '../api/net_cache.dart';
 
@@ -47,11 +47,11 @@ class Global {
       ..maxAge = 3600
       ..maxCount = 100;
 
-    //初始化网络请求相关配置
-    Wan.init();
-
     //初始化日志
     Log.init();
+
+    //依赖注入
+    setupServiceLocator();
   }
 
   //持久化Profile信息

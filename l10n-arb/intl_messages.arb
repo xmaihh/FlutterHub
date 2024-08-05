@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-08-01T16:13:11.858980",
+  "@@last_modified": "2024-08-06T15:45:16.316435",
   "app_name": "FlutterHub",
   "@app_name": {
     "type": "text",
@@ -14,6 +14,66 @@
   },
   "nav_login": "Login",
   "@nav_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_username_label": "Username",
+  "@login_username_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_username_validator": "Enter your username",
+  "@login_username_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_password_label": "Password",
+  "@login_password_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_password_validator": "Enter your password",
+  "@login_password_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_btn_forget_password": "Forget password?",
+  "@login_btn_forget_password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_other_method": "Others",
+  "@login_other_method": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_btn_login": "Login",
+  "@login_btn_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_no_account": "Don't have an account?",
+  "@login_no_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_btn_signup": "Signup",
+  "@login_btn_signup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "nav_signup": "Signup",
+  "@nav_signup": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

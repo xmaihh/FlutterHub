@@ -2,26 +2,26 @@ import 'package:dio/dio.dart';
 
 import '../common/constants.dart';
 import '../common/global.dart';
-import '../services/auth_service.dart';
+import '../services/cache_manager.dart';
+
+typedef CookieProvider = Future<String?> Function();
 
 class ApiClient {
-  static final ApiClient _instance = ApiClient._internal();
-
-  factory ApiClient() => _instance;
   late Dio _dio;
-  final AuthService _authService = AuthService();
+  final CookieProvider _cookieProvider;
+  final CacheManager _cacheManager;
 
-  ApiClient._internal() {
+  ApiClient(this._cookieProvider, this._cacheManager) {
     _dio = Dio(BaseOptions(
       baseUrl: Constants.baseUrl,
       connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 3),
+      receiveTimeout: const Duration(seconds: 5),
     ));
     // 添加拦截器、错误处理等...
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         // 在每个请求中添加cookie
-        String? cookie = await _authService.getCookie();
+        String? cookie = await _cookieProvider();
         if (cookie != null) {
           options.headers['Cookie'] = cookie;
         }
@@ -34,13 +34,49 @@ class ApiClient {
     _dio.interceptors.add(Global.netCache);
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
-    return await _dio.get(path, queryParameters: queryParameters);
+  Future<Response> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    bool useCache = false,
+    Duration? cacheDuration,
+  }) async {
+    if (useCache) {
+      final cachedData = await _cacheManager.getCache(path);
+      if (cachedData != null) {
+        return Response(
+          requestOptions: RequestOptions(path: path),
+          data: cachedData,
+          statusCode: 200,
+        );
+      }
+    }
+
+    try {
+      final response = await _dio.get(path, queryParameters: queryParameters);
+      if (useCache) {
+        await _cacheManager.setCache(path, response.data, duration: cacheDuration);
+      }
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future<Response> post(String path, {data, Map<String, dynamic>? queryParameters}) async {
-    return await _dio.post(path, data: data, queryParameters: queryParameters);
+  Future<Response> post(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    try {
+      return await _dio.post(path, data: data, queryParameters: queryParameters);
+    } catch (e) {
+      rethrow;
+    }
   }
 
-// 添加其他HTTP方法...
+  // 其他 HTTP 方法...
+
+  Future<void> clearCache() async {
+    await _cacheManager.clearAllCache();
+  }
 }

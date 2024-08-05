@@ -1,10 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hub/common/constants.dart';
+
 import '../api/api_client.dart';
 import '../models/index.dart';
 
 class ApiService {
-  final ApiClient _apiClient = ApiClient();
+  final ApiClient _apiClient;
+
+  ApiService(this._apiClient);
 
   Future<T> handleApiCall<T>(Future<T> Function() apiCall, BuildContext context) async {
     try {
@@ -72,7 +76,12 @@ class ApiService {
   }
 
 // 添加其他API调用方法...
-
+  Future<ResponseModel<User>> fetchUser(BuildContext context) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.get(Constants.userInfoEndpoint);
+      return ResponseModel<User>.fromJson(response.data, (json) => User.fromJson(json));
+    }, context);
+  }
 }
 
 // import 'package:flutter/material.dart';

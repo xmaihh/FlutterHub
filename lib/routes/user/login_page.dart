@@ -1,14 +1,9 @@
-import 'dart:developer';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hub/common/wan_api.dart';
+import 'package:icons_plus/icons_plus.dart';
 
-import '../../common/global.dart';
-import '../../utils/logger.dart';
+import '../../common/index.dart';
 import '../../l10n/localization_intl.dart';
-import '../../models/index.dart';
-import '../../models/userInfo.dart';
+import '../../services/index.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -16,120 +11,235 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _unameController = new TextEditingController();
-  TextEditingController _pwdController = new TextEditingController();
-  bool pwdShow = false;
-  GlobalKey _formKey = new GlobalKey<FormState>();
-  bool _nameAutoFocus = true;
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _unameController = TextEditingController();
+  TextEditingController _pwdController = TextEditingController();
+  bool _isObscure = true;
+  bool _unameAutoFocus = true;
+  final _authService = getIt<AuthService>();
+  final _apiService = getIt<ApiService>();
+
+  List _loginMethod = [
+    {
+      "title": "facebook",
+      "icon": Bootstrap.facebook,
+    },
+    {
+      "title": "google",
+      "icon": Bootstrap.google,
+    },
+    {
+      "title": "twitter",
+      "icon": Bootstrap.twitter,
+    },
+    {
+      "title": "wechat",
+      "icon": Bootstrap.wechat,
+    },
+    {
+      "title": "telegram",
+      "icon": Bootstrap.telegram,
+    }
+  ];
 
   @override
   void initState() {
     // 自动填充上次登录的用户名，填充后将焦点定位到密码输入框
     _unameController.text = Global.profile.lastLogin ?? "";
     if (_unameController.text.isNotEmpty) {
-      _nameAutoFocus = false;
+      _unameAutoFocus = false;
     }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var lan = WanLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(lan.nav_login),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Column(
-            children: [
-              TextFormField(
-                autofocus: _nameAutoFocus,
-                controller: _unameController,
-                decoration: InputDecoration(labelText: "username", hintText: "username", prefixIcon: Icon(Icons.person)),
-                // 校验用户名（不能为空）
-                validator: (v) {
-                  return v == null || v.trim().isNotEmpty ? null : "用户名不能为空";
-                },
-              ),
-              TextFormField(
-                autofocus: !_nameAutoFocus,
-                controller: _pwdController,
-                decoration: InputDecoration(
-                  labelText: "pwd",
-                  hintText: "password",
-                  prefixIcon: Icon(Icons.password),
-                  suffixIcon: IconButton(
-                    icon: Icon(pwdShow ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        pwdShow = !pwdShow;
-                      });
-                    },
-                  ),
+        body: Form(
+            key: _formKey,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 22.0),
+              children: <Widget>[
+                SizedBox(
+                  height: kToolbarHeight,
                 ),
-                obscureText: !pwdShow,
-                //校验密码（不能为空）
-                validator: (v) {
-                  return v == null || v.trim().isNotEmpty ? null : "输入密码";
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 25.0),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.expand(height: 55.0),
-                  child: ElevatedButton(
-                    onPressed: _onLogin,
-                    child: Text("loGIn"),
-                  ),
-                ),
-              )
-            ],
-          ),
+                buildTitle(),
+                buildTitleLine(),
+                SizedBox(height: 70.0),
+                buildUnameTextField(),
+                SizedBox(height: 30.0),
+                buildPasswordTextField(context),
+                buildForgetPasswordText(context),
+                SizedBox(height: 60.0),
+                buildLoginButton(context),
+                SizedBox(height: 30.0),
+                buildOtherLoginText(),
+                buildOtherMethod(context),
+                buildRegisterText(context),
+              ],
+            )));
+  }
+
+  Padding buildTitle() {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Text(
+        WanLocalizations.of(context).nav_login,
+        style: TextStyle(
+          fontSize: 42.0,
+          color: Theme.of(context).primaryColor,
         ),
       ),
     );
   }
 
-  void _onLogin() async {
-    Log.info("点击Loign");
-    // 先验证各个表单字段是否合法
-    Log.info("先验证各个表单字段是否合法");
-    Log.error("usname: ${_unameController.text}");
-    Log.error("passwd: ${_pwdController.text}");
-    if ((_formKey.currentState as FormState).validate()) {
-      Log.info("校验通过！");
-      UserInfo? user;
+  Padding buildTitleLine() {
+    return Padding(
+      padding: EdgeInsets.only(left: 12.0, top: 4.0),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Container(
+          color: Theme.of(context).primaryColor,
+          width: 40.0,
+          height: 2.0,
+        ),
+      ),
+    );
+  }
 
-      ResponseModel<UserInfo> res = await Wan(context).login(_unameController.text, _pwdController.text);
-      // 因为登录页返回后，首页会build，所以我们传false，更新user后不触发更新
-      // Provider.of<UserModel>(context, listen: false).user = user;
-      Log.warning(res.toString());
+  TextFormField buildUnameTextField() {
+    return TextFormField(
+      autofocus: _unameAutoFocus,
+      controller: _unameController,
+      decoration: InputDecoration(
+        labelText: WanLocalizations.of(context).login_username_label,
+        prefixIcon: Icon(Bootstrap.person_fill),
+      ),
+      validator: (v) {
+        return v == null || v.trim().isNotEmpty ? null : WanLocalizations.of(context).login_username_validator;
+      },
+    );
+  }
 
-      try {
-        ResponseModel<UserInfo> res = await Wan(context).login(_unameController.text, _pwdController.text);
-        // 因为登录页返回后，首页会build，所以我们传false，更新user后不触发更新
-        // Provider.of<UserModel>(context, listen: false).user = user;
-        Log.warning(res.toString());
-      } on DioException catch (e) {
-        //登录失败则提示
-        if (e.response?.statusCode == 401) {
-        } else {
-          // showToast(e.toString());
-        }
-      } finally {
-        // 隐藏loading框
-        // Navigator.of(context).pop();
-      }
-      //登录成功则返回
-      if (user != null) {
-        // Navigator.of(context).pop();
-      }
-    }else{
-      Log.error("校验失败!!!");
-    }
+  TextFormField buildPasswordTextField(BuildContext context) {
+    return TextFormField(
+      autofocus: !_unameAutoFocus,
+      controller: _pwdController,
+      obscureText: _isObscure,
+      decoration: InputDecoration(
+        labelText: WanLocalizations.of(context).login_password_label,
+        prefixIcon: Icon(AntDesign.lock_fill),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _isObscure ? AntDesign.eye_invisible_fill : AntDesign.eye_fill,
+          ),
+          onPressed: () {
+            setState(() {
+              _isObscure = !_isObscure;
+            });
+          },
+        ),
+      ),
+      validator: (v) {
+        return v == null || v.trim().isNotEmpty ? null : WanLocalizations.of(context).login_password_validator;
+      },
+    );
+  }
+
+  Padding buildForgetPasswordText(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: ElevatedButton(
+          child: Text(
+            WanLocalizations.of(context).login_btn_forget_password,
+          ),
+          onPressed: () {
+          },
+        ),
+      ),
+    );
+  }
+
+  Align buildLoginButton(BuildContext context) {
+    return Align(
+      child: SizedBox(
+        height: 45.0,
+        width: 270.0,
+        child: ElevatedButton(
+          child: Text(
+            WanLocalizations.of(context).login_btn_login,
+          ),
+          onPressed: () {
+            // if (_formKey.currentState.validate()) {
+            //   /// 只有输入内容符合通过要求才能到达此处
+            //   _formKey.currentState.save();
+
+            /// TODO 执行登录方法
+            // print('email:$_username, password:$_password');
+            // }
+          },
+        ),
+      ),
+    );
+  }
+
+  Align buildOtherLoginText() {
+    return Align(
+      alignment: Alignment.center,
+      child: Text(
+        // '其他帐号登录',
+        WanLocalizations.of(context).login_other_method,
+        style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 14.0),
+      ),
+    );
+  }
+
+  ButtonBar buildOtherMethod(BuildContext context) {
+    return ButtonBar(
+      alignment: MainAxisAlignment.center,
+      children: _loginMethod
+          .map((item) => Builder(
+                builder: (context) {
+                  return IconButton(
+                      icon: Icon(
+                        item['icon'],
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      onPressed: () {
+                        /// TODO 第三方登录方法
+                      });
+                },
+              ))
+          .toList(),
+    );
+  }
+
+  Align buildRegisterText(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(WanLocalizations.of(context).login_no_account),
+            GestureDetector(
+              child: Text(
+                WanLocalizations.of(context).login_btn_signup,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              onTap: () {
+                /// TODO 跳转到注册页面
+                print('去注册');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

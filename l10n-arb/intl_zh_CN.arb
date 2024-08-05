@@ -19,6 +19,66 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "login_username_label": "用户名",
+  "@login_username_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_username_validator": "请输入用户名",
+  "@login_username_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_password_label": "密码",
+  "@login_password_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_password_validator": "请输入密码",
+  "@login_password_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_btn_forget_password": "忘记密码？",
+  "@login_btn_forget_password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_other_method": "其他帐号登录",
+  "@login_other_method": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_btn_login": "登录",
+  "@login_btn_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_no_account": "还没有帐号？",
+  "@login_no_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_btn_signup": "去注册",
+  "@login_btn_signup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "nav_signup": "注册",
+  "@nav_signup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "nav_settings": "设置",
   "@nav_settings": {
     "type": "text",

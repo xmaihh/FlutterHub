@@ -56,7 +56,7 @@ class Constants {
   static const String unknownErrorMessage = '发生未知错误,请稍后重试';
 
   // 应用信息
-  static const String appName = 'WanAndroid';
+  static const String appName = 'flutter_hub';
   static const String appVersion = '1.0.0';
 
   // 资源路径
