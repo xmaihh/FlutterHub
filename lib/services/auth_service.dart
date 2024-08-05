@@ -2,14 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/api_client.dart';
 import '../common/constants.dart';
-import '../models/user.dart';
+import '../models/index.dart';
 
 class AuthService {
   final ApiClient _apiClient = ApiClient();
   final String _cookieKey = 'auth_cookie';
 
   // 登录方法
-  Future<User> login(String username, String password) async {
+  Future<ResponseModel<UserInfo>> login(String username, String password) async {
     try {
       final response = await _apiClient.post(
         Constants.loginEndpoint,
@@ -24,7 +24,7 @@ class AuthService {
         _saveCookie(response);
 
         // 解析并返回用户信息
-        return User.fromJson(response.data['data']);
+        return ResponseModel<UserInfo>.fromJson(response.data, (json) => UserInfo.fromJson(json));
       } else {
         throw Exception('Login failed: ${response.statusMessage}');
       }

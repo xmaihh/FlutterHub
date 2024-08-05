@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../common/constants.dart';
+import '../common/global.dart';
 import '../services/auth_service.dart';
 
 class ApiClient {
@@ -27,6 +28,10 @@ class ApiClient {
         return handler.next(options);
       },
     ));
+    // 添加日志拦截器
+    _dio.interceptors.add(LogInterceptor());
+    // 添加缓存插件
+    _dio.interceptors.add(Global.netCache);
   }
 
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
