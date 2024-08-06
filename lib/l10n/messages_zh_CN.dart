@@ -26,13 +26,15 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
     "app_name" : MessageLookupByLibrary.simpleMessage("Flutter应用"),
-    "login_btn_forget_password" : MessageLookupByLibrary.simpleMessage("忘记密码？"),
+    "login_btn_forgot_password" : MessageLookupByLibrary.simpleMessage("忘记密码？"),
     "login_btn_login" : MessageLookupByLibrary.simpleMessage("登录"),
     "login_btn_signup" : MessageLookupByLibrary.simpleMessage("去注册"),
     "login_no_account" : MessageLookupByLibrary.simpleMessage("还没有帐号？"),
     "login_other_method" : MessageLookupByLibrary.simpleMessage("其他帐号登录"),
     "login_password_label" : MessageLookupByLibrary.simpleMessage("密码"),
     "login_password_validator" : MessageLookupByLibrary.simpleMessage("请输入密码"),
+    "login_subtitle" : MessageLookupByLibrary.simpleMessage("请输入您的登录凭据"),
+    "login_title" : MessageLookupByLibrary.simpleMessage("你好，欢迎回来"),
     "login_username_label" : MessageLookupByLibrary.simpleMessage("用户名"),
     "login_username_validator" : MessageLookupByLibrary.simpleMessage("请输入用户名"),
     "nav_home" : MessageLookupByLibrary.simpleMessage("首页"),
@@ -52,6 +54,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "settings_update_msg_check_failed" : MessageLookupByLibrary.simpleMessage("检查更新失败，请稍后再试"),
     "settings_update_msg_new_version_found" : m0,
     "settings_update_msg_rate_limit" : m1,
-    "settings_update_title_new_version_available" : MessageLookupByLibrary.simpleMessage("有新版本可用")
+    "settings_update_title_new_version_available" : MessageLookupByLibrary.simpleMessage("有新版本可用"),
+    "signup_already_have_an_account" : MessageLookupByLibrary.simpleMessage("已经有帐号？ "),
+    "signup_btn_login" : MessageLookupByLibrary.simpleMessage("去登录"),
+    "signup_btn_signup" : MessageLookupByLibrary.simpleMessage("注册"),
+    "signup_confirm_password_label" : MessageLookupByLibrary.simpleMessage("确认密码"),
+    "signup_confirm_password_validator" : MessageLookupByLibrary.simpleMessage("两次输入的密码不一致，请重新输入！"),
+    "signup_password_label" : MessageLookupByLibrary.simpleMessage("密码"),
+    "signup_password_validator" : MessageLookupByLibrary.simpleMessage("请输入密码"),
+    "signup_subtitle" : MessageLookupByLibrary.simpleMessage("创建一个新账号"),
+    "signup_title" : MessageLookupByLibrary.simpleMessage("注册帐号"),
+    "signup_username_label" : MessageLookupByLibrary.simpleMessage("用户名"),
+    "signup_username_validator" : MessageLookupByLibrary.simpleMessage("请输入用户名")
   };
 }

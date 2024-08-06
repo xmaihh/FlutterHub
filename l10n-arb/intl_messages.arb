@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-08-06T15:45:16.316435",
+  "@@last_modified": "2024-08-06T23:38:45.488839",
   "app_name": "FlutterHub",
   "@app_name": {
     "type": "text",
@@ -14,6 +14,18 @@
   },
   "nav_login": "Login",
   "@nav_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_title": "Welcome Back",
+  "@login_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_subtitle": "Enter your credential to login",
+  "@login_subtitle": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
@@ -42,13 +54,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_btn_forget_password": "Forget password?",
-  "@login_btn_forget_password": {
+  "login_btn_forgot_password": "Forgot password?",
+  "@login_btn_forgot_password": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_other_method": "Others",
+  "login_other_method": "Or",
   "@login_other_method": {
     "type": "text",
     "placeholders_order": [],
@@ -60,13 +72,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_no_account": "Don't have an account?",
+  "login_no_account": "Don't have an account? ",
   "@login_no_account": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_btn_signup": "Signup",
+  "login_btn_signup": "Sign Up",
   "@login_btn_signup": {
     "type": "text",
     "placeholders_order": [],
@@ -74,6 +86,72 @@
   },
   "nav_signup": "Signup",
   "@nav_signup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_title": "Sign up",
+  "@signup_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_subtitle": "Create your account",
+  "@signup_subtitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_username_label": "Username",
+  "@signup_username_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_password_label": "Password",
+  "@signup_password_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_confirm_password_label": "Confirm Password",
+  "@signup_confirm_password_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_username_validator": "Enter your username",
+  "@signup_username_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_password_validator": "Enter your password",
+  "@signup_password_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_confirm_password_validator": "Enter your confirm password",
+  "@signup_confirm_password_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_btn_signup": "Sign up",
+  "@signup_btn_signup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_already_have_an_account": "Already have an account? ",
+  "@signup_already_have_an_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_btn_login": "Login",
+  "@signup_btn_login": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

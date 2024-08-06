@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/index.dart';
 import '../../l10n/localization_intl.dart';
@@ -63,19 +64,21 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: kToolbarHeight,
                 ),
+                const SizedBox(height: 60.0),
                 buildTitle(),
+                const SizedBox(height: 20),
                 buildTitleLine(),
-                SizedBox(height: 70.0),
+                const SizedBox(height: 70.0),
                 buildUnameTextField(),
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 buildPasswordTextField(context),
                 buildForgetPasswordText(context),
-                SizedBox(height: 60.0),
+                const SizedBox(height: 60.0),
                 buildLoginButton(context),
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 buildOtherLoginText(),
                 buildOtherMethod(context),
-                buildRegisterText(context),
+                buildSignupText(context),
               ],
             )));
   }
@@ -83,12 +86,15 @@ class _LoginPageState extends State<LoginPage> {
   Padding buildTitle() {
     return Padding(
       padding: EdgeInsets.all(8.0),
-      child: Text(
-        WanLocalizations.of(context).nav_login,
-        style: TextStyle(
-          fontSize: 42.0,
-          color: Theme.of(context).primaryColor,
-        ),
+      child: Column(
+        children: [
+          Text(
+            WanLocalizations.of(context).login_title,
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Text(WanLocalizations.of(context).login_subtitle, style: TextStyle(fontSize: 15)),
+        ],
       ),
     );
   }
@@ -112,8 +118,11 @@ class _LoginPageState extends State<LoginPage> {
       autofocus: _unameAutoFocus,
       controller: _unameController,
       decoration: InputDecoration(
-        labelText: WanLocalizations.of(context).login_username_label,
+        hintText: WanLocalizations.of(context).login_username_label,
         prefixIcon: Icon(Bootstrap.person_fill),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
+        fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        filled: true,
       ),
       validator: (v) {
         return v == null || v.trim().isNotEmpty ? null : WanLocalizations.of(context).login_username_validator;
@@ -127,8 +136,11 @@ class _LoginPageState extends State<LoginPage> {
       controller: _pwdController,
       obscureText: _isObscure,
       decoration: InputDecoration(
-        labelText: WanLocalizations.of(context).login_password_label,
+        hintText: WanLocalizations.of(context).login_password_label,
         prefixIcon: Icon(AntDesign.lock_fill),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
+        fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        filled: true,
         suffixIcon: IconButton(
           icon: Icon(
             _isObscure ? AntDesign.eye_invisible_fill : AntDesign.eye_fill,
@@ -153,9 +165,13 @@ class _LoginPageState extends State<LoginPage> {
         alignment: Alignment.centerRight,
         child: ElevatedButton(
           child: Text(
-            WanLocalizations.of(context).login_btn_forget_password,
+            WanLocalizations.of(context).login_btn_forgot_password,
           ),
           onPressed: () {
+            launchUrl(
+              Uri.parse('https://www.wanandroid.com/blog/show/2947'),
+              mode: LaunchMode.externalApplication,
+            );
           },
         ),
       ),
@@ -170,6 +186,7 @@ class _LoginPageState extends State<LoginPage> {
         child: ElevatedButton(
           child: Text(
             WanLocalizations.of(context).login_btn_login,
+            style: TextStyle(fontSize: 20),
           ),
           onPressed: () {
             // if (_formKey.currentState.validate()) {
@@ -216,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Align buildRegisterText(BuildContext context) {
+  Align buildSignupText(BuildContext context) {
     return Align(
       alignment: Alignment.center,
       child: Padding(
@@ -233,8 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               onTap: () {
-                /// TODO 跳转到注册页面
-                print('去注册');
+                Navigator.of(context).pushNamed(Constants.signupRoutePath);
               },
             ),
           ],

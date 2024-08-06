@@ -4,6 +4,8 @@ import 'package:flutter_hub/states/profile_change_notifier.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../common/index.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -55,7 +57,7 @@ class _HomePageState extends State<HomePage> {
             child: Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed("login");
+                  Navigator.of(context).pushNamed(Constants.loginRoutePath);
                 },
                 child: Text("Login"),
               ),
@@ -147,17 +149,17 @@ class MyDrawer extends StatelessWidget {
                 ListTile(
                   title: Text(lan.settings_theme),
                   leading: const Icon(Icons.color_lens),
-                  onTap: () => Navigator.pushNamed(context, "themes"),
+                  onTap: () => Navigator.pushNamed(context, Constants.themeRoutePath),
                 ),
                 ListTile(
                   title: Text(lan.settings_language),
                   leading: const Icon(Icons.language),
-                  onTap: () => Navigator.pushNamed(context, "language"),
+                  onTap: () => Navigator.pushNamed(context, Constants.languageRoutePath),
                 ),
                 ListTile(
                   title: Text(lan.settings_about),
                   leading: const Icon(Icons.info),
-                  onTap: () => Navigator.pushNamed(context, "about"),
+                  onTap: () => Navigator.pushNamed(context, Constants.aboutRoutePath),
                 ),
                 // 添加更多 ListTile 项目
               ],

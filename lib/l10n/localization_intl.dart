@@ -23,6 +23,10 @@ class WanLocalizations {
 
   String get nav_login => Intl.message('Login', name: 'nav_login');
 
+  String get login_title => Intl.message('Welcome Back', name: 'login_title');
+
+  String get login_subtitle => Intl.message('Enter your credential to login', name: 'login_subtitle');
+
   String get login_username_label => Intl.message('Username', name: 'login_username_label');
 
   String get login_username_validator => Intl.message('Enter your username', name: 'login_username_validator');
@@ -31,17 +35,39 @@ class WanLocalizations {
 
   String get login_password_validator => Intl.message('Enter your password', name: 'login_password_validator');
 
-  String get login_btn_forget_password => Intl.message('Forget password?', name: 'login_btn_forget_password');
+  String get login_btn_forgot_password => Intl.message('Forgot password?', name: 'login_btn_forgot_password');
 
-  String get login_other_method => Intl.message('Others', name: 'login_other_method');
+  String get login_other_method => Intl.message('Or', name: 'login_other_method');
 
   String get login_btn_login => Intl.message('Login', name: 'login_btn_login');
 
-  String get login_no_account => Intl.message("Don't have an account?", name: 'login_no_account');
+  String get login_no_account => Intl.message("Don't have an account? ", name: 'login_no_account');
 
-  String get login_btn_signup => Intl.message('Signup', name: 'login_btn_signup');
+  String get login_btn_signup => Intl.message('Sign Up', name: 'login_btn_signup');
 
   String get nav_signup => Intl.message('Signup', name: 'nav_signup');
+
+  String get signup_title => Intl.message('Sign up', name: 'signup_title');
+
+  String get signup_subtitle => Intl.message('Create your account', name: 'signup_subtitle');
+
+  String get signup_username_label => Intl.message('Username', name: 'signup_username_label');
+
+  String get signup_password_label => Intl.message('Password', name: 'signup_password_label');
+
+  String get signup_confirm_password_label => Intl.message('Confirm Password', name: 'signup_confirm_password_label');
+
+  String get signup_username_validator => Intl.message('Enter your username', name: 'signup_username_validator');
+
+  String get signup_password_validator => Intl.message('Enter your password', name: 'signup_password_validator');
+
+  String get signup_confirm_password_validator => Intl.message('Enter your confirm password', name: 'signup_confirm_password_validator');
+
+  String get signup_btn_signup => Intl.message('Sign up', name: 'signup_btn_signup');
+
+  String get signup_already_have_an_account => Intl.message('Already have an account? ', name: 'signup_already_have_an_account');
+
+  String get signup_btn_login => Intl.message('Login', name: 'signup_btn_login');
 
   String get nav_settings => Intl.message('Settings', name: 'nav_settings');
 

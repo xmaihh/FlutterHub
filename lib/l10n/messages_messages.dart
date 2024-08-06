@@ -26,13 +26,15 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
     "app_name" : MessageLookupByLibrary.simpleMessage("FlutterHub"),
-    "login_btn_forget_password" : MessageLookupByLibrary.simpleMessage("Forget password?"),
+    "login_btn_forgot_password" : MessageLookupByLibrary.simpleMessage("Forgot password?"),
     "login_btn_login" : MessageLookupByLibrary.simpleMessage("Login"),
-    "login_btn_signup" : MessageLookupByLibrary.simpleMessage("Signup"),
-    "login_no_account" : MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
-    "login_other_method" : MessageLookupByLibrary.simpleMessage("Others"),
+    "login_btn_signup" : MessageLookupByLibrary.simpleMessage("Sign Up"),
+    "login_no_account" : MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
+    "login_other_method" : MessageLookupByLibrary.simpleMessage("Or"),
     "login_password_label" : MessageLookupByLibrary.simpleMessage("Password"),
     "login_password_validator" : MessageLookupByLibrary.simpleMessage("Enter your password"),
+    "login_subtitle" : MessageLookupByLibrary.simpleMessage("Enter your credential to login"),
+    "login_title" : MessageLookupByLibrary.simpleMessage("Welcome Back"),
     "login_username_label" : MessageLookupByLibrary.simpleMessage("Username"),
     "login_username_validator" : MessageLookupByLibrary.simpleMessage("Enter your username"),
     "nav_home" : MessageLookupByLibrary.simpleMessage("Home"),
@@ -52,6 +54,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "settings_update_msg_check_failed" : MessageLookupByLibrary.simpleMessage("Update check failed, please try again later"),
     "settings_update_msg_new_version_found" : m0,
     "settings_update_msg_rate_limit" : m1,
-    "settings_update_title_new_version_available" : MessageLookupByLibrary.simpleMessage("New version available")
+    "settings_update_title_new_version_available" : MessageLookupByLibrary.simpleMessage("New version available"),
+    "signup_already_have_an_account" : MessageLookupByLibrary.simpleMessage("Already have an account? "),
+    "signup_btn_login" : MessageLookupByLibrary.simpleMessage("Login"),
+    "signup_btn_signup" : MessageLookupByLibrary.simpleMessage("Sign up"),
+    "signup_confirm_password_label" : MessageLookupByLibrary.simpleMessage("Confirm Password"),
+    "signup_confirm_password_validator" : MessageLookupByLibrary.simpleMessage("Enter your confirm password"),
+    "signup_password_label" : MessageLookupByLibrary.simpleMessage("Password"),
+    "signup_password_validator" : MessageLookupByLibrary.simpleMessage("Enter your password"),
+    "signup_subtitle" : MessageLookupByLibrary.simpleMessage("Create your account"),
+    "signup_title" : MessageLookupByLibrary.simpleMessage("Sign up"),
+    "signup_username_label" : MessageLookupByLibrary.simpleMessage("Username"),
+    "signup_username_validator" : MessageLookupByLibrary.simpleMessage("Enter your username")
   };
 }

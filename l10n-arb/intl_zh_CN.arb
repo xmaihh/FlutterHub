@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-08-01T15:12:36.447615",
+  "@@last_modified": "2024-08-06T23:38:45.488839",
   "@@locale":"zh_CN",
   "app_name": "Flutter应用",
   "@app_name": {
@@ -15,6 +15,18 @@
   },
   "nav_login": "登录",
   "@nav_login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_title": "你好，欢迎回来",
+  "@login_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "login_subtitle": "请输入您的登录凭据",
+  "@login_subtitle": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
@@ -43,8 +55,8 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_btn_forget_password": "忘记密码？",
-  "@login_btn_forget_password": {
+  "login_btn_forgot_password": "忘记密码？",
+  "@login_btn_forgot_password": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
@@ -75,6 +87,72 @@
   },
   "nav_signup": "注册",
   "@nav_signup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_title": "注册帐号",
+  "@signup_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_subtitle": "创建一个新账号",
+  "@signup_subtitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_username_label": "用户名",
+  "@signup_username_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_password_label": "密码",
+  "@signup_password_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_confirm_password_label": "确认密码",
+  "@signup_confirm_password_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_username_validator": "请输入用户名",
+  "@signup_username_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_password_validator": "请输入密码",
+  "@signup_password_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_confirm_password_validator": "两次输入的密码不一致，请重新输入！",
+  "@signup_confirm_password_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_btn_signup": "注册",
+  "@signup_btn_signup": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_already_have_an_account": "已经有帐号？ ",
+  "@signup_already_have_an_account": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_btn_login": "去登录",
+  "@signup_btn_login": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
