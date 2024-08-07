@@ -58,29 +58,35 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         body: Form(
             key: _formKey,
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 22.0),
-              children: <Widget>[
-                SizedBox(
-                  height: kToolbarHeight,
-                ),
-                const SizedBox(height: 60.0),
-                buildTitle(),
-                const SizedBox(height: 20),
-                buildTitleLine(),
-                const SizedBox(height: 70.0),
-                buildUnameTextField(),
-                const SizedBox(height: 30.0),
-                buildPasswordTextField(context),
-                buildForgetPasswordText(context),
-                const SizedBox(height: 60.0),
-                buildLoginButton(context),
-                const SizedBox(height: 30.0),
-                buildOtherLoginText(),
-                buildOtherMethod(context),
-                buildSignupText(context),
-              ],
-            )));
+            child: SingleChildScrollView(
+                child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    height: MediaQuery.of(context).size.height - 50,
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SizedBox(
+                          height: kToolbarHeight,
+                        ),
+                        const SizedBox(height: 60.0),
+                        buildTitle(),
+                        const SizedBox(height: 10),
+                        buildTitleLine(),
+                        const SizedBox(height: 70.0),
+                        buildUnameTextField(),
+                        const SizedBox(height: 20.0),
+                        buildPasswordTextField(context),
+                        buildForgetPasswordText(context),
+                        const SizedBox(height: 60.0),
+                        buildLoginButton(context),
+                        const SizedBox(height: 30.0),
+                        buildOtherLoginText(),
+                        buildOtherMethod(context),
+                        buildSignupText(context),
+                      ],
+                    )))));
   }
 
   Padding buildTitle() {
@@ -186,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
         child: ElevatedButton(
           child: Text(
             WanLocalizations.of(context).login_btn_login,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 16),
           ),
           onPressed: () {
             // if (_formKey.currentState.validate()) {
