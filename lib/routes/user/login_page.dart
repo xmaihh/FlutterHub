@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Align(
         alignment: Alignment.bottomLeft,
         child: Container(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.primary,
           width: 40.0,
           height: 2.0,
         ),
@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
         hintText: WanLocalizations.of(context).login_username_label,
         prefixIcon: Icon(Bootstrap.person_fill),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
-        fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
         filled: true,
       ),
       validator: (v) {
@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
         hintText: WanLocalizations.of(context).login_password_label,
         prefixIcon: Icon(AntDesign.lock_fill),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
-        fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
         filled: true,
         suffixIcon: IconButton(
           icon: Icon(
@@ -252,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(
                 WanLocalizations.of(context).login_btn_signup,
                 style: TextStyle(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
               onTap: () {

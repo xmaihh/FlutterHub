@@ -4,7 +4,7 @@ import '../common/global.dart';
 import '../models/profile.dart';
 import '../models/user.dart';
 
-class ProfileChangeNotifier extends ChangeNotifier {
+class ProfileState extends ChangeNotifier {
   Profile get _profile => Global.profile;
 
   @override
@@ -14,7 +14,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
   }
 }
 
-class UserModel extends ProfileChangeNotifier {
+class UserModel extends ProfileState {
   User? get user => _profile.user;
   // APP是否登录(如果有用户信息，则证明登录过)
   bool get isLogin => user != null;
@@ -29,7 +29,7 @@ class UserModel extends ProfileChangeNotifier {
   }
 }
 
-class ThemeModel extends ProfileChangeNotifier {
+class ThemeModel extends ProfileState {
   // 获取当前主题，如果为设置主题，则默认使用主题
   MaterialColor get theme => Global.themes.firstWhere((e)=>e.value == _profile.theme,orElse: () => Colors.amber);
 
@@ -42,7 +42,7 @@ class ThemeModel extends ProfileChangeNotifier {
   }
 }
 
-class LocaleModel extends ProfileChangeNotifier {
+class LocaleModel extends ProfileState {
   // 获取当前用户的App语言配置Locale类，如果为null，则语言跟随系统语言
   Locale? getLocale() {
     if (_profile.locale == null) return null;

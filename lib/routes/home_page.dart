@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
-import 'package:flutter_hub/states/profile_change_notifier.dart';
+import 'package:flutter_hub/states/profile_state.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: theme.primaryColor,
+        indicatorColor: theme.colorScheme.primary,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
@@ -113,7 +113,7 @@ class MyDrawer extends StatelessWidget {
       builder: (BuildContext context, UserModel value, Widget? child) {
         return GestureDetector(
           child: Container(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
             padding: EdgeInsets.only(top: 40, bottom: 20),
             child: Row(
               children: [

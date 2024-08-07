@@ -7,7 +7,7 @@ import 'package:flutter_hub/routes/settings/language_page.dart';
 import 'package:flutter_hub/routes/settings/theme_page.dart';
 import 'package:flutter_hub/routes/user/login_page.dart';
 import 'package:flutter_hub/routes/user/signup_page.dart';
-import 'package:flutter_hub/states/profile_change_notifier.dart';
+import 'package:flutter_hub/states/profile_state.dart';
 import 'package:flutter_hub/states/theme_state.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -27,15 +27,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserModel()),
         ChangeNotifierProvider(create: (_) => ThemeState()),
       ],
-      child: Consumer2<ThemeModel, LocaleModel>(
-        builder: (BuildContext context, ThemeModel themeModel, LocaleModel localeModel, Widget? child) {
+      child: Consumer2<ThemeState, LocaleModel>(
+        builder: (BuildContext context, ThemeState themeState, LocaleModel localeModel, Widget? child) {
           return MaterialApp(
-            theme: ThemeData(
-              // colorScheme: ColorScheme.fromSeed(seedColor: themeModel.theme),
-              useMaterial3: true, // Optional: enables Material 3 design
-              primaryColor: themeModel.theme, primarySwatch: themeModel.theme,
-              colorScheme: const ColorScheme.light().copyWith(primary: themeModel.theme),
-            ),
+            theme: themeState.lightTheme,
+            darkTheme: themeState.darkTheme,
+            themeMode: themeState.themeMode,
             onGenerateTitle: (context) {
               return WanLocalizations.of(context).app_name;
             },

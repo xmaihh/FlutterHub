@@ -6,7 +6,7 @@ class ThemeState with ChangeNotifier {
   static const String _themeModeKey = 'theme_mode';
 
   // 预定义的主题颜色
-  static const List<Color> themeColors = [
+  static const List<MaterialColor> themeColors = [
     Colors.blue,
     Colors.green,
     Colors.red,
@@ -15,16 +15,17 @@ class ThemeState with ChangeNotifier {
     Colors.teal,
   ];
 
-  late Color _primaryColor;
+  late MaterialColor _primaryColor;
   late ThemeMode _themeMode;
 
   ThemeState() {
-    _primaryColor = themeColors[0];  // 默认使用蓝色
-    _themeMode = ThemeMode.system;   // 默认跟随系统
+    _primaryColor = themeColors[0]; // 默认使用蓝色
+    _themeMode = ThemeMode.system; // 默认跟随系统
     _loadPreferences();
   }
 
-  Color get primaryColor => _primaryColor;
+  MaterialColor get primaryColor => _primaryColor;
+
   ThemeMode get themeMode => _themeMode;
 
   // 加载保存的偏好设置
@@ -47,7 +48,7 @@ class ThemeState with ChangeNotifier {
   }
 
   // 切换主题颜色
-  void setThemeColor(Color color) {
+  void setThemeColor(MaterialColor color) {
     _primaryColor = color;
     _savePreferences();
     notifyListeners();
@@ -63,17 +64,34 @@ class ThemeState with ChangeNotifier {
   // 获取当前主题
   ThemeData get lightTheme {
     return ThemeData(
-      primarySwatch: _createMaterialColor(_primaryColor),
-      brightness: Brightness.light,
+      // primarySwatch: _createMaterialColor(_primaryColor),
+      // brightness: Brightness.light,
       // 可以在这里添加更多的主题定制
+
+      // theme:
+      // ThemeData(
+        useMaterial3: true, // Optional: enables Material 3 design
+        brightness: Brightness.light,
+        primaryColor: primaryColor, primarySwatch: primaryColor,
+        colorScheme: const ColorScheme.light().copyWith(primary: primaryColor),
+      //   // colorSchemeSeed: const Color.fromRGBO(86, 80, 14, 171),
+      // ),
     );
   }
 
   ThemeData get darkTheme {
     return ThemeData(
-      primarySwatch: _createMaterialColor(_primaryColor),
-      brightness: Brightness.dark,
+      // primarySwatch: _createMaterialColor(_primaryColor),
+      // brightness: Brightness.dark,
       // 可以在这里添加更多的主题定制
+
+      // ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        primaryColor: primaryColor, primarySwatch: primaryColor,
+        colorScheme: const ColorScheme.dark().copyWith(primary: primaryColor),
+      //   // colorSchemeSeed: const Color.fromRGBO(86, 80, 14, 171),
+      // ),
     );
   }
 
@@ -100,22 +118,6 @@ class ThemeState with ChangeNotifier {
 }
 
 //使用示例
-//class MyApp extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return Consumer<ThemeState>(
-//      builder: (context, themeState, child) {
-//        return MaterialApp(
-//          title: 'My App',
-//          theme: themeState.lightTheme,
-//          darkTheme: themeState.darkTheme,
-//          themeMode: themeState.themeMode,
-//          home: HomePage(),
-//        );
-//      },
-//    );
-//  }
-//}
 //更改颜色和主题
 //// 改变主题颜色
 //Provider.of<ThemeState>(context, listen: false).setThemeColor(Colors.red);

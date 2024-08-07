@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
-import 'package:flutter_hub/states/profile_change_notifier.dart';
+import 'package:flutter_hub/states/profile_state.dart';
 import 'package:provider/provider.dart';
 
 class LanguagePage extends StatelessWidget {
@@ -8,7 +8,7 @@ class LanguagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var color = Theme.of(context).primaryColor;
+    var color = Theme.of(context).colorScheme.primary;
     var localeModel = Provider.of<LocaleModel>(context);
     var lan = WanLocalizations.of(context);
     Widget _buildLanguageItem(String lan, value) {
