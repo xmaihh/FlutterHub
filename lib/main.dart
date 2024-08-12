@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/common/index.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
@@ -29,7 +30,13 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer2<ThemeState, LocaleModel>(
         builder: (BuildContext context, ThemeState themeState, LocaleModel localeModel, Widget? child) {
+          final botToastBuilder = BotToastInit();
           return MaterialApp(
+            builder: (context, child) {
+              child = botToastBuilder(context, child);
+              return child;
+            },
+            navigatorObservers: [BotToastNavigatorObserver()],
             theme: themeState.lightTheme,
             darkTheme: themeState.darkTheme,
             themeMode: themeState.themeMode,

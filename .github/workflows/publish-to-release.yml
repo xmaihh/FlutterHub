@@ -149,16 +149,12 @@ jobs:
       
       # 安装Flutter依赖
       - name: Install dependencies
-        run: |
-          flutter pub get
-          flutter pub run build_runner build
+        run: flutter pub get
 
       # 根据矩阵配置，为不同平台执行构建命令
       - name: Build Android APK
         if: matrix.name == 'android'
-        run: |
-         flutter build apk
-         flutter build apk --split-per-abi
+        run: flutter build apk --split-per-abi
 
       - name: Build Android App Bundle
         if: matrix.name == 'android-aab'
@@ -205,25 +201,23 @@ jobs:
       - name: Compress Build
         run: |
           if [ "${{ matrix.name }}" = "android" ]; then
-            mv build/app/outputs/flutter-apk/app-release.apk ./app-release-all-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
-            mv build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ./app-release-armeabi-v7a-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
-            mv build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ./app-release-arm64-v8a-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
-            mv build/app/outputs/flutter-apk/app-x86_64-release.apk ./app-release-x86_64-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
+            mv build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ./flutter_hub_android-armeabi-v7a-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
+            mv build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ./flutter_hub_android-arm64-v8a-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
+            mv build/app/outputs/flutter-apk/app-x86_64-release.apk ./flutter_hub_android-x86_64-${{ steps.read_build_env.outputs.FULL_VERSION }}.apk
           elif [ "${{ matrix.name }}" = "android-aab" ]; then
-            mv build/app/outputs/bundle/release/app-release.aab ./app-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.aab
+            mv build/app/outputs/bundle/release/app-release.aab ./flutter_hub_android-${{ steps.read_build_env.outputs.FULL_VERSION }}.aab
           elif [ "${{ matrix.name }}" = "web" ]; then
-            zip -r web-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/web
+            zip -r flutter_hub_web-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/web
           elif [ "${{ matrix.name }}" = "linux" ]; then
-            zip -r linux-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/linux/x64/release/bundle
+            zip -r flutter_hub_linux-x64-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/linux/x64/release/bundle
           elif [ "${{ matrix.name }}" = "windows" ]; then
-            powershell Compress-Archive build/windows/x64/runner/Release windows-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip
+            powershell Compress-Archive build/windows/x64/runner/Release flutter_hub_win32_x64-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip
           elif [ "${{ matrix.name }}" = "ios" ]; then
             mkdir Payload
             cp -r build/ios/iphoneos/Runner.app Payload/
-            zip -r ios-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.ipa Payload/
-            zip -r ios-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/ios/iphoneos
+            zip -r flutter_hub_ios-${{ steps.read_build_env.outputs.FULL_VERSION }}.ipa Payload/
           elif [ "${{ matrix.name }}" = "macos" ]; then
-            zip -r macos-release-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Release
+            zip -r flutter_hub_macos_universal-${{ steps.read_build_env.outputs.FULL_VERSION }}.zip build/macos/Build/Products/Release
           fi
         shell: bash
 
