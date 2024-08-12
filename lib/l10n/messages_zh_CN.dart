@@ -19,9 +19,13 @@ typedef String MessageIfAbsent(String? messageStr, List<Object>? args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_CN';
 
-  static m0(version) => "发现新版本 ${version}，是否更新？";
+  static m0(username) => "登录成功，欢迎 ${username}";
 
-  static m1(retryTime) => "速率限制，请在 ${retryTime} 后重试";
+  static m1(version) => "发现新版本 ${version}，是否更新？";
+
+  static m2(retryTime) => "速率限制，请在 ${retryTime} 后重试";
+
+  static m3(username) => "欢迎 ${username}， 注册成功！";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
@@ -29,6 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_btn_forgot_password" : MessageLookupByLibrary.simpleMessage("忘记密码？"),
     "login_btn_login" : MessageLookupByLibrary.simpleMessage("登录"),
     "login_btn_signup" : MessageLookupByLibrary.simpleMessage("去注册"),
+    "login_message_welcome_login_successful" : m0,
     "login_no_account" : MessageLookupByLibrary.simpleMessage("还没有帐号？"),
     "login_other_method" : MessageLookupByLibrary.simpleMessage("其他帐号登录"),
     "login_password_label" : MessageLookupByLibrary.simpleMessage("密码"),
@@ -52,15 +57,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "settings_update_action_update" : MessageLookupByLibrary.simpleMessage("更新"),
     "settings_update_msg_app_up_to_date" : MessageLookupByLibrary.simpleMessage("您的应用已经是最新版本"),
     "settings_update_msg_check_failed" : MessageLookupByLibrary.simpleMessage("检查更新失败，请稍后再试"),
-    "settings_update_msg_new_version_found" : m0,
-    "settings_update_msg_rate_limit" : m1,
+    "settings_update_msg_new_version_found" : m1,
+    "settings_update_msg_rate_limit" : m2,
     "settings_update_title_new_version_available" : MessageLookupByLibrary.simpleMessage("有新版本可用"),
     "signup_already_have_an_account" : MessageLookupByLibrary.simpleMessage("已经有帐号？ "),
     "signup_btn_login" : MessageLookupByLibrary.simpleMessage("去登录"),
     "signup_btn_signup" : MessageLookupByLibrary.simpleMessage("注册"),
     "signup_confirm_password_label" : MessageLookupByLibrary.simpleMessage("确认密码"),
-    "signup_confirm_password_validator" : MessageLookupByLibrary.simpleMessage("两次输入的密码不一致，请重新输入！"),
+    "signup_confirm_password_validator" : MessageLookupByLibrary.simpleMessage("请输入确认密码"),
+    "signup_message_welcome_signup_successful" : m3,
     "signup_password_label" : MessageLookupByLibrary.simpleMessage("密码"),
+    "signup_password_mismatch_error" : MessageLookupByLibrary.simpleMessage("两次输入的密码不一致！"),
     "signup_password_validator" : MessageLookupByLibrary.simpleMessage("请输入密码"),
     "signup_subtitle" : MessageLookupByLibrary.simpleMessage("创建一个新账号"),
     "signup_title" : MessageLookupByLibrary.simpleMessage("注册帐号"),

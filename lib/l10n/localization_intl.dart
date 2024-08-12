@@ -3,18 +3,18 @@ import 'package:intl/intl.dart';
 
 import 'messages_all.dart';
 
-class WanLocalizations {
-  static Future<WanLocalizations> load(Locale locale) {
+class AppLocalizations {
+  static Future<AppLocalizations> load(Locale locale) {
     final String name = (locale.countryCode ?? "").isEmpty == true ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((b) {
       Intl.defaultLocale = localeName;
-      return WanLocalizations();
+      return AppLocalizations();
     });
   }
 
-  static WanLocalizations of(BuildContext context) {
-    return Localizations.of<WanLocalizations>(context, WanLocalizations)!;
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
   String get app_name => Intl.message('FlutterHub', name: 'app_name');
@@ -45,6 +45,8 @@ class WanLocalizations {
 
   String get login_btn_signup => Intl.message('Sign Up', name: 'login_btn_signup');
 
+  String login_message_welcome_login_successful(String username) => Intl.message('Login successful, $username. Welcome back!', args: [username], name: 'login_message_welcome_login_successful');
+
   String get nav_signup => Intl.message('Signup', name: 'nav_signup');
 
   String get signup_title => Intl.message('Sign up', name: 'signup_title');
@@ -63,11 +65,15 @@ class WanLocalizations {
 
   String get signup_confirm_password_validator => Intl.message('Enter your confirm password', name: 'signup_confirm_password_validator');
 
+  String get signup_password_mismatch_error => Intl.message('Passwords do NOT match!', name: 'signup_password_mismatch_error');
+
   String get signup_btn_signup => Intl.message('Sign up', name: 'signup_btn_signup');
 
   String get signup_already_have_an_account => Intl.message('Already have an account? ', name: 'signup_already_have_an_account');
 
   String get signup_btn_login => Intl.message('Login', name: 'signup_btn_login');
+
+  String signup_message_welcome_signup_successful(String username) => Intl.message('Welcome $username, signup successful!', args: [username], name: 'signup_message_welcome_signup_successful');
 
   String get nav_settings => Intl.message('Settings', name: 'nav_settings');
 
@@ -101,8 +107,8 @@ class WanLocalizations {
 }
 
 //Locale代理类
-class WanLocalizationsDelegate extends LocalizationsDelegate<WanLocalizations> {
-  const WanLocalizationsDelegate();
+class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+  const AppLocalizationsDelegate();
 
   //是否支持某个Local
   @override
@@ -110,12 +116,12 @@ class WanLocalizationsDelegate extends LocalizationsDelegate<WanLocalizations> {
 
   // Flutter会调用此类加载相应的Locale资源类
   @override
-  Future<WanLocalizations> load(Locale locale) {
+  Future<AppLocalizations> load(Locale locale) {
     //3
-    return WanLocalizations.load(locale);
+    return AppLocalizations.load(locale);
   }
 
   // 当Localizations Widget重新build时，是否调用load重新加载Locale资源.
   @override
-  bool shouldReload(WanLocalizationsDelegate old) => false;
+  bool shouldReload(AppLocalizationsDelegate old) => false;
 }

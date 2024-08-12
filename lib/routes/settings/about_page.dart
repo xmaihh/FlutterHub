@@ -32,7 +32,7 @@ class _AboutPageState extends State<AboutPage> {
 
   @override
   Widget build(BuildContext context) {
-    final lan = WanLocalizations.of(context);
+    final lan = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(lan.settings_about),

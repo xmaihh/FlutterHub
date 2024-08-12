@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import '../common/constants.dart';
@@ -23,7 +25,7 @@ class ApiClient {
         // 在每个请求中添加cookie
         String? cookie = await _cookieProvider();
         if (cookie != null) {
-          options.headers['Cookie'] = cookie;
+          options.headers[HttpHeaders.cookieHeader] = cookie;
         }
         return handler.next(options);
       },

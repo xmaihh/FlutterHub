@@ -3,11 +3,13 @@ import 'package:flutter_hub/l10n/localization_intl.dart';
 import 'package:flutter_hub/routes/user/mine_page.dart';
 import 'package:flutter_hub/states/profile_state.dart';
 import 'package:flutter_hub/widgets/disappearing_navigation_rail.dart';
+import 'package:flutter_hub/widgets/show_toast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../common/index.dart';
-import '../widgets/animated_floating_action_button.dart';
+import '../models/index.dart';
+import '../services/index.dart';
 import '../widgets/animations.dart';
 import '../widgets/disappearing_bottom_navigation_bar.dart';
 
@@ -25,7 +27,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   late final _railAnimation = RailAnimation(parent: _controller);
   late final _railFabAnimation = RailFabAnimation(parent: _controller);
   late final _barAnimation = BarAnimation(parent: _controller);
-
+  final _authService = getIt<AuthService>();
+  final _apiService = getIt<ApiService>();
   int selectedIndex = 0;
   bool controllerInitialized = false;
 
@@ -95,16 +98,45 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     Card(
                       shadowColor: Colors.transparent,
                       margin: const EdgeInsets.all(8.0),
-                      child: SizedBox.expand(
-                        child: Center(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(Constants.loginRoutePath);
-                            },
-                            child: Text("Login"),
-                          ),
-                        ),
-                      ),
+                      child: Center(
+                          child: Padding(
+                              padding: EdgeInsets.only(top: 100),
+                              child: Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed(Constants.loginRoutePath);
+                                    },
+                                    child: Text("Login"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed(Constants.signupRoutePath);
+                                    },
+                                    child: Text("Signup"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _authService.logout();
+                                    },
+                                    child: Text("Logout"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      bool isLoggedIn = await _authService.isLoggedIn();
+                                      showToast("$isLoggedIn");
+                                    },
+                                    child: Text("isLoggedIn"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      ResponseModel<User> res = await _apiService.fetchUser(context);
+                                      showToast("${res.toString()}");
+                                    },
+                                    child: Text("fetchUser"),
+                                  ),
+                                ],
+                              ))),
                     ),
 
                     /// Mine page
@@ -166,7 +198,7 @@ class MyDrawer extends StatelessWidget {
 
   Widget _buildMenus() {
     return Consumer<UserModel>(builder: (BuildContext context, UserModel value, Widget? child) {
-      var lan = WanLocalizations.of(context);
+      var lan = AppLocalizations.of(context);
       return Column(
         children: <Widget>[
           Expanded(

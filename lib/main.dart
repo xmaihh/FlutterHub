@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             darkTheme: themeState.darkTheme,
             themeMode: themeState.themeMode,
             onGenerateTitle: (context) {
-              return WanLocalizations.of(context).app_name;
+              return AppLocalizations.of(context).app_name;
             },
             home: const HomePage(),
             locale: localeModel.getLocale(),
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
-              WanLocalizationsDelegate(),
+              AppLocalizationsDelegate(),
             ],
             localeResolutionCallback: (_locale, supportedLocales) {
               if (localeModel.getLocale() != null) {

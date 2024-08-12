@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hub/utils/logger.dart';
+import 'package:flutter_hub/widgets/show_toast.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/index.dart';
 import '../../l10n/localization_intl.dart';
+import '../../models/index.dart';
 import '../../services/index.dart';
+import '../../widgets/show_loading.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,7 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _isObscure = true;
   bool _unameAutoFocus = true;
   final _authService = getIt<AuthService>();
-  final _apiService = getIt<ApiService>();
 
   List _loginMethod = [
     {
@@ -95,11 +98,11 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           Text(
-            WanLocalizations.of(context).login_title,
+            AppLocalizations.of(context).login_title,
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          Text(WanLocalizations.of(context).login_subtitle, style: TextStyle(fontSize: 15)),
+          Text(AppLocalizations.of(context).login_subtitle, style: TextStyle(fontSize: 15)),
         ],
       ),
     );
@@ -124,14 +127,14 @@ class _LoginPageState extends State<LoginPage> {
       autofocus: _unameAutoFocus,
       controller: _unameController,
       decoration: InputDecoration(
-        hintText: WanLocalizations.of(context).login_username_label,
+        hintText: AppLocalizations.of(context).login_username_label,
         prefixIcon: Icon(Bootstrap.person_fill),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
         fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
         filled: true,
       ),
       validator: (v) {
-        return v == null || v.trim().isNotEmpty ? null : WanLocalizations.of(context).login_username_validator;
+        return v == null || v.trim().isNotEmpty ? null : AppLocalizations.of(context).login_username_validator;
       },
     );
   }
@@ -142,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
       controller: _pwdController,
       obscureText: _isObscure,
       decoration: InputDecoration(
-        hintText: WanLocalizations.of(context).login_password_label,
+        hintText: AppLocalizations.of(context).login_password_label,
         prefixIcon: Icon(AntDesign.lock_fill),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
         fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -159,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       validator: (v) {
-        return v == null || v.trim().isNotEmpty ? null : WanLocalizations.of(context).login_password_validator;
+        return v == null || v.trim().isNotEmpty ? null : AppLocalizations.of(context).login_password_validator;
       },
     );
   }
@@ -171,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
         alignment: Alignment.centerRight,
         child: ElevatedButton(
           child: Text(
-            WanLocalizations.of(context).login_btn_forgot_password,
+            AppLocalizations.of(context).login_btn_forgot_password,
           ),
           onPressed: () {
             launchUrl(
@@ -190,19 +193,11 @@ class _LoginPageState extends State<LoginPage> {
         height: 45.0,
         width: 270.0,
         child: ElevatedButton(
+          onPressed: _onLogin,
           child: Text(
-            WanLocalizations.of(context).login_btn_login,
+            AppLocalizations.of(context).login_btn_login,
             style: TextStyle(fontSize: 16),
           ),
-          onPressed: () {
-            // if (_formKey.currentState.validate()) {
-            //   /// 只有输入内容符合通过要求才能到达此处
-            //   _formKey.currentState.save();
-
-            /// TODO 执行登录方法
-            // print('email:$_username, password:$_password');
-            // }
-          },
         ),
       ),
     );
@@ -213,14 +208,14 @@ class _LoginPageState extends State<LoginPage> {
       alignment: Alignment.center,
       child: Text(
         // '其他帐号登录',
-        WanLocalizations.of(context).login_other_method,
+        AppLocalizations.of(context).login_other_method,
         style: TextStyle(color: Theme.of(context).dividerColor, fontSize: 14.0),
       ),
     );
   }
 
-  ButtonBar buildOtherMethod(BuildContext context) {
-    return ButtonBar(
+  OverflowBar buildOtherMethod(BuildContext context) {
+    return OverflowBar(
       alignment: MainAxisAlignment.center,
       children: _loginMethod
           .map((item) => Builder(
@@ -247,10 +242,10 @@ class _LoginPageState extends State<LoginPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(WanLocalizations.of(context).login_no_account),
+            Text(AppLocalizations.of(context).login_no_account),
             GestureDetector(
               child: Text(
-                WanLocalizations.of(context).login_btn_signup,
+                AppLocalizations.of(context).login_btn_signup,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -263,5 +258,40 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _onLogin() async {
+    /// 取消所有 TextFormField 的焦点
+    FocusScope.of(context).unfocus();
+
+    /// 先验证各个表单字段是否合法
+    if ((_formKey.currentState as FormState).validate()) {
+      showLoading(context);
+
+      ///执行登录方法
+      Log.info('username:${_unameController.text}, password:${_pwdController.text}');
+      ResponseModel<UserInfo>? userInfo;
+      try {
+        userInfo = await _authService.login(_unameController.text, _pwdController.text);
+        if (userInfo.errorCode != 0) {
+          showToast("${userInfo.errorMsg}${userInfo.errorCode}");
+        }
+        Log.info(userInfo.toString());
+      } catch (e) {
+        showToast(e.toString());
+      } finally {
+        if (mounted) {
+          hideLoading(context);
+        }
+      }
+
+      ///登录成功则返回
+      if (userInfo?.errorCode == 0 && userInfo?.data != null) {
+        if (mounted) {
+          showToast(AppLocalizations.of(context).login_message_welcome_login_successful(userInfo?.data?.username ?? ''));
+          Navigator.of(context).pop();
+        }
+      }
+    }
   }
 }

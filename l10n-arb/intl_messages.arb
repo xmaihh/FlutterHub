@@ -84,6 +84,16 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "login_message_welcome_login_successful": "Login successful, {username}. Welcome back!",
+  "@login_message_welcome_login_successful": {
+    "type": "text",
+    "placeholders_order": [
+      "username"
+    ],
+    "placeholders": {
+      "username": {}
+    }
+  },
   "nav_signup": "Signup",
   "@nav_signup": {
     "type": "text",
@@ -138,6 +148,12 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "signup_password_mismatch_error": "Passwords do NOT match!",
+  "@signup_password_mismatch_error": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "signup_btn_signup": "Sign up",
   "@signup_btn_signup": {
     "type": "text",
@@ -155,6 +171,16 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "signup_message_welcome_signup_successful": "Welcome {username}, signup successful!",
+  "@signup_message_welcome_signup_successful": {
+    "type": "text",
+    "placeholders_order": [
+      "username"
+    ],
+    "placeholders": {
+      "username": {}
+    }
   },
   "nav_settings": "Settings",
   "@nav_settings": {

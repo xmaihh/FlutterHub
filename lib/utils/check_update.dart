@@ -15,7 +15,7 @@ import '../common/global.dart';
 Future<void> checkUpdate(BuildContext context, {bool manualCheck = false}) async {
   //限制每小时请求次数
   print(Global.lastShowUpdate);
-  final lan = WanLocalizations.of(context);
+  final lan = AppLocalizations.of(context);
   if ((DateTime.now().difference(Global.lastShowUpdate)) < const Duration(hours: 1)) {
     final retryTime = Global.lastShowUpdate.add(const Duration(hours: 1));
     final retryTimeFormatted = '${retryTime.hour}:${retryTime.minute.toString().padLeft(2, '0')}';
@@ -66,7 +66,7 @@ void showUpdateDialog(BuildContext context, String version, String downloadUrl) 
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      var lan = WanLocalizations.of(context);
+      var lan = AppLocalizations.of(context);
       return AlertDialog(
         title: Text(lan.settings_update_title_new_version_available),
         content: Text(lan.settings_update_msg_new_version_found(version)),

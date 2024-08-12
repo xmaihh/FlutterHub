@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
+import 'package:flutter_hub/utils/logger.dart';
+import 'package:flutter_hub/widgets/show_loading.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 import '../../common/index.dart';
+import '../../models/index.dart';
+import '../../services/index.dart';
+import '../../widgets/show_toast.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -15,6 +20,7 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController _pwdController = TextEditingController();
   TextEditingController _confirmpwdController = TextEditingController();
   bool _isObscure = true;
+  final _authService = getIt<AuthService>();
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +67,11 @@ class _SignupPageState extends State<SignupPage> {
       child: Column(
         children: [
           Text(
-            WanLocalizations.of(context).signup_title,
+            AppLocalizations.of(context).signup_title,
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          Text(WanLocalizations.of(context).signup_subtitle, style: TextStyle(fontSize: 15)),
+          Text(AppLocalizations.of(context).signup_subtitle, style: TextStyle(fontSize: 15)),
         ],
       ),
     );
@@ -89,14 +95,14 @@ class _SignupPageState extends State<SignupPage> {
     return TextFormField(
       controller: _unameController,
       decoration: InputDecoration(
-        hintText: WanLocalizations.of(context).signup_username_label,
+        hintText: AppLocalizations.of(context).signup_username_label,
         prefixIcon: Icon(Bootstrap.person_fill),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
         fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
         filled: true,
       ),
       validator: (v) {
-        return v == null || v.trim().isNotEmpty ? null : WanLocalizations.of(context).signup_username_validator;
+        return v == null || v.trim().isNotEmpty ? null : AppLocalizations.of(context).signup_username_validator;
       },
     );
   }
@@ -106,7 +112,7 @@ class _SignupPageState extends State<SignupPage> {
       controller: _pwdController,
       obscureText: _isObscure,
       decoration: InputDecoration(
-        hintText: WanLocalizations.of(context).signup_password_label,
+        hintText: AppLocalizations.of(context).signup_password_label,
         prefixIcon: Icon(AntDesign.lock_fill),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
         fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -123,7 +129,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
       validator: (v) {
-        return v == null || v.trim().isNotEmpty ? null : WanLocalizations.of(context).signup_password_validator;
+        return v == null || v.trim().isNotEmpty ? null : AppLocalizations.of(context).signup_password_validator;
       },
     );
   }
@@ -133,7 +139,7 @@ class _SignupPageState extends State<SignupPage> {
       controller: _confirmpwdController,
       obscureText: _isObscure,
       decoration: InputDecoration(
-        hintText: WanLocalizations.of(context).signup_confirm_password_label,
+        hintText: AppLocalizations.of(context).signup_confirm_password_label,
         prefixIcon: Icon(AntDesign.lock_fill),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none),
         fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -150,7 +156,12 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
       validator: (v) {
-        return v == null || v.trim().isNotEmpty ? null : WanLocalizations.of(context).signup_confirm_password_validator;
+        if (v == null || v.trim().isEmpty) {
+          return AppLocalizations.of(context).signup_password_validator;
+        } else if (v != _pwdController.text) {
+          return AppLocalizations.of(context).signup_password_mismatch_error;
+        }
+        return null;
       },
     );
   }
@@ -161,19 +172,11 @@ class _SignupPageState extends State<SignupPage> {
         height: 45.0,
         width: 270.0,
         child: ElevatedButton(
+          onPressed: _onSignup,
           child: Text(
-            WanLocalizations.of(context).signup_btn_signup,
+            AppLocalizations.of(context).signup_btn_signup,
             style: TextStyle(fontSize: 16),
           ),
-          onPressed: () {
-            // if (_formKey.currentState.validate()) {
-            //   /// 只有输入内容符合通过要求才能到达此处
-            //   _formKey.currentState.save();
-
-            /// TODO 执行注册方法
-            // print('email:$_username, password:$_password');
-            // }
-          },
         ),
       ),
     );
@@ -187,10 +190,10 @@ class _SignupPageState extends State<SignupPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(WanLocalizations.of(context).signup_already_have_an_account),
+            Text(AppLocalizations.of(context).signup_already_have_an_account),
             GestureDetector(
               child: Text(
-                WanLocalizations.of(context).signup_btn_login,
+                AppLocalizations.of(context).signup_btn_login,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -204,5 +207,40 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
     );
+  }
+
+  void _onSignup() async {
+    /// 取消所有 TextFormField 的焦点
+    FocusScope.of(context).unfocus();
+
+    /// 先验证各个表单字段是否合法
+    if ((_formKey.currentState as FormState).validate()) {
+      showLoading(context);
+
+      ///执行注册方法
+      Log.info('username:${_unameController.text}, password:${_pwdController.text}, repassword:${_confirmpwdController.text}');
+      ResponseModel<UserInfo>? userInfo;
+      try {
+        userInfo = await _authService.register(_unameController.text, _pwdController.text, _confirmpwdController.text);
+        if (userInfo.errorCode != 0) {
+          showToast("${userInfo.errorMsg}${userInfo.errorCode}");
+        }
+        Log.info(userInfo.toString());
+      } catch (e) {
+        showToast(e.toString());
+      } finally {
+        if (mounted) {
+          hideLoading(context);
+        }
+      }
+
+      ///注册成功则返回
+      if (userInfo?.errorCode == 0 && userInfo?.data != null) {
+        if (mounted) {
+          showToast(AppLocalizations.of(context).signup_message_welcome_signup_successful(userInfo?.data?.username ?? ''));
+          Navigator.of(context).pop();
+        }
+      }
+    }
   }
 }

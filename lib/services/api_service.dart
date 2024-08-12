@@ -79,54 +79,13 @@ class ApiService {
   Future<ResponseModel<User>> fetchUser(BuildContext context) async {
     return handleApiCall(() async {
       final response = await _apiClient.get(Constants.userInfoEndpoint);
+      print(response.data.toString());
+      if (response.statusCode == 200) {
+        ResponseModel<User> res = ResponseModel<User>.fromJson(response.data, (json) => User.fromJson(json));
+        print(res.errorCode);
+        print(res.errorMsg);
+      }
       return ResponseModel<User>.fromJson(response.data, (json) => User.fromJson(json));
     }, context);
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'api_service.dart';
-
-// class ArticleListScreen extends StatefulWidget {
-//   @override
-//   _ArticleListScreenState createState() => _ArticleListScreenState();
-// }
-//
-// class _ArticleListScreenState extends State<ArticleListScreen> {
-//   final ApiService _apiService = ApiService();
-//   List<dynamic> articles = [];
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _fetchArticles();
-//   }
-//
-//   Future<void> _fetchArticles() async {
-//     try {
-//       final data = await _apiService.fetchArticles(context);
-//       setState(() {
-//         articles = data['data']['datas'];
-//       });
-//     } catch (e) {
-//       // 错误已经在ApiService中处理，这里可以做一些额外的处理
-//       print('Failed to fetch articles: $e');
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Articles')),
-//       body: ListView.builder(
-//         itemCount: articles.length,
-//         itemBuilder: (context, index) {
-//           return ListTile(
-//             title: Text(articles[index]['title']),
-//             // ... 其他UI逻辑
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }

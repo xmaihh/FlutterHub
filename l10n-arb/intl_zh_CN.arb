@@ -85,6 +85,16 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "login_message_welcome_login_successful": "登录成功，欢迎 {username}",
+  "@login_message_welcome_login_successful": {
+    "type": "text",
+    "placeholders_order": [
+      "username"
+    ],
+    "placeholders": {
+      "username": {}
+    }
+  },
   "nav_signup": "注册",
   "@nav_signup": {
     "type": "text",
@@ -133,8 +143,14 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "signup_confirm_password_validator": "两次输入的密码不一致，请重新输入！",
+  "signup_confirm_password_validator": "请输入确认密码",
   "@signup_confirm_password_validator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signup_password_mismatch_error": "两次输入的密码不一致！",
+  "@signup_password_mismatch_error": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
@@ -156,6 +172,16 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "signup_message_welcome_signup_successful": "欢迎 {username}， 注册成功！",
+  "@signup_message_welcome_signup_successful": {
+    "type": "text",
+    "placeholders_order": [
+      "username"
+    ],
+    "placeholders": {
+      "username": {}
+    }
   },
   "nav_settings": "设置",
   "@nav_settings": {

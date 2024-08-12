@@ -10,7 +10,7 @@ class LanguagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var color = Theme.of(context).colorScheme.primary;
     var localeModel = Provider.of<LocaleModel>(context);
-    var lan = WanLocalizations.of(context);
+    var lan = AppLocalizations.of(context);
     Widget _buildLanguageItem(String lan, value) {
       return ListTile(
         title: Text(

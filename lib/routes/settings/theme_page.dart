@@ -12,12 +12,12 @@ class ThemeChangePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(WanLocalizations.of(context).settings_theme),
+        title: Text(AppLocalizations.of(context).settings_theme),
       ),
       body: Column(
         children: [
           ListTile(
-            title: Text(WanLocalizations.of(context).settings_theme),
+            title: Text(AppLocalizations.of(context).settings_theme),
             trailing: DropdownButton<ThemeMode>(
               value: themeState.themeMode,
               items: ThemeMode.values.map((mode) {
