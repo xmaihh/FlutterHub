@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../transitions/no_animation_page_transitions_builder.dart';
+
 class ThemeState with ChangeNotifier {
   static const String _themeColorKey = 'theme_color';
   static const String _themeModeKey = 'theme_mode';
@@ -14,6 +16,16 @@ class ThemeState with ChangeNotifier {
     Colors.orange,
     Colors.teal,
   ];
+
+  final pageTransitionsTheme = const PageTransitionsTheme(
+    builders: <TargetPlatform, PageTransitionsBuilder>{
+      TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      TargetPlatform.linux: NoAnimationPageTransitionsBuilder(),
+      TargetPlatform.macOS: NoAnimationPageTransitionsBuilder(),
+      TargetPlatform.windows: NoAnimationPageTransitionsBuilder(),
+    },
+  );
 
   late MaterialColor _primaryColor;
   late ThemeMode _themeMode;
@@ -70,10 +82,13 @@ class ThemeState with ChangeNotifier {
 
       // theme:
       // ThemeData(
-        useMaterial3: true, // Optional: enables Material 3 design
-        brightness: Brightness.light,
-        primaryColor: primaryColor, primarySwatch: primaryColor,
-        colorScheme: const ColorScheme.light().copyWith(primary: primaryColor),
+      useMaterial3: true,
+      // Optional: enables Material 3 design
+      brightness: Brightness.light,
+      primaryColor: primaryColor,
+      primarySwatch: primaryColor,
+      colorScheme: const ColorScheme.light().copyWith(primary: primaryColor),
+      pageTransitionsTheme: pageTransitionsTheme,
       //   // colorSchemeSeed: const Color.fromRGBO(86, 80, 14, 171),
       // ),
     );
@@ -86,10 +101,12 @@ class ThemeState with ChangeNotifier {
       // 可以在这里添加更多的主题定制
 
       // ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        primaryColor: primaryColor, primarySwatch: primaryColor,
-        colorScheme: const ColorScheme.dark().copyWith(primary: primaryColor),
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      primaryColor: primaryColor,
+      primarySwatch: primaryColor,
+      colorScheme: const ColorScheme.dark().copyWith(primary: primaryColor),
+      pageTransitionsTheme: pageTransitionsTheme,
       //   // colorSchemeSeed: const Color.fromRGBO(86, 80, 14, 171),
       // ),
     );

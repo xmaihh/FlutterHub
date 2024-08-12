@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
+import 'package:flutter_hub/routes/user/mine_page.dart';
 import 'package:flutter_hub/states/profile_state.dart';
+import 'package:flutter_hub/widgets/disappearing_navigation_rail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../common/index.dart';
+import '../widgets/animated_floating_action_button.dart';
+import '../widgets/animations.dart';
+import '../widgets/disappearing_bottom_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,82 +18,103 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int currentPageIndex = 0;
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  late final _colorScheme = Theme.of(context).colorScheme;
+  late final _backgroundColor = Color.alphaBlend(_colorScheme.primary.withOpacity(0.14), _colorScheme.surface);
+  late final _controller = AnimationController(duration: const Duration(milliseconds: 1000), reverseDuration: const Duration(milliseconds: 1250), value: 0, vsync: this);
+  late final _railAnimation = RailAnimation(parent: _controller);
+  late final _railFabAnimation = RailFabAnimation(parent: _controller);
+  late final _barAnimation = BarAnimation(parent: _controller);
+
+  int selectedIndex = 0;
+  bool controllerInitialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final double width = MediaQuery.of(context).size.width;
+    final AnimationStatus status = _controller.status;
+    if (width > 600) {
+      if (status != AnimationStatus.forward && status != AnimationStatus.completed) {
+        _controller.forward();
+      }
+    } else {
+      if (status != AnimationStatus.reverse && status != AnimationStatus.dismissed) {
+        _controller.reverse();
+      }
+    }
+    if (!controllerInitialized) {
+      controllerInitialized = true;
+      _controller.value = width > 600 ? 1 : 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    UserModel userModel = Provider.of<UserModel>(context);
-    final ThemeData theme = Theme.of(context);
-    final lan = WanLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(lan.app_name),
-      ),
-      drawer: MyDrawer(),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        indicatorColor: theme.colorScheme.primary,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Badge(
-              child: Icon(Icons.person_sharp),
+    return AnimatedBuilder(
+        animation: _controller,
+        builder: (context, _) {
+          return Scaffold(
+            drawer: MyDrawer(),
+            bottomNavigationBar: DisappearingBottomNavigationBar(
+              barAnimation: _barAnimation,
+              selectedIndex: selectedIndex,
+              onDestinationSelected: (index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
             ),
-            label: 'Mine',
-          ),
-        ],
-      ),
-      body: <Widget>[
-        /// Home page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: const EdgeInsets.all(8.0),
-          child: SizedBox.expand(
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Constants.loginRoutePath);
-                },
-                child: Text("Login"),
-              ),
-            ),
-          ),
-        ),
+            // floatingActionButton: AnimatedFloatingActionButton(
+            //   animation: _barAnimation,
+            //   onPressed: () {},
+            //   child: const Icon(Icons.add),
+            // ),
+            body: Row(
+              children: [
+                DisappearingNavigationRail(
+                  railAnimation: _railAnimation,
+                  railFabAnimation: _railFabAnimation,
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },
+                ),
+                Expanded(
+                  child: <Widget>[
+                    /// Home page
+                    Card(
+                      shadowColor: Colors.transparent,
+                      margin: const EdgeInsets.all(8.0),
+                      child: SizedBox.expand(
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(Constants.loginRoutePath);
+                            },
+                            child: Text("Login"),
+                          ),
+                        ),
+                      ),
+                    ),
 
-        /// Mine page
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
+                    /// Mine page
+                    MinePage()
+                  ][selectedIndex],
                 ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ][currentPageIndex],
-    );
+              ],
+            ),
+          );
+        });
   }
 }
 
