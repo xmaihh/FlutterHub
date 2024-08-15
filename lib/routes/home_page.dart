@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
-import 'package:flutter_hub/routes/user/mine_page.dart';
+import 'package:flutter_hub/routes/settings/mine_page.dart';
 import 'package:flutter_hub/states/profile_state.dart';
 import 'package:flutter_hub/widgets/disappearing_navigation_rail.dart';
 import 'package:flutter_hub/widgets/show_toast.dart';
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {
-                                      ResponseModel<User> res = await _apiService.fetchUser(context);
+                                      ResponseModel<User> res = await _apiService.retrieveUserData(context);
                                       showToast("${res.toString()}");
                                     },
                                     child: Text("fetchUser"),

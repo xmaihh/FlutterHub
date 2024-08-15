@@ -20,12 +20,12 @@ class Constants {
   static const String languageCacheKey = 'language_cache';
 
   // 路由相关
-  static const String loginRoutePath = 'login';
-  static const String signupRoutePath = 'signup';
-  static const String forgotPasswdRoutePath = 'forgotPasswd';
-  static const String themeRoutePath = 'theme';
-  static const String languageRoutePath = 'language';
-  static const String aboutRoutePath = 'about';
+  static const String loginRoutePath = '/login';
+  static const String signupRoutePath = '/signup';
+  static const String forgotPasswdRoutePath = '/forgotPasswd';
+  static const String themeRoutePath = '/theme';
+  static const String languageRoutePath = '/language';
+  static const String aboutRoutePath = '/about';
 
   // UI相关
   static const double defaultPadding = 16.0;

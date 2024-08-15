@@ -76,7 +76,7 @@ class ApiService {
   }
 
 // 添加其他API调用方法...
-  Future<ResponseModel<User>> fetchUser(BuildContext context) async {
+  Future<ResponseModel<User>> retrieveUserData(BuildContext context) async {
     return handleApiCall(() async {
       final response = await _apiClient.get(Constants.userInfoEndpoint);
       print(response.data.toString());

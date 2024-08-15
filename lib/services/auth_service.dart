@@ -14,7 +14,7 @@ class AuthService {
 
   AuthService(this._apiClient, this._cookieManager);
 
-  // 登录方法
+  /// 登录方法
   Future<ResponseModel<UserInfo>> login(String username, String password) async {
     try {
       final response = await _apiClient.post(Constants.loginEndpoint,
@@ -24,10 +24,10 @@ class AuthService {
           }));
 
       if (response.statusCode == 200) {
-        // 解析并返回用户信息
+        /// 解析并返回用户信息
         ResponseModel<UserInfo> res = ResponseModel<UserInfo>.fromJson(response.data, (json) => UserInfo.fromJson(json));
         if (res.errorCode == 0) {
-          // 保存cookie
+          /// 保存cookie
           _saveCookie(response);
         }
         return res;
@@ -39,7 +39,7 @@ class AuthService {
     }
   }
 
-  // 注册方法
+  /// 注册方法
   Future<ResponseModel<UserInfo>> register(String username, String password, String repassword) async {
     try {
       final response = await _apiClient.post(Constants.registerEndpoint,
@@ -50,10 +50,10 @@ class AuthService {
           }));
 
       if (response.statusCode == 200) {
-        // 解析并返回用户信息
+        /// 解析并返回用户信息
         ResponseModel<UserInfo> res = ResponseModel<UserInfo>.fromJson(response.data, (json) => UserInfo.fromJson(json));
         if (res.errorCode == 0) {
-          // 保存cookie
+          /// 保存cookie
           _saveCookie(response);
         }
         return res;
@@ -65,14 +65,14 @@ class AuthService {
     }
   }
 
-  // 登出方法
+  /// 登出方法
   Future<void> logout() async {
     try {
       await _apiClient.get(Constants.logoutEndpoint);
     } catch (e) {
       print('Logout failed: $e');
     } finally {
-      // 无论是否成功调用登出API，都清除本地存储的cookie
+      /// 无论是否成功调用登出API，都清除本地存储的cookie
       await _cookieManager.clearCookie();
 
       ///清空所有缓存
@@ -80,13 +80,17 @@ class AuthService {
     }
   }
 
-  // 获取当前登录用户信息
-  Future<User?> getCurrentUser() async {
+  /// 获取当前登录用户信息
+  Future<ResponseModel<User>?> getCurrentUser() async {
     try {
       final response = await _apiClient.get(Constants.userInfoEndpoint);
+      print(response.data.toString());
       if (response.statusCode == 200) {
-        return User.fromJson(response.data['data']);
+        ResponseModel<User> res = ResponseModel<User>.fromJson(response.data, (json) => User.fromJson(json));
+        print(res.errorCode);
+        print(res.errorMsg);
       }
+      return ResponseModel<User>.fromJson(response.data, (json) => User.fromJson(json));
     } catch (e) {
       print('Failed to get current user: $e');
     }

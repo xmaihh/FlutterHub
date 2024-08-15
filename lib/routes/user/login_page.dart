@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hub/utils/logger.dart';
 import 'package:flutter_hub/widgets/show_toast.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/index.dart';
 import '../../l10n/localization_intl.dart';
 import '../../models/index.dart';
 import '../../services/index.dart';
+import '../../states/profile_state.dart';
 import '../../widgets/show_loading.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isObscure = true;
   bool _unameAutoFocus = true;
   final _authService = getIt<AuthService>();
+  final _apiService = getIt<ApiService>();
 
   List _loginMethod = [
     {
@@ -288,6 +291,9 @@ class _LoginPageState extends State<LoginPage> {
       ///登录成功则返回
       if (userInfo?.errorCode == 0 && userInfo?.data != null) {
         if (mounted) {
+          ///执行获取用户信息
+          ResponseModel<User> res = await _apiService.retrieveUserData(context);
+          Provider.of<UserModel>(context, listen: false).user = res.data;
           showToast(AppLocalizations.of(context).login_message_welcome_login_successful(userInfo?.data?.username ?? ''));
           Navigator.of(context).pop();
         }
