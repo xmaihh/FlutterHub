@@ -126,7 +126,7 @@ remainingEmailsMessage(int howMany) => Intl.plural(howMany,
 # 生成arb文件
 
 现在我们可以通[intl_generator](https://pub.dartlang.org/packages/intl_generator)包的工具来提取代码中的字符串到一个arb文件，运行如下命名：
-```bash
+```powershell
 dart run intl_generator:extract_to_arb --output-dir=l10n-arb \ lib/l10n/localization_intl.dart
 ```
 

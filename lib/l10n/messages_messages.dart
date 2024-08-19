@@ -21,15 +21,18 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(username) => "Login successful, ${username}. Welcome back!";
 
-  static m1(version) => "A new version ${version} is available, do you want to update?";
+  static m1(coinCount, rank, level) => "coinCount: ${coinCount}, rank: ${rank}, level: ${level}";
 
-  static m2(retryTime) => "Rate limit exceeded, please retry after ${retryTime} ";
+  static m2(version) => "A new version ${version} is available, do you want to update?";
 
-  static m3(username) => "Welcome ${username}, signup successful!";
+  static m3(retryTime) => "Rate limit exceeded, please retry after ${retryTime} ";
+
+  static m4(username) => "Welcome ${username}, signup successful!";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
     "app_name" : MessageLookupByLibrary.simpleMessage("FlutterHub"),
+    "cancel" : MessageLookupByLibrary.simpleMessage("cancel"),
     "login_btn_forgot_password" : MessageLookupByLibrary.simpleMessage("Forgot password?"),
     "login_btn_login" : MessageLookupByLibrary.simpleMessage("Login"),
     "login_btn_signup" : MessageLookupByLibrary.simpleMessage("Sign Up"),
@@ -52,26 +55,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "settings_check_for_updates" : MessageLookupByLibrary.simpleMessage("Check for updates"),
     "settings_language" : MessageLookupByLibrary.simpleMessage("Language"),
     "settings_language_auto" : MessageLookupByLibrary.simpleMessage("Auto"),
+    "settings_mine_about" : MessageLookupByLibrary.simpleMessage("About"),
+    "settings_mine_language" : MessageLookupByLibrary.simpleMessage("Language"),
+    "settings_mine_license" : MessageLookupByLibrary.simpleMessage("License"),
+    "settings_mine_login_subtitle_default" : MessageLookupByLibrary.simpleMessage("to get access to all the features"),
+    "settings_mine_login_subtitle_userinfo" : m1,
+    "settings_mine_login_title" : MessageLookupByLibrary.simpleMessage("Login"),
+    "settings_mine_logout" : MessageLookupByLibrary.simpleMessage("Logout"),
+    "settings_mine_logout_tip" : MessageLookupByLibrary.simpleMessage("Are you sure you want to quit your current account?"),
+    "settings_mine_menu_favorite" : MessageLookupByLibrary.simpleMessage("Favorite"),
+    "settings_mine_menu_msg" : MessageLookupByLibrary.simpleMessage("Message"),
+    "settings_mine_menu_todo" : MessageLookupByLibrary.simpleMessage("Todo"),
+    "settings_mine_theme" : MessageLookupByLibrary.simpleMessage("Custom theme"),
+    "settings_mine_update" : MessageLookupByLibrary.simpleMessage("Update"),
     "settings_theme" : MessageLookupByLibrary.simpleMessage("Theme"),
     "settings_update_action_cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "settings_update_action_update" : MessageLookupByLibrary.simpleMessage("Update"),
     "settings_update_msg_app_up_to_date" : MessageLookupByLibrary.simpleMessage("Your application is up to date"),
     "settings_update_msg_check_failed" : MessageLookupByLibrary.simpleMessage("Update check failed, please try again later"),
-    "settings_update_msg_new_version_found" : m1,
-    "settings_update_msg_rate_limit" : m2,
+    "settings_update_msg_new_version_found" : m2,
+    "settings_update_msg_rate_limit" : m3,
     "settings_update_title_new_version_available" : MessageLookupByLibrary.simpleMessage("New version available"),
     "signup_already_have_an_account" : MessageLookupByLibrary.simpleMessage("Already have an account? "),
     "signup_btn_login" : MessageLookupByLibrary.simpleMessage("Login"),
     "signup_btn_signup" : MessageLookupByLibrary.simpleMessage("Sign up"),
     "signup_confirm_password_label" : MessageLookupByLibrary.simpleMessage("Confirm Password"),
     "signup_confirm_password_validator" : MessageLookupByLibrary.simpleMessage("Enter your confirm password"),
-    "signup_message_welcome_signup_successful" : m3,
+    "signup_message_welcome_signup_successful" : m4,
     "signup_password_label" : MessageLookupByLibrary.simpleMessage("Password"),
     "signup_password_mismatch_error" : MessageLookupByLibrary.simpleMessage("Passwords do NOT match!"),
     "signup_password_validator" : MessageLookupByLibrary.simpleMessage("Enter your password"),
     "signup_subtitle" : MessageLookupByLibrary.simpleMessage("Create your account"),
     "signup_title" : MessageLookupByLibrary.simpleMessage("Sign up"),
     "signup_username_label" : MessageLookupByLibrary.simpleMessage("Username"),
-    "signup_username_validator" : MessageLookupByLibrary.simpleMessage("Enter your username")
+    "signup_username_validator" : MessageLookupByLibrary.simpleMessage("Enter your username"),
+    "yes" : MessageLookupByLibrary.simpleMessage("yes")
   };
 }

@@ -104,24 +104,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               child: Column(
                                 children: [
                                   ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pushNamed(Constants.loginRoutePath);
-                                    },
-                                    child: Text("Login"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pushNamed(Constants.signupRoutePath);
-                                    },
-                                    child: Text("Signup"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      _authService.logout();
-                                    },
-                                    child: Text("Logout"),
-                                  ),
-                                  ElevatedButton(
                                     onPressed: () async {
                                       bool isLoggedIn = await _authService.isLoggedIn();
                                       showToast("$isLoggedIn");

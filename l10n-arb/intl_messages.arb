@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-08-06T23:38:45.488839",
+  "@@last_modified": "2024-08-18T16:06:31.626939",
   "app_name": "FlutterHub",
   "@app_name": {
     "type": "text",
@@ -276,6 +276,104 @@
   },
   "settings_app_license": "License",
   "@settings_app_license": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_login_title": "Login",
+  "@settings_mine_login_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_login_subtitle_default": "to get access to all the features",
+  "@settings_mine_login_subtitle_default": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_login_subtitle_userinfo": "coin: {coinCount}, rank: {rank}, level: {level}",
+  "@settings_mine_login_subtitle_userinfo": {
+    "type": "text",
+    "placeholders_order": [
+      "coinCount",
+      "rank",
+      "level"
+    ],
+    "placeholders": {
+      "coinCount": {},
+      "rank": {},
+      "level": {}
+    }
+  },
+  "settings_mine_menu_msg": "Message",
+  "@settings_mine_menu_msg": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_menu_todo": "Todo",
+  "@settings_mine_menu_todo": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_menu_favorite": "Favorite",
+  "@settings_mine_menu_favorite": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_theme": "Custom theme",
+  "@settings_mine_theme": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_language": "Language",
+  "@settings_mine_language": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_update": "Update",
+  "@settings_mine_update": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_license": "License",
+  "@settings_mine_license": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_about": "About",
+  "@settings_mine_about": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_logout": "Logout",
+  "@settings_mine_logout": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_logout_tip": "Are you sure you want to quit your current account?",
+  "@settings_mine_logout_tip": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yes": "yes",
+  "@yes": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cancel": "cancel",
+  "@cancel": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

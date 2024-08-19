@@ -6,11 +6,11 @@ import 'package:flutter_hub/utils/app_version.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:random_avatar/random_avatar.dart';
 
 import '../../common/index.dart';
 import '../../states/profile_state.dart';
 import '../../utils/check_update.dart';
-import '../../widgets/svg_circle_avatar.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({super.key});
@@ -39,26 +39,12 @@ class _MinePageState extends State<MinePage> {
               ),
               child: Column(
                 children: <Widget>[
-                  _getSettingWidget(context, const EdgeInsets.only(top: 10), Bootstrap.palette, '个性换肤', () => Navigator.pushNamed(context, Constants.themeRoutePath)),
-                  _getSettingWidget(context, const EdgeInsets.only(), Bootstrap.translate, '多语言', () => Navigator.pushNamed(context, Constants.languageRoutePath)),
-                  _getSettingWidget(context, const EdgeInsets.only(), Bootstrap.arrow_clockwise, '检查更新', () => checkUpdate(context, manualCheck: true)),
-                  FutureBuilder(
-                      future: getAppVersion(),
-                      builder: (context, snapshot) {
-                        return _getSettingWidget(context, const EdgeInsets.only(top: 8), Bootstrap.cc_circle, '开源许可', () => showLicensePage(context: context, applicationName: loc.app_name, applicationVersion: snapshot.data ?? ''));
-                      }),
-                  _getSettingWidget(context, const EdgeInsets.only(), Bootstrap.info_circle, '关于', () => Navigator.pushNamed(context, Constants.aboutRoutePath)),
-                  FutureBuilder(
-                      future: _authServer.isLoggedIn(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return SizedBox.shrink();
-                        } else if (snapshot.hasData && snapshot.data == true) {
-                          return _getSettingWidget(context, const EdgeInsets.only(top: 8), Bootstrap.box_arrow_right, '退出登录');
-                        } else {
-                          return SizedBox.shrink(); // 不显示任何 widget
-                        }
-                      }),
+                  _getSettingWidget(context, const EdgeInsets.only(top: 10), Bootstrap.palette, loc.settings_mine_theme, () => Navigator.pushNamed(context, Constants.themeRoutePath)),
+                  _getSettingWidget(context, const EdgeInsets.only(), Bootstrap.translate, loc.settings_mine_language, () => Navigator.pushNamed(context, Constants.languageRoutePath)),
+                  _getSettingWidget(context, const EdgeInsets.only(), Bootstrap.arrow_clockwise, loc.settings_mine_update, () => checkUpdate(context, manualCheck: true)),
+                  _getLicenseWidget(context),
+                  _getSettingWidget(context, const EdgeInsets.only(), Bootstrap.info_circle, loc.settings_mine_about, () => Navigator.pushNamed(context, Constants.aboutRoutePath)),
+                  _getLogoutWidget(context),
                 ],
               ),
             ),
@@ -118,10 +104,15 @@ class _MinePageState extends State<MinePage> {
   /// 个人信息
   _getMineWidget(BuildContext context) {
     late final _colorScheme = Theme.of(context).colorScheme;
+    late final loc = AppLocalizations.of(context);
     return Consumer<UserModel>(
-      builder: (BuildContext context, UserModel value, Widget? child) {
+      builder: (BuildContext context, UserModel userModel, Widget? child) {
         return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              if (!userModel.isLogin) {
+                Navigator.of(context).pushNamed(Constants.loginRoutePath);
+              }
+            },
             child: Container(
                 height: 76,
                 color: _colorScheme.surface,
@@ -133,10 +124,15 @@ class _MinePageState extends State<MinePage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(left: 16, bottom: 10),
-                          child: SvgCircleAvatar(
-                            radius: 30,
-                            svgAssetPath: 'assets/images/avatar.svg',
+                          child: RandomAvatar(
+                            userModel.user?.userInfo?.username ?? 'flutterhub',
+                            height: 50,
+                            width: 52,
                           ),
+                          // SvgCircleAvatar(
+                          //   radius: 30,
+                          //   svgAssetPath: 'assets/images/avatar.svg',
+                          // ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 16, bottom: 10),
@@ -145,11 +141,11 @@ class _MinePageState extends State<MinePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                '你说什么大点声',
+                                userModel.user?.userInfo?.username ?? loc.settings_mine_login_title,
                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                               ),
                               Text(
-                                '积分：18 排名 887711， 等级：3',
+                                userModel.isLogin ? loc.settings_mine_login_subtitle_userinfo((userModel.user?.coinInfo?.coinCount ?? 0).toString(), (userModel.user?.coinInfo?.rank ?? 0).toString(), (userModel.user?.coinInfo?.level ?? 0).toString()) : loc.settings_mine_login_subtitle_default,
                                 style: TextStyle(height: 2.0, fontSize: 14, fontWeight: FontWeight.w100),
                               ),
                             ],
@@ -173,6 +169,7 @@ class _MinePageState extends State<MinePage> {
   /// 二级菜单
   _getSubMenuWidget(BuildContext context) {
     late final _colorScheme = Theme.of(context).colorScheme;
+    late final loc = AppLocalizations.of(context);
     return Container(
       color: _colorScheme.surfaceContainer,
       height: 70,
@@ -181,18 +178,18 @@ class _MinePageState extends State<MinePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: _singleItemWidget('消息', 'assets/images/nav_msg.svg'),
+            child: _singleItemWidget(loc.settings_mine_menu_msg, 'imgs/nav_msg.svg', 0),
             flex: 1,
           ),
           Expanded(
-            child: _singleItemWidget('待办', 'assets/images/nav_todo.svg'),
+            child: _singleItemWidget(loc.settings_mine_menu_todo, 'imgs/nav_todo.svg', 0),
             flex: 1,
           ),
           Expanded(
             flex: 1,
             child: GestureDetector(
               onTap: () {},
-              child: _singleItemWidget('收藏', 'assets/images/nav_favorite.svg'),
+              child: _singleItemWidget(loc.settings_mine_menu_favorite, 'imgs/nav_favorite.svg', 0),
             ),
           ),
         ],
@@ -201,16 +198,19 @@ class _MinePageState extends State<MinePage> {
   }
 
   /// 单个item///
-  _singleItemWidget(String text, String img) {
+  _singleItemWidget(String text, String img, int badge) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        SvgPicture.asset(
-          img,
-          width: 30,
-          height: 30,
-          fit: BoxFit.cover,
-        ),
+        Badge(
+            label: badge > 0 ? Text(badge.toString()) : null, // 仅当 badge > 0 时显示文本
+            isLabelVisible: badge > 0,
+            child: SvgPicture.asset(
+              img,
+              width: 30,
+              height: 30,
+              fit: BoxFit.cover,
+            )),
         Text(
           text,
           style: TextStyle(height: 1.5, fontSize: 14, fontWeight: FontWeight.w100),
@@ -261,6 +261,60 @@ class _MinePageState extends State<MinePage> {
             ],
           ),
         ));
+  }
+
+  /// 开源许可
+  _getLicenseWidget(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    return FutureBuilder(
+        future: getAppVersion(),
+        builder: (context, snapshot) {
+          return _getSettingWidget(context, const EdgeInsets.only(top: 8), Bootstrap.cc_circle, loc.settings_mine_license, () => showLicensePage(context: context, applicationName: loc.app_name, applicationVersion: snapshot.data ?? ''));
+        });
+  }
+
+  /// 退出登录
+  _getLogoutWidget(BuildContext context) {
+    late final loc = AppLocalizations.of(context);
+    return FutureBuilder(
+        future: _authServer.isLoggedIn(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox.shrink();
+          } else if (snapshot.hasData && snapshot.data == true) {
+            return _getSettingWidget(
+                context,
+                const EdgeInsets.only(top: 8),
+                Bootstrap.box_arrow_right,
+                loc.settings_mine_logout,
+                () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        //退出账号前先弹二次确认窗
+                        return AlertDialog(
+                          content: Text(loc.settings_mine_logout_tip),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(loc.cancel),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            TextButton(
+                              child: Text(loc.yes),
+                              onPressed: () {
+                                //该赋值语句会触发MaterialApp rebuild
+                                Provider.of<UserModel>(context, listen: false).user = null;
+                                getIt<AuthService>().logout();
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ));
+          } else {
+            return SizedBox.shrink(); // 不显示任何 widget
+          }
+        });
   }
 
   /// 请求数据

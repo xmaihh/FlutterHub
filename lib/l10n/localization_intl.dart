@@ -104,6 +104,36 @@ class AppLocalizations {
   String get settings_update_action_update => Intl.message('Update', name: 'settings_update_action_update');
 
   String get settings_app_license => Intl.message('License', name: 'settings_app_license');
+
+  String get settings_mine_login_title => Intl.message('Login', name: 'settings_mine_login_title');
+
+  String get settings_mine_login_subtitle_default => Intl.message('to get access to all the features', name: 'settings_mine_login_subtitle_default');
+
+  String settings_mine_login_subtitle_userinfo(String coinCount, String rank, String level) => Intl.message("coin: $coinCount, rank: $rank, level: $level", args: [coinCount, rank, level], name: 'settings_mine_login_subtitle_userinfo');
+
+  String get settings_mine_menu_msg => Intl.message('Message', name: 'settings_mine_menu_msg');
+
+  String get settings_mine_menu_todo => Intl.message('Todo', name: 'settings_mine_menu_todo');
+
+  String get settings_mine_menu_favorite => Intl.message('Favorite', name: 'settings_mine_menu_favorite');
+
+  String get settings_mine_theme => Intl.message('Custom theme', name: 'settings_mine_theme');
+
+  String get settings_mine_language => Intl.message('Language', name: 'settings_mine_language');
+
+  String get settings_mine_update => Intl.message('Update', name: 'settings_mine_update');
+
+  String get settings_mine_license => Intl.message('License', name: 'settings_mine_license');
+
+  String get settings_mine_about => Intl.message('About', name: 'settings_mine_about');
+
+  String get settings_mine_logout => Intl.message('Logout', name: 'settings_mine_logout');
+
+  String get settings_mine_logout_tip => Intl.message('Are you sure you want to quit your current account?', name: 'settings_mine_logout_tip');
+
+  String get yes => Intl.message('yes', name: 'yes');
+
+  String get cancel => Intl.message('cancel', name: 'cancel');
 }
 
 //Locale代理类

@@ -1,6 +1,6 @@
 {
-  "@@last_modified": "2024-08-06T23:38:45.488839",
-  "@@locale":"zh_CN",
+  "@@last_modified": "2024-08-18T16:06:31.626939",
+  "@@locale": "zh_CN",
   "app_name": "Flutter应用",
   "@app_name": {
     "type": "text",
@@ -277,6 +277,104 @@
   },
   "settings_app_license": "开源许可",
   "@settings_app_license": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_login_title": "立即登录",
+  "@settings_mine_login_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_login_subtitle_default": "解锁全部功能，畅享完整体验",
+  "@settings_mine_login_subtitle_default": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_login_subtitle_userinfo": "积分：{coinCount}，排名：{rank}，等级：{level}",
+  "@settings_mine_login_subtitle_userinfo": {
+    "type": "text",
+    "placeholders_order": [
+      "coinCount",
+      "rank",
+      "level"
+    ],
+    "placeholders": {
+      "coinCount": {},
+      "rank": {},
+      "level": {}
+    }
+  },
+  "settings_mine_menu_msg": "消息",
+  "@settings_mine_menu_msg": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_menu_todo": "待办",
+  "@settings_mine_menu_todo": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_menu_favorite": "收藏",
+  "@settings_mine_menu_favorite": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_theme": "个性换肤",
+  "@settings_mine_theme": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_language": "多语言",
+  "@settings_mine_language": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_update": "检查更新",
+  "@settings_mine_update": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_license": "开源许可",
+  "@settings_mine_license": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_about": "关于",
+  "@settings_mine_about": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_logout": "退出登录",
+  "@settings_mine_logout": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_mine_logout_tip": "确定要退出当前账号吗？",
+  "@settings_mine_logout_tip": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yes": "确定",
+  "@yes": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cancel": "取消",
+  "@cancel": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

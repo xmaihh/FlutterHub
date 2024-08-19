@@ -84,6 +84,7 @@ class ThemeState with ChangeNotifier {
       // ThemeData(
       useMaterial3: true,
       // Optional: enables Material 3 design
+      fontFamily: 'Inter',
       brightness: Brightness.light,
       primaryColor: primaryColor,
       primarySwatch: primaryColor,
@@ -102,6 +103,7 @@ class ThemeState with ChangeNotifier {
 
       // ThemeData(
       useMaterial3: true,
+      fontFamily: 'Inter',
       brightness: Brightness.dark,
       primaryColor: primaryColor,
       primarySwatch: primaryColor,
