@@ -276,45 +276,51 @@ class _MinePageState extends State<MinePage> {
   /// 退出登录
   _getLogoutWidget(BuildContext context) {
     late final loc = AppLocalizations.of(context);
-    return FutureBuilder(
-        future: _authServer.isLoggedIn(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox.shrink();
-          } else if (snapshot.hasData && snapshot.data == true) {
-            return _getSettingWidget(
-                context,
-                const EdgeInsets.only(top: 8),
-                Bootstrap.box_arrow_right,
-                loc.settings_mine_logout,
-                () => showDialog(
-                      context: context,
-                      builder: (context) {
-                        //退出账号前先弹二次确认窗
-                        return AlertDialog(
-                          content: Text(loc.settings_mine_logout_tip),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text(loc.cancel),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                            TextButton(
-                              child: Text(loc.yes),
-                              onPressed: () {
-                                //该赋值语句会触发MaterialApp rebuild
-                                Provider.of<UserModel>(context, listen: false).user = null;
-                                getIt<AuthService>().logout();
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    ));
-          } else {
-            return SizedBox.shrink(); // 不显示任何 widget
-          }
-        });
+    return Consumer<UserModel>(builder: (BuildContext context, UserModel value, Widget? child) {
+      if (value.isLogin) {
+        return FutureBuilder(
+            future: _authServer.isLoggedIn(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox.shrink();
+              } else if (snapshot.hasData && snapshot.data == true) {
+                return _getSettingWidget(
+                    context,
+                    const EdgeInsets.only(top: 8),
+                    Bootstrap.box_arrow_right,
+                    loc.settings_mine_logout,
+                    () => showDialog(
+                          context: context,
+                          builder: (context) {
+                            //退出账号前先弹二次确认窗
+                            return AlertDialog(
+                              content: Text(loc.settings_mine_logout_tip),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text(loc.cancel),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                TextButton(
+                                  child: Text(loc.yes),
+                                  onPressed: () {
+                                    //该赋值语句会触发MaterialApp rebuild
+                                    Provider.of<UserModel>(context, listen: false).user = null;
+                                    getIt<AuthService>().logout();
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ));
+              } else {
+                return SizedBox.shrink(); // 不显示任何 widget
+              }
+            });
+      } else {
+        return SizedBox.shrink();
+      }
+    });
   }
 
   /// 请求数据
