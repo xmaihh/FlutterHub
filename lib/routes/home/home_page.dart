@@ -1,5 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hub/models/banner.dart' as hub;
+import 'package:flutter_hub/models/index.dart';
+import 'package:flutter_hub/services/index.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -7,73 +11,112 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<BannerItem> banners = [];
-  List<ArticleItem> articles = [];
+  List<hub.Banner> banners = [];
+  List<Article> articles = [];
+  int currentPage = 0;
+  bool isLoading = false;
+  bool hasMoreData = true;
+  bool showTop = false;
+  ScrollController _scrollController = ScrollController();
+  final _apiServer = getIt<ApiService>();
 
   @override
   void initState() {
     super.initState();
     fetchBanners();
+    fetchTopArticles();
     fetchArticles();
+    _scrollController.addListener(_onScroll);
   }
 
-  void fetchBanners() {
-    // 模拟从API获取banner数据
-    banners = [
-      BannerItem(
-        id: 30,
-        title: "我们支持订阅啦~",
-        desc: "我们支持订阅啦~",
-        imagePath: "https://www.wanandroid.com/blogimgs/42da12d8-de56-4439-b40c-eab66c227a4b.png",
-        url: "https://www.wanandroid.com/blog/show/3352",
-      ),
-      // 添加更多banner项...
-
-      BannerItem(
-        id: 6,
-        imagePath: "https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png",
-        title: "我们新增了一个常用导航Tab~",
-        url: "https://www.wanandroid.com/navi",
-        desc: "我们新增了一个常用导航Tab~",
-      ),
-      BannerItem(
-        desc: "一起来做个App吧",
-        id: 10,
-        imagePath: "https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png",
-        title: "一起来做个App吧",
-        url: "https://www.wanandroid.com/blog/show/2"
-      )
-
-    ];
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
-// 在 fetchArticles 方法中，你可以这样初始化文章数据：
-  void fetchArticles() {
-    articles = [
-      ArticleItem(
-        id: 28807,
-        title: "一文掌握Kotlin协程使用",
-        author: "郭霖",
-        niceDate: "12小时前",
-        link: "https://mp.weixin.qq.com/s/lyaLrnFeLiWFk2NCgXZOgQ",
-        tags: ["Kotlin", "协程"],
-        isTop: true,
-      ),
-      // 添加更多文章项...
-      ArticleItem(
-        id: 28822,
-        title: "鸿蒙next 下拉刷新上拉加载 来了",
-        author: "坚果派_xq9527",
-        niceDate: "18小时前",
-        link: "https://juejin.cn/post/7386936832609337355",
-        tags: [],
-        isTop: false,
-      ),
-    ];
+  void _onScroll() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (!isLoading && hasMoreData) {
+        fetchArticles();
+      }
+      if (_scrollController.offset < 200 && showTop) {
+        setState(() {
+          showTop = false;
+        });
+      } else if (_scrollController.offset >= 200 && !showTop) {
+        setState(() {
+          showTop = true;
+        });
+      }
+    }
+  }
+
+  Future<void> fetchBanners() async {
+    ResponseListModel<hub.Banner>? res = await _apiServer.fetchBanners(context);
+    if (res?.data != null) {
+      setState(() {
+        banners
+          ..clear()
+          ..addAll(res?.data ?? []);
+      });
+    }
+  }
+
+  Future<void> fetchTopArticles() async {
+    ResponseListModel<Article>? res = await _apiServer.fetchTopArticles(context);
+    if (res?.data != null) {
+      res?.data?.forEach((article) {
+        article.top = true;
+      });
+      setState(() {
+        articles.addAll(res?.data ?? []);
+      });
+    }
+  }
+
+  Future<void> fetchArticles() async {
+    if (isLoading) return;
+    setState(() {
+      isLoading = true;
+    });
+
+    ResponseModel<PaginationModel<Article>>? res = await _apiServer.fetchArticles(currentPage, context);
+    if (res?.data != null) {
+      debugPrint('curPage: ${res?.data?.curPage}');
+      debugPrint('datas: ${res?.data?.datas.length}');
+      debugPrint('offset: ${res?.data?.offset}');
+      debugPrint('over: ${res?.data?.over}');
+      debugPrint('pageCount: ${res?.data?.pageCount}');
+      debugPrint('size: ${res?.data?.size}');
+      debugPrint('total: ${res?.data?.total}');
+
+      setState(() {
+        currentPage++;
+        articles.addAll(res?.data?.datas ?? []);
+        if (res?.data?.over == true) {
+          hasMoreData = false;
+        } else {
+          hasMoreData = true;
+        }
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _refreshData() async {
+    setState(() {
+      currentPage = 0;
+      articles.clear();
+    });
+    await fetchBanners();
+    await fetchTopArticles();
+    await fetchArticles();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: Padding(
@@ -89,10 +132,9 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
       ),
       body: RefreshIndicator(
-        onRefresh: () async {
-          // 实现刷新逻辑
-        },
+        onRefresh: _refreshData,
         child: ListView(
+          controller: _scrollController,
           padding: EdgeInsets.all(16),
           children: [
             _buildBanner(),
@@ -103,9 +145,19 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 16),
             _buildArticleList(),
+            if (isLoading) Center(child: CircularProgressIndicator()),
+            if (!hasMoreData) Padding(padding: EdgeInsets.all(8.0), child: Center(child: Text('没有更多数据了'))),
           ],
         ),
       ),
+      floatingActionButton: showTop
+          ? FloatingActionButton(
+              backgroundColor: _colorScheme.primary.withOpacity(0.85),
+              child: Icon(Bootstrap.arrow_up_circle_fill),
+              onPressed: () {
+                _scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+              })
+          : null,
     );
   }
 
@@ -184,145 +236,104 @@ class _HomePageState extends State<HomePage> {
       separatorBuilder: (context, index) => SizedBox(height: 16),
       itemBuilder: (context, index) {
         final article = articles[index];
-        return Card(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+        return InkWell(
+            onTap: () {
+              debugPrint("处理文章点击事件，可以跳转到文章详情页");
+            },
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (article.isTop)
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                  margin: EdgeInsets.only(bottom: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(4),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (article.top)
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                      margin: EdgeInsets.only(bottom: 8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        '置顶',
+                                        style: TextStyle(color: Colors.white, fontSize: 12),
+                                      ),
+                                    ),
+                                  Text(
+                                    article.title,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1, // 限制为一行
+                                    overflow: TextOverflow.ellipsis, // 超出长度时显示省略号
                                   ),
-                                  child: Text(
-                                    '置顶',
-                                    style: TextStyle(color: Colors.white, fontSize: 12),
-                                  ),
-                                ),
-                              Text(
-                                article.title,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                article.collect ? Icons.favorite : Icons.favorite_border,
+                                color: article.collect ? Colors.red : Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  article.collect = !article.collect;
+                                  // 在这里实现收藏/取消收藏的逻辑
+                                  debugPrint("在这里实现收藏/取消收藏的逻辑");
+                                });
+                              },
+                            ),
+                          ],
                         ),
-                        IconButton(
-                          icon: Icon(
-                            article.isCollected ? Icons.favorite : Icons.favorite_border,
-                            color: article.isCollected ? Colors.red : Colors.grey,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              article.isCollected = !article.isCollected;
-                              // 在这里实现收藏/取消收藏的逻辑
-                            });
-                          },
+                        SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          children: article.tags
+                              .map((tag) => Chip(
+                                    label: Text(tag.name, style: TextStyle(fontSize: 12)),
+                                    backgroundColor: Colors.blue.withOpacity(0.1),
+                                  ))
+                              .toList(),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(Icons.person, size: 16, color: Colors.grey),
+                            SizedBox(width: 4),
+                            Text(
+                              article.author.isNotEmpty ? article.author : (article.shareUser.isNotEmpty ? article.shareUser : "Unknown"),
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            SizedBox(width: 16),
+                            Icon(Icons.access_time, size: 16, color: Colors.grey),
+                            SizedBox(width: 4),
+                            Text(
+                              article.niceDate,
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      children: article.tags.map((tag) => Chip(
-                        label: Text(tag, style: TextStyle(fontSize: 12)),
-                        backgroundColor: Colors.blue.withOpacity(0.1),
-                      )).toList(),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(Icons.person, size: 16, color: Colors.grey),
-                        SizedBox(width: 4),
-                        Text(
-                          article.author,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        SizedBox(width: 16),
-                        Icon(Icons.access_time, size: 16, color: Colors.grey),
-                        SizedBox(width: 4),
-                        Text(
-                          article.niceDate,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Positioned.fill(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      // 处理文章点击事件，可以跳转到文章详情页
-                    },
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        );
+            ));
       },
     );
   }
-}
-
-// BannerItem 和 ArticleItem 类保持不变
-
-class BannerItem {
-  final int id;
-  final String title;
-  final String desc;
-  final String imagePath;
-  final String url;
-
-  BannerItem({
-    required this.id,
-    required this.title,
-    required this.desc,
-    required this.imagePath,
-    required this.url,
-  });
-}
-
-class ArticleItem {
-  final int id;
-  final String title;
-  final String author;
-  final String niceDate;
-  final String link;
-  final List<String> tags;
-  final bool isTop;
-  bool isCollected;
-
-  ArticleItem({
-    required this.id,
-    required this.title,
-    required this.author,
-    required this.niceDate,
-    required this.link,
-    required this.tags,
-    this.isTop = false,
-    this.isCollected = false,
-  });
 }

@@ -327,6 +327,6 @@ class _MinePageState extends State<MinePage> {
   void _retrieveUserData() async {
     final _apiService = getIt<ApiService>();
     var res = await _apiService.retrieveUserData(context);
-    Provider.of<UserModel>(context, listen: true).user = res.data;
+    Provider.of<UserModel>(context, listen: true).user = res?.data;
   }
 }

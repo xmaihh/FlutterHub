@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/common/constants.dart';
+import 'package:flutter_hub/utils/logger.dart';
 
 import '../api/api_client.dart';
+import '../models/banner.dart' as hub;
 import '../models/index.dart';
 
 class ApiService {
@@ -67,25 +69,50 @@ class ApiService {
     );
   }
 
-  // API调用方法
-  Future<dynamic> fetchArticles(BuildContext context) async {
+  /// 个人信息接口
+  Future<ResponseModel<User>?> retrieveUserData(BuildContext context) async {
     return handleApiCall(() async {
-      final response = await _apiClient.get('/article/list/0/json');
-      return response.data;
+      final response = await _apiClient.get(Constants.userInfoEndpoint);
+      Log.info(response.data.toString());
+      if (response.statusCode == 200) {
+        return ResponseModel<User>.fromJson(response.data, (json) => User.fromJson(json));
+      }
+      return null;
     }, context);
   }
 
-// 添加其他API调用方法...
-  Future<ResponseModel<User>> retrieveUserData(BuildContext context) async {
+  /// 首页banner
+  Future<ResponseListModel<hub.Banner>?> fetchBanners(BuildContext context) async {
     return handleApiCall(() async {
-      final response = await _apiClient.get(Constants.userInfoEndpoint);
+      final response = await _apiClient.get(Constants.bannersEndpoint);
+      Log.info(response.data.toString());
+      if (response.statusCode == 200) {
+        return ResponseListModel<hub.Banner>.fromJson(response.data, (json) => hub.Banner.fromJson(json));
+      }
+      return null;
+    }, context);
+  }
+
+  /// 首页-置顶文章
+  Future<ResponseListModel<Article>?> fetchTopArticles(BuildContext context) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.get(Constants.topArticlesEndpoint, useCache: true);
+      Log.info(response.data.toString());
+      if (response.statusCode == 200) {
+        return ResponseListModel<Article>.fromJson(response.data, (json) => Article.fromJson(json));
+      }
+      return null;
+    }, context);
+  }
+
+  Future<ResponseModel<PaginationModel<Article>>?> fetchArticles(int page, BuildContext context) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.get(Constants.articlesEndpoint(page), useCache: true);
       print(response.data.toString());
       if (response.statusCode == 200) {
-        ResponseModel<User> res = ResponseModel<User>.fromJson(response.data, (json) => User.fromJson(json));
-        print(res.errorCode);
-        print(res.errorMsg);
+        return ResponseModel<PaginationModel<Article>>.fromJson(response.data, (json) => PaginationModel<Article>.fromJson(json, Article.fromJson));
       }
-      return ResponseModel<User>.fromJson(response.data, (json) => User.fromJson(json));
+      return null;
     }, context);
   }
 }

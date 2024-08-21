@@ -292,8 +292,8 @@ class _LoginPageState extends State<LoginPage> {
       if (userInfo?.errorCode == 0 && userInfo?.data != null) {
         if (mounted) {
           ///执行获取用户信息
-          ResponseModel<User> res = await _apiService.retrieveUserData(context);
-          Provider.of<UserModel>(context, listen: false).user = res.data;
+          ResponseModel<User>? res = await _apiService.retrieveUserData(context);
+          Provider.of<UserModel>(context, listen: false).user = res?.data;
           showToast(AppLocalizations.of(context).login_message_welcome_login_successful(userInfo?.data?.username ?? ''));
           Navigator.of(context).pop();
         }

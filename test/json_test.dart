@@ -35,7 +35,7 @@ void main() {
 
     expect(result.data?.length, 3);
     expect(result.data?[0].title, "我们支持订阅啦~");
-    expect(result.data?[1].id, 6);
+    expect(result.data?[1].bid, 6);
     expect(result.data?[2].url, "https://www.wanandroid.com/blog/show/2");
   });
   // 预期输出

@@ -11,7 +11,8 @@ class Constants {
   static const String registerEndpoint = 'user/register';
   static const String logoutEndpoint = 'user/logout/json';
   static const String userInfoEndpoint = 'user/lg/userinfo/json';
-  static const String articlesEndpoint = 'article/list/';
+  static const String topArticlesEndpoint = 'article/top/json';
+  static String articlesEndpoint(int page) => "article/list/$page/json";
   static const String bannersEndpoint = 'banner/json';
 
   // 缓存相关

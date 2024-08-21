@@ -6,8 +6,9 @@ part 'banner.g.dart';
 class Banner {
   Banner();
 
+  @JsonKey(name: 'id')
+  late num bid;
   late String desc;
-  late num id;
   late String imagePath;
   late num isVisible;
   late num order;
@@ -20,6 +21,6 @@ class Banner {
 
   @override
   String toString() {
-    return 'Banner(desc: $desc, id: $id, imagePath: $imagePath, isVisible: $isVisible, order: $order, title: $title, type: $type, url: $url)';
+    return 'Banner(id: $bid, desc: $desc, imagePath: $imagePath, isVisible: $isVisible, order: $order, title: $title, type: $type, url: $url)';
   }
 }

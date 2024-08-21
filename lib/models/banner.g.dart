@@ -7,8 +7,8 @@ part of 'banner.dart';
 // **************************************************************************
 
 Banner _$BannerFromJson(Map<String, dynamic> json) => Banner()
+  ..bid = json['id'] as num
   ..desc = json['desc'] as String
-  ..id = json['id'] as num
   ..imagePath = json['imagePath'] as String
   ..isVisible = json['isVisible'] as num
   ..order = json['order'] as num
@@ -17,8 +17,8 @@ Banner _$BannerFromJson(Map<String, dynamic> json) => Banner()
   ..url = json['url'] as String;
 
 Map<String, dynamic> _$BannerToJson(Banner instance) => <String, dynamic>{
+      'id': instance.bid,
       'desc': instance.desc,
-      'id': instance.id,
       'imagePath': instance.imagePath,
       'isVisible': instance.isVisible,
       'order': instance.order,
