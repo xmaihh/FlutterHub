@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/common/index.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
+import 'package:flutter_hub/routes/home/article_view_page.dart';
 import 'package:flutter_hub/routes/main_page.dart';
 import 'package:flutter_hub/routes/settings/about_page.dart';
 import 'package:flutter_hub/routes/settings/language_page.dart';
@@ -79,6 +80,20 @@ class MyApp extends StatelessWidget {
               Constants.themeRoutePath: (context) => const ThemeChangePage(),
               Constants.languageRoutePath: (context) => const LanguagePage(),
               Constants.aboutRoutePath: (context) => AboutPage(),
+            },
+            onGenerateRoute: (settings) {
+              final args = settings.arguments as Map<String, dynamic>?;
+              switch (settings.name) {
+                case Constants.articleRoutePath:
+                  return MaterialPageRoute(
+                    builder: (context) => ArticleViewPage(
+                      url: args?['url'] ?? '',
+                      title: args?['title'] ?? '',
+                    ),
+                  );
+                default:
+                  return null; // Default behavior for unhandled routes
+              }
             },
           );
         },

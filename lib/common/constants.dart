@@ -27,6 +27,7 @@ class Constants {
   static const String themeRoutePath = '/theme';
   static const String languageRoutePath = '/language';
   static const String aboutRoutePath = '/about';
+  static const String articleRoutePath = '/article';
 
   // UI相关
   static const double defaultPadding = 16.0;

@@ -148,3 +148,10 @@ class Constants {
 - 减少硬编码: 避免在代码中直接使用字符串或数字字面量。
 - 提高代码的一致性: 确保整个应用中使用相同的值。
 - 便于国际化: 可以轻松地将文本常量替换为本地化的字符串。
+
+# 运行项目
+
+由 CORS 策略引起的接口调用错误：`The XMLHttpRequest onError callback was called`。您可以在 Chrome 中使用`disable-web-security`命令调试应用程序时禁用它
+```bash
+flutter run -d chrome --web-browser-flag "--disable-web-security"
+```

@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hub/common/constants.dart';
 import 'package:flutter_hub/models/banner.dart' as hub;
 import 'package:flutter_hub/models/index.dart';
 import 'package:flutter_hub/services/index.dart';
+import 'package:flutter_hub/widgets/searchbar_with_hotwords.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 class HomePage extends StatefulWidget {
@@ -118,25 +120,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final _colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'Search...',
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.search),
-            ),
-          ),
-        ),
-        elevation: 0,
-      ),
-      body: RefreshIndicator(
+      body: SafeArea(
+          child: RefreshIndicator(
         onRefresh: _refreshData,
         child: ListView(
           controller: _scrollController,
           padding: EdgeInsets.all(16),
           children: [
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: SearchBarWithHotWords()),
+            SizedBox(height: 8.0),
             _buildBanner(),
             SizedBox(height: 24),
             Text(
@@ -149,14 +141,19 @@ class _HomePageState extends State<HomePage> {
             if (!hasMoreData) Padding(padding: EdgeInsets.all(8.0), child: Center(child: Text('没有更多数据了'))),
           ],
         ),
-      ),
+      )),
       floatingActionButton: showTop
-          ? FloatingActionButton(
-              backgroundColor: _colorScheme.primary.withOpacity(0.85),
-              child: Icon(Bootstrap.arrow_up_circle_fill),
+          ? IconButton(
               onPressed: () {
-                _scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-              })
+                _scrollController.animateTo(0, duration: Duration(milliseconds: 1500), curve: Curves.easeInOut);
+                setState(() {
+                  showTop = false;
+                });
+              },
+              icon: Icon(
+                Bootstrap.arrow_up_circle_fill,
+                size: 40,
+              ))
           : null,
     );
   }
@@ -238,7 +235,7 @@ class _HomePageState extends State<HomePage> {
         final article = articles[index];
         return InkWell(
             onTap: () {
-              debugPrint("处理文章点击事件，可以跳转到文章详情页");
+              Navigator.pushNamed(context, Constants.articleRoutePath, arguments: {'url': article.link, 'title': article.title});
             },
             child: Card(
               elevation: 2,
@@ -293,7 +290,6 @@ class _HomePageState extends State<HomePage> {
                                 setState(() {
                                   article.collect = !article.collect;
                                   // 在这里实现收藏/取消收藏的逻辑
-                                  debugPrint("在这里实现收藏/取消收藏的逻辑");
                                 });
                               },
                             ),
