@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ArticleViewPage extends StatefulWidget {
+class ArticleDetailPage extends StatefulWidget {
   final String url;
   final String title;
-
-  ArticleViewPage({required this.url, required this.title});
+  final bool collect;
+  ArticleDetailPage({required this.url, required this.title,this.collect = false});
 
   @override
-  State<ArticleViewPage> createState() => _ArticleViewPageState();
+  State<ArticleDetailPage> createState() => _ArticleDetailPageState();
 }
 
-class _ArticleViewPageState extends State<ArticleViewPage> {
+class _ArticleDetailPageState extends State<ArticleDetailPage> {
   final GlobalKey webViewKey = GlobalKey();
   InAppWebViewController? webViewController;
   double progress = 0;
@@ -26,10 +26,13 @@ class _ArticleViewPageState extends State<ArticleViewPage> {
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
-              // webViewController?.reload();
+              webViewController?.reload();
             },
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
+          IconButton(onPressed: () {}, icon: Icon(
+            widget.collect ? Icons.favorite : Icons.favorite_border,
+            color: widget.collect ? Colors.red : Colors.grey,
+          )),
           IconButton(
               onPressed: () {
                 launchUrl(Uri.parse(widget.url), mode: LaunchMode.externalApplication);

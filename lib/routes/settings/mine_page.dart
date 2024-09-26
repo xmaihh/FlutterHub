@@ -188,7 +188,9 @@ class _MinePageState extends State<MinePage> {
           Expanded(
             flex: 1,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(Constants.favoriteRoutePath);
+              },
               child: _singleItemWidget(loc.settings_mine_menu_favorite, 'imgs/nav_favorite.svg', 0),
             ),
           ),

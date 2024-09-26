@@ -84,7 +84,7 @@ class ApiService {
   /// 首页banner
   Future<ResponseListModel<hub.Banner>?> fetchBanners(BuildContext context) async {
     return handleApiCall(() async {
-      final response = await _apiClient.get(Constants.bannersEndpoint);
+      final response = await _apiClient.get(Constants.bannersEndpoint, useCache: true);
       Log.info(response.data.toString());
       if (response.statusCode == 200) {
         return ResponseListModel<hub.Banner>.fromJson(response.data, (json) => hub.Banner.fromJson(json));
@@ -105,6 +105,7 @@ class ApiService {
     }, context);
   }
 
+  /// 首页-文章列表
   Future<ResponseModel<PaginationModel<Article>>?> fetchArticles(int page, BuildContext context) async {
     return handleApiCall(() async {
       final response = await _apiClient.get(Constants.articlesEndpoint(page), useCache: true);
@@ -113,6 +114,29 @@ class ApiService {
         return ResponseModel<PaginationModel<Article>>.fromJson(response.data, (json) => PaginationModel<Article>.fromJson(json, Article.fromJson));
       }
       return null;
+    }, context);
+  }
+
+  /// 收藏站内文章
+  Future<ResponseModel?> collect(int articleId, BuildContext context) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.post(Constants.collectEndpoint(articleId));
+      print(response.data.toString());
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(response.data, (json) => {});
+      }
+      return null;
+    }, context);
+  }
+
+  /// 取消收藏
+  Future<ResponseModel?> uncollect(int articleId, BuildContext context) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.post(Constants.uncollectEndpoint(articleId));
+      print(response.data.toString());
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(response.data, (json) => {});
+      }
     }, context);
   }
 }

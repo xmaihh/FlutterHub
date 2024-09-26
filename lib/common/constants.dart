@@ -13,6 +13,8 @@ class Constants {
   static const String userInfoEndpoint = 'user/lg/userinfo/json';
   static const String topArticlesEndpoint = 'article/top/json';
   static String articlesEndpoint(int page) => "article/list/$page/json";
+  static String collectEndpoint(int articleId) => "lg/collect/$articleId/json";
+  static String uncollectEndpoint(int articleId) => "lg/uncollect_originId/$articleId/json";
   static const String bannersEndpoint = 'banner/json';
 
   // 缓存相关
@@ -24,10 +26,11 @@ class Constants {
   static const String loginRoutePath = '/login';
   static const String signupRoutePath = '/signup';
   static const String forgotPasswdRoutePath = '/forgotPasswd';
-  static const String themeRoutePath = '/theme';
-  static const String languageRoutePath = '/language';
-  static const String aboutRoutePath = '/about';
-  static const String articleRoutePath = '/article';
+  static const String themeRoutePath = '/mine/settings/theme';
+  static const String languageRoutePath = '/mine/settings/language';
+  static const String aboutRoutePath = '/mine/settings/about';
+  static const String articleRoutePath = '/home/article';
+  static const String favoriteRoutePath = '/mine/favorite';
 
   // UI相关
   static const double defaultPadding = 16.0;

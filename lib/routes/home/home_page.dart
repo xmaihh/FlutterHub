@@ -5,6 +5,7 @@ import 'package:flutter_hub/models/banner.dart' as hub;
 import 'package:flutter_hub/models/index.dart';
 import 'package:flutter_hub/services/index.dart';
 import 'package:flutter_hub/widgets/searchbar_with_hotwords.dart';
+import 'package:flutter_hub/widgets/show_toast.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 class HomePage extends StatefulWidget {
@@ -70,6 +71,7 @@ class _HomePageState extends State<HomePage> {
     if (res?.data != null) {
       res?.data?.forEach((article) {
         article.top = true;
+        debugPrint('置顶: ${article.title}');
       });
       setState(() {
         articles.addAll(res?.data ?? []);
@@ -114,6 +116,28 @@ class _HomePageState extends State<HomePage> {
     await fetchBanners();
     await fetchTopArticles();
     await fetchArticles();
+  }
+
+  Future<bool> _collect(int articleId) async {
+    ResponseModel? res = await _apiServer.collect(articleId, context);
+    if (res?.errorCode == 0) {
+      showToast("收藏成功");
+      return true;
+    } else {
+      showToast("${res?.errorMsg}${res?.errorCode}");
+      return false;
+    }
+  }
+
+  Future<bool> _uncollect(int articleId) async {
+    ResponseModel? res = await _apiServer.uncollect(articleId, context);
+    if (res?.errorCode == 0) {
+      showToast("取消收藏成功");
+      return true;
+    } else {
+      showToast("${res?.errorMsg}${res?.errorCode}");
+      return false;
+    }
   }
 
   @override
@@ -173,48 +197,53 @@ class _HomePageState extends State<HomePage> {
       items: banners.map((banner) {
         return Builder(
           builder: (BuildContext context) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: NetworkImage(banner.imagePath),
-                  fit: BoxFit.cover,
-                ),
-              ),
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, Constants.articleRoutePath, arguments: {'url': banner.url, 'title': banner.title});
+              },
               child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black54],
+                  image: DecorationImage(
+                    image: NetworkImage(banner.imagePath),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        banner.title,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, Colors.black54],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          banner.title,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        banner.desc,
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14.0,
+                        SizedBox(height: 4),
+                        Text(
+                          banner.desc,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14.0,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -235,7 +264,7 @@ class _HomePageState extends State<HomePage> {
         final article = articles[index];
         return InkWell(
             onTap: () {
-              Navigator.pushNamed(context, Constants.articleRoutePath, arguments: {'url': article.link, 'title': article.title});
+              Navigator.pushNamed(context, Constants.articleRoutePath, arguments: {'url': article.link, 'title': article.title, 'collect': article.collect});
             },
             child: Card(
               elevation: 2,
@@ -286,11 +315,25 @@ class _HomePageState extends State<HomePage> {
                                 article.collect ? Icons.favorite : Icons.favorite_border,
                                 color: article.collect ? Colors.red : Colors.grey,
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  article.collect = !article.collect;
-                                  // 在这里实现收藏/取消收藏的逻辑
-                                });
+                              onPressed: () async {
+                                // 先执行异步操作，根据结果来更新状态
+                                if (article.collect) {
+                                  // 如果已经收藏，则尝试取消收藏
+                                  bool result = await _uncollect(article.id);
+                                  if (result) {
+                                    setState(() {
+                                      article.collect = false;
+                                    });
+                                  }
+                                } else {
+                                  // 如果未收藏，则尝试收藏
+                                  bool result = await _collect(article.id);
+                                  if (result) {
+                                    setState(() {
+                                      article.collect = true;
+                                    });
+                                  }
+                                }
                               },
                             ),
                           ],

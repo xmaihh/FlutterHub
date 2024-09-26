@@ -2,9 +2,10 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/common/index.dart';
 import 'package:flutter_hub/l10n/localization_intl.dart';
-import 'package:flutter_hub/routes/home/article_view_page.dart';
+import 'package:flutter_hub/routes/home/article_detail_page.dart';
 import 'package:flutter_hub/routes/main_page.dart';
 import 'package:flutter_hub/routes/settings/about_page.dart';
+import 'package:flutter_hub/routes/settings/favorite_page.dart';
 import 'package:flutter_hub/routes/settings/language_page.dart';
 import 'package:flutter_hub/routes/settings/theme_page.dart';
 import 'package:flutter_hub/routes/user/login_page.dart';
@@ -80,15 +81,17 @@ class MyApp extends StatelessWidget {
               Constants.themeRoutePath: (context) => const ThemeChangePage(),
               Constants.languageRoutePath: (context) => const LanguagePage(),
               Constants.aboutRoutePath: (context) => AboutPage(),
+              Constants.favoriteRoutePath: (context) => FavoritePage(),
             },
             onGenerateRoute: (settings) {
               final args = settings.arguments as Map<String, dynamic>?;
               switch (settings.name) {
                 case Constants.articleRoutePath:
                   return MaterialPageRoute(
-                    builder: (context) => ArticleViewPage(
+                    builder: (context) => ArticleDetailPage(
                       url: args?['url'] ?? '',
                       title: args?['title'] ?? '',
+                      collect: args?['collect'] ?? false,
                     ),
                   );
                 default:
