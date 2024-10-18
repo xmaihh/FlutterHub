@@ -33,7 +33,6 @@ class _SignupPageState extends State<SignupPage> {
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 40),
-            height: MediaQuery.of(context).size.height - 50,
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -56,6 +55,7 @@ class _SignupPageState extends State<SignupPage> {
                 buildSignupButton(context),
                 const SizedBox(height: 30.0),
                 buildLoginText(context),
+                const SizedBox(height: 20.0),
               ],
             ),
           ),
@@ -202,7 +202,6 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               ),
               onTap: () {
-                /// TODO 执行登录方法
                 Navigator.of(context).pushNamed(Constants.loginRoutePath);
               },
             ),

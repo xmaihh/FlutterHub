@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/common/constants.dart';
+import 'package:flutter_hub/models/bookmark.dart';
 import 'package:flutter_hub/utils/logger.dart';
 
 import '../api/api_client.dart';
@@ -137,6 +138,31 @@ class ApiService {
       if (response.statusCode == 200) {
         return ResponseModel.fromJson(response.data, (json) => {});
       }
+      return null;
+    }, context);
+  }
+
+  /// 收藏文章列表
+  Future<ResponseModel<PaginationModel<Favorite>>?> fetchCollectArticles(int page, BuildContext context) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.get(Constants.collectArticlesEndpoint(page));
+      print(response.data.toString());
+      if (response.statusCode == 200) {
+        return ResponseModel<PaginationModel<Favorite>>.fromJson(response.data, (json) => PaginationModel<Favorite>.fromJson(json, Favorite.fromJson));
+      }
+      return null;
+    }, context);
+  }
+
+  /// 收藏网站列表
+  Future<ResponseListModel<Bookmark>?> fetchBookmarks(BuildContext context) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.get(Constants.bookmarkEndpoint);
+      print(response.data.toString());
+      if (response.statusCode == 200) {
+        return ResponseListModel<Bookmark>.fromJson(response.data, (json) => Bookmark.fromJson(json));
+      }
+      return null;
     }, context);
   }
 }

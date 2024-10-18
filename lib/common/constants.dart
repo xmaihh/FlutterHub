@@ -15,6 +15,8 @@ class Constants {
   static String articlesEndpoint(int page) => "article/list/$page/json";
   static String collectEndpoint(int articleId) => "lg/collect/$articleId/json";
   static String uncollectEndpoint(int articleId) => "lg/uncollect_originId/$articleId/json";
+  static String collectArticlesEndpoint(int page) => "lg/collect/list/$page/json";
+  static const String bookmarkEndpoint = "lg/collect/usertools/json";
   static const String bannersEndpoint = 'banner/json';
 
   // 缓存相关

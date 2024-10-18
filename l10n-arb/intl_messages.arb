@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-08-18T16:06:31.626939",
+  "@@last_modified": "2024-10-15T16:09:25.702466",
   "app_name": "FlutterHub",
   "@app_name": {
     "type": "text",
@@ -374,6 +374,102 @@
   },
   "cancel": "cancel",
   "@cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_search": "Search...",
+  "@home_page_search": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_latest_articles": "Latest Articles",
+  "@home_page_latest_articles": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_article_on_top": "Top",
+  "@home_page_article_on_top": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_no_more_data": "No more data",
+  "@home_page_no_more_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_added_to_favorites": "Added to favorites",
+  "@home_page_added_to_favorites": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_favorite_removed": "Removed.",
+  "@home_page_favorite_removed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_favorites": "Favorites",
+  "@favorite_page_favorites": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_my_favorites": "My Favorites",
+  "@favorite_page_my_favorites": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_my_bookmarks": "My Bookmarks",
+  "@favorite_page_my_bookmarks": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_no_favorites": "No Favorites",
+  "@favorite_page_no_favorites": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_no_bookmarks": "No Bookmarks",
+  "@favorite_page_no_bookmarks": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark": "Edit Bookmark",
+  "@favorite_page_edit_bookmark": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark_name": "Name",
+  "@favorite_page_edit_bookmark_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark_link": "Link",
+  "@favorite_page_edit_bookmark_link": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark_confirm": "Ok",
+  "@favorite_page_edit_bookmark_confirm": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark_cancel": "Cancel",
+  "@favorite_page_edit_bookmark_cancel": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

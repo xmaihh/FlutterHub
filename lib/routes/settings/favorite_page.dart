@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hub/l10n/localization_intl.dart';
+import 'package:flutter_hub/models/index.dart';
+import 'package:flutter_hub/services/index.dart';
+import 'package:flutter_hub/widgets/show_toast.dart';
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -7,83 +11,145 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  List<Article> articles = [];
-  List<Website> websites = [];
+  List<Favorite> articles = [];
+  List<Bookmark> websites = [];
+  int currentPage = 0;
   bool isLoading = false;
+  bool hasMoreData = true;
+  ScrollController _scrollController = ScrollController();
+  final _apiService = getIt<ApiService>();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _loadData();
+    fetchCollectArticles();
+    fetchBookmarks();
+    _scrollController.addListener(_onScroll);
   }
 
-  Future<void> _loadData() async {
+  Future<void> fetchCollectArticles() async {
+    if (isLoading) return;
     setState(() {
       isLoading = true;
     });
 
-    // 模拟网络请求延迟
-    await Future.delayed(Duration(seconds: 1));
-
-    // 这里应该是从API或本地存储加载数据
-    // 为了演示，我们使用模拟数据
-    articles = [
-      Article(
-        id: 27996,
-        title: "一文掌握直播技术：实时音视频采集、编码、传输与播放",
-        author: "干货",
-        chapterName: "干货资源",
-        niceDate: "2024-06-06 14:00",
-        link: "https://www.xiangxueketang.cn/enjoy/play/native_19",
-      ),
-      // 添加更多文章...
-    ];
-
-    websites = [
-      Website(
-        id: 22,
-        name: "Flutter - Build apps for any screen",
-        link: "https://flutter.dev",
-        category: "源码",
-      ),
-      // 添加更多网站...
-    ];
+    ResponseModel<PaginationModel<Favorite>>? res = await _apiService.fetchCollectArticles(0, context);
+    if (res?.data != null) {
+      setState(() {
+        currentPage++;
+        articles.addAll(res?.data?.datas ?? []);
+        hasMoreData = !(res?.data?.over == true);
+        isLoading = false;
+      });
+    } else {
+      showToast("${res?.errorMsg}${res?.errorCode}");
+    }
 
     setState(() {
       isLoading = false;
     });
   }
 
-  Future<void> _refreshData() async {
-    // 在实际应用中，这里应该重新从服务器获取数据
-    await _loadData();
+  Future<void> fetchBookmarks() async {
+    ResponseListModel<Bookmark>? res = await _apiService.fetchBookmarks(context);
+    if (res?.data != null) {
+      setState(() {
+        websites
+          ..clear()
+          ..addAll(res?.data ?? []);
+      });
+    } else {
+      showToast("${res?.errorMsg}${res?.errorCode}");
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
-  void _deleteArticle(Article article) {
+  Future<void> _refreshData() async {
+    setState(() {
+      currentPage = 0;
+      articles.clear();
+    });
+    fetchCollectArticles();
+    fetchBookmarks();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (!isLoading && hasMoreData) {}
+    }
+  }
+
+  void _deleteArticle(Favorite article) {
     setState(() {
       articles.remove(article);
     });
     // 在实际应用中，这里应该同步删除操作到服务器或本地存储
   }
 
-  void _deleteWebsite(Website website) {
+  void _deleteWebsite(Bookmark website) {
     setState(() {
       websites.remove(website);
     });
     // 在实际应用中，这里应该同步删除操作到服务器或本地存储
   }
 
+  void _editBookmark(Bookmark bookmark) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String newName = bookmark.name;
+        String newLink = bookmark.link;
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context).favorite_page_edit_bookmark),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).favorite_page_edit_bookmark_name),
+                onChanged: (value) => newName = value,
+                controller: TextEditingController(text: bookmark.name),
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).favorite_page_edit_bookmark_link),
+                onChanged: (value) => newLink = value,
+                controller: TextEditingController(text: bookmark.link),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context).favorite_page_edit_bookmark_cancel),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context).favorite_page_edit_bookmark_confirm),
+              onPressed: () {
+                setState(() {
+                  bookmark.name = newName;
+                  bookmark.link = newLink;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('我的收藏'),
+        title: Text(AppLocalizations.of(context).favorite_page_favorites),
         bottom: TabBar(
           controller: _tabController,
           tabs: [
-            Tab(text: '收藏文章'),
-            Tab(text: '收藏网址'),
+            Tab(text: AppLocalizations.of(context).favorite_page_my_favorites),
+            Tab(text: AppLocalizations.of(context).favorite_page_my_bookmarks),
           ],
         ),
       ),
@@ -103,51 +169,68 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
       child: isLoading
           ? Center(child: CircularProgressIndicator())
           : articles.isEmpty
-          ? _buildEmptyState('暂无收藏文章')
-          : ListView.builder(
-        itemCount: articles.length,
-        itemBuilder: (context, index) {
-          final article = articles[index];
-          return Dismissible(
-            key: Key(article.id.toString()),
-            background: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.only(right: 20),
-              child: Icon(Icons.delete, color: Colors.white),
-            ),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) {
-              _deleteArticle(article);
-            },
-            child: Card(
-              elevation: 2,
-              margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: ListTile(
-                title: Text(
-                  article.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+              ? _buildEmptyState(AppLocalizations.of(context).favorite_page_no_favorites)
+              : ListView.builder(
+                  itemCount: articles.length,
+                  itemBuilder: (context, index) {
+                    final article = articles[index];
+                    return Dismissible(
+                      key: Key(article.id.toString()),
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 20),
+                        child: Icon(Icons.delete, color: Colors.white),
+                      ),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) {
+                        _deleteArticle(article);
+                      },
+                      child: Card(
+                        elevation: 2,
+                        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: ListTile(
+                          title: Text(
+                            article.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                article.desc,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              SizedBox(height: 4),
+                              Row(children: [
+                                Icon(Icons.person, size: 16.0, color: Colors.grey),
+                                SizedBox(width: 4.0),
+                                Text(article.author, style: TextStyle(color: Colors.grey)),
+                              ]),
+                              Row(children: [
+                                Icon(Icons.label, size: 16.0, color: Colors.grey),
+                                SizedBox(width: 4.0),
+                                Text(article.chapterName, style: TextStyle(color: Colors.grey)),
+                              ]),
+                              Row(children: [
+                                Icon(Icons.access_time, size: 16.0, color: Colors.grey),
+                                SizedBox(width: 4.0),
+                                Text(article.niceDate, style: TextStyle(color: Colors.grey)),
+                              ]),
+                            ],
+                          ),
+                          trailing: Icon(Icons.arrow_forward_ios),
+                          onTap: () {
+                            // 处理文章点击事件，例如打开WebView
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 4),
-                    Text('作者: ${article.author}'),
-                    Text('分类: ${article.chapterName}'),
-                    Text('日期: ${article.niceDate}'),
-                  ],
-                ),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  // 处理文章点击事件，例如打开WebView
-                },
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 
@@ -157,42 +240,42 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
       child: isLoading
           ? Center(child: CircularProgressIndicator())
           : websites.isEmpty
-          ? _buildEmptyState('暂无收藏网址')
-          : ListView.builder(
-        itemCount: websites.length,
-        itemBuilder: (context, index) {
-          final website = websites[index];
-          return Dismissible(
-            key: Key(website.id.toString()),
-            background: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.only(right: 20),
-              child: Icon(Icons.delete, color: Colors.white),
-            ),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) {
-              _deleteWebsite(website);
-            },
-            child: Card(
-              elevation: 2,
-              margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.blue,
-                  child: Text(website.name[0].toUpperCase()),
+              ? _buildEmptyState(AppLocalizations.of(context).favorite_page_no_bookmarks)
+              : ListView.builder(
+                  itemCount: websites.length,
+                  itemBuilder: (context, index) {
+                    final website = websites[index];
+                    return Dismissible(
+                      key: Key(website.id.toString()),
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 20),
+                        child: Icon(Icons.delete, color: Colors.white),
+                      ),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) {
+                        _deleteWebsite(website);
+                      },
+                      child: Card(
+                        elevation: 2,
+                        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.blue,
+                            child: Text(website.name[0].toUpperCase()),
+                          ),
+                          title: Text(website.name),
+                          subtitle: Text(website.desc),
+                          trailing: Icon(Icons.link),
+                          onTap: () {
+                            // 处理网站点击事件，例如打开WebView
+                          },
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                title: Text(website.name),
-                subtitle: Text(website.category),
-                trailing: Icon(Icons.link),
-                onTap: () {
-                  // 处理网站点击事件，例如打开WebView
-                },
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 
@@ -217,38 +300,4 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
     _tabController.dispose();
     super.dispose();
   }
-}
-
-// Article 和 Website 类保持不变
-
-class Article {
-  final int id;
-  final String title;
-  final String author;
-  final String chapterName;
-  final String niceDate;
-  final String link;
-
-  Article({
-    required this.id,
-    required this.title,
-    required this.author,
-    required this.chapterName,
-    required this.niceDate,
-    required this.link,
-  });
-}
-
-class Website {
-  final int id;
-  final String name;
-  final String link;
-  final String category;
-
-  Website({
-    required this.id,
-    required this.name,
-    required this.link,
-    required this.category,
-  });
 }

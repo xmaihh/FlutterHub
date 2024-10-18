@@ -134,6 +134,38 @@ class AppLocalizations {
   String get yes => Intl.message('yes', name: 'yes');
 
   String get cancel => Intl.message('cancel', name: 'cancel');
+
+  String get home_page_search => Intl.message('Search...', name: 'home_page_search');
+
+  String get home_page_latest_articles => Intl.message('Latest Articles', name: 'home_page_latest_articles');
+
+  String get home_page_article_on_top => Intl.message('Top', name: 'home_page_article_on_top');
+
+  String get home_page_no_more_data => Intl.message('No more data', name: 'home_page_no_more_data');
+
+  String get home_page_added_to_favorites => Intl.message('Added to favorites', name: 'home_page_added_to_favorites');
+
+  String get home_page_favorite_removed => Intl.message('Removed.', name: 'home_page_favorite_removed');
+
+  String get favorite_page_favorites => Intl.message('Favorites', name: 'favorite_page_favorites');
+
+  String get favorite_page_my_favorites => Intl.message('My Favorites', name: 'favorite_page_my_favorites');
+
+  String get favorite_page_my_bookmarks => Intl.message('My Bookmarks', name: 'favorite_page_my_bookmarks');
+
+  String get favorite_page_no_favorites => Intl.message('No Favorites', name: 'favorite_page_no_favorites');
+
+  String get favorite_page_no_bookmarks => Intl.message('No Bookmarks', name: 'favorite_page_no_bookmarks');
+
+  String get favorite_page_edit_bookmark => Intl.message('Edit Bookmark', name: 'favorite_page_edit_bookmark');
+
+  String get favorite_page_edit_bookmark_name => Intl.message('Name', name: 'favorite_page_edit_bookmark_name');
+
+  String get favorite_page_edit_bookmark_link => Intl.message('Link', name: 'favorite_page_edit_bookmark_link');
+
+  String get favorite_page_edit_bookmark_confirm => Intl.message('Ok', name: 'favorite_page_edit_bookmark_confirm');
+
+  String get favorite_page_edit_bookmark_cancel => Intl.message('Cancel', name: 'favorite_page_edit_bookmark_cancel');
 }
 
 //Locale代理类

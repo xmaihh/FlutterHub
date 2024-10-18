@@ -21,7 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(username) => "Login successful, ${username}. Welcome back!";
 
-  static m1(coinCount, rank, level) => "coinCount: ${coinCount}, rank: ${rank}, level: ${level}";
+  static m1(coinCount, rank, level) => "coin: ${coinCount}, rank: ${rank}, level: ${level}";
 
   static m2(version) => "A new version ${version} is available, do you want to update?";
 
@@ -33,6 +33,22 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
     "app_name" : MessageLookupByLibrary.simpleMessage("FlutterHub"),
     "cancel" : MessageLookupByLibrary.simpleMessage("cancel"),
+    "favorite_page_edit_bookmark" : MessageLookupByLibrary.simpleMessage("Edit Bookmark"),
+    "favorite_page_edit_bookmark_cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
+    "favorite_page_edit_bookmark_confirm" : MessageLookupByLibrary.simpleMessage("Ok"),
+    "favorite_page_edit_bookmark_link" : MessageLookupByLibrary.simpleMessage("Link"),
+    "favorite_page_edit_bookmark_name" : MessageLookupByLibrary.simpleMessage("Name"),
+    "favorite_page_favorites" : MessageLookupByLibrary.simpleMessage("Favorites"),
+    "favorite_page_my_bookmarks" : MessageLookupByLibrary.simpleMessage("My Bookmarks"),
+    "favorite_page_my_favorites" : MessageLookupByLibrary.simpleMessage("My Favorites"),
+    "favorite_page_no_bookmarks" : MessageLookupByLibrary.simpleMessage("No Bookmarks"),
+    "favorite_page_no_favorites" : MessageLookupByLibrary.simpleMessage("No Favorites"),
+    "home_page_added_to_favorites" : MessageLookupByLibrary.simpleMessage("Added to favorites"),
+    "home_page_article_on_top" : MessageLookupByLibrary.simpleMessage("Top"),
+    "home_page_favorite_removed" : MessageLookupByLibrary.simpleMessage("Removed."),
+    "home_page_latest_articles" : MessageLookupByLibrary.simpleMessage("Latest Articles"),
+    "home_page_no_more_data" : MessageLookupByLibrary.simpleMessage("No more data"),
+    "home_page_search" : MessageLookupByLibrary.simpleMessage("Search..."),
     "login_btn_forgot_password" : MessageLookupByLibrary.simpleMessage("Forgot password?"),
     "login_btn_login" : MessageLookupByLibrary.simpleMessage("Login"),
     "login_btn_signup" : MessageLookupByLibrary.simpleMessage("Sign Up"),

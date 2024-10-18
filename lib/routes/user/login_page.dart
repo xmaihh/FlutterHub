@@ -67,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
             child: SingleChildScrollView(
                 child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    height: MediaQuery.of(context).size.height - 50,
                     width: double.infinity,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -91,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                         buildOtherLoginText(),
                         buildOtherMethod(context),
                         buildSignupText(context),
+                        const SizedBox(height: 20.0),
                       ],
                     )))));
   }

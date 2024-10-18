@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hub/l10n/localization_intl.dart';
 
 class SearchBarWithHotWords extends StatefulWidget {
   const SearchBarWithHotWords({super.key});
@@ -89,7 +90,7 @@ class _SearchBarWithHotWordsState extends State<SearchBarWithHotWords> {
                 controller: _searchController,
                 focusNode: _focusNode,
                 decoration: InputDecoration(
-                  hintText: '搜索',
+                  hintText: AppLocalizations.of(context).home_page_search,
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),

@@ -378,5 +378,101 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "home_page_search": "搜索",
+  "@home_page_search": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_latest_articles": "最新文章",
+  "@home_page_latest_articles": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_article_on_top": "置顶",
+  "@home_page_article_on_top": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_no_more_data": "没有更多数据了",
+  "@home_page_no_more_data": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_added_to_favorites": "收藏成功",
+  "@home_page_added_to_favorites": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "home_page_favorite_removed": "取消收藏成功",
+  "@home_page_favorite_removed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_favorites": "我的收藏",
+  "@favorite_page_favorites": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_my_favorites": "收藏文章",
+  "@favorite_page_my_favorites": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_my_bookmarks": "收藏网址",
+  "@favorite_page_my_bookmarks": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_no_favorites": "暂无收藏文章",
+  "@favorite_page_no_favorites": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_no_bookmarks": "暂无收藏网址",
+  "@favorite_page_no_bookmarks": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark": "编辑书签",
+  "@favorite_page_edit_bookmark": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark_name": "名称",
+  "@favorite_page_edit_bookmark_name": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark_link": "链接",
+  "@favorite_page_edit_bookmark_link": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark_confirm": "保存",
+  "@favorite_page_edit_bookmark_confirm": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorite_page_edit_bookmark_cancel": "取消",
+  "@favorite_page_edit_bookmark_cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
   }
 }

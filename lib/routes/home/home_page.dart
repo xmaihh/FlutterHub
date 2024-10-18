@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/common/constants.dart';
+import 'package:flutter_hub/l10n/localization_intl.dart';
 import 'package:flutter_hub/models/banner.dart' as hub;
 import 'package:flutter_hub/models/index.dart';
 import 'package:flutter_hub/services/index.dart';
@@ -87,22 +88,10 @@ class _HomePageState extends State<HomePage> {
 
     ResponseModel<PaginationModel<Article>>? res = await _apiServer.fetchArticles(currentPage, context);
     if (res?.data != null) {
-      debugPrint('curPage: ${res?.data?.curPage}');
-      debugPrint('datas: ${res?.data?.datas.length}');
-      debugPrint('offset: ${res?.data?.offset}');
-      debugPrint('over: ${res?.data?.over}');
-      debugPrint('pageCount: ${res?.data?.pageCount}');
-      debugPrint('size: ${res?.data?.size}');
-      debugPrint('total: ${res?.data?.total}');
-
       setState(() {
         currentPage++;
         articles.addAll(res?.data?.datas ?? []);
-        if (res?.data?.over == true) {
-          hasMoreData = false;
-        } else {
-          hasMoreData = true;
-        }
+        hasMoreData = !(res?.data?.over == true);
         isLoading = false;
       });
     }
@@ -121,7 +110,7 @@ class _HomePageState extends State<HomePage> {
   Future<bool> _collect(int articleId) async {
     ResponseModel? res = await _apiServer.collect(articleId, context);
     if (res?.errorCode == 0) {
-      showToast("收藏成功");
+      showToast(AppLocalizations.of(context).home_page_added_to_favorites);
       return true;
     } else {
       showToast("${res?.errorMsg}${res?.errorCode}");
@@ -132,7 +121,7 @@ class _HomePageState extends State<HomePage> {
   Future<bool> _uncollect(int articleId) async {
     ResponseModel? res = await _apiServer.uncollect(articleId, context);
     if (res?.errorCode == 0) {
-      showToast("取消收藏成功");
+      showToast(AppLocalizations.of(context).home_page_favorite_removed);
       return true;
     } else {
       showToast("${res?.errorMsg}${res?.errorCode}");
@@ -156,13 +145,13 @@ class _HomePageState extends State<HomePage> {
             _buildBanner(),
             SizedBox(height: 24),
             Text(
-              '最新文章',
+              AppLocalizations.of(context).home_page_latest_articles,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             _buildArticleList(),
             if (isLoading) Center(child: CircularProgressIndicator()),
-            if (!hasMoreData) Padding(padding: EdgeInsets.all(8.0), child: Center(child: Text('没有更多数据了'))),
+            if (!hasMoreData) Padding(padding: EdgeInsets.all(8.0), child: Center(child: Text(AppLocalizations.of(context).home_page_no_more_data))),
           ],
         ),
       )),
@@ -294,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Text(
-                                        '置顶',
+                                        AppLocalizations.of(context).home_page_article_on_top,
                                         style: TextStyle(color: Colors.white, fontSize: 12),
                                       ),
                                     ),
