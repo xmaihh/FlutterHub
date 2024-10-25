@@ -7,6 +7,7 @@ import 'package:flutter_hub/routes/main_page.dart';
 import 'package:flutter_hub/routes/settings/about_page.dart';
 import 'package:flutter_hub/routes/settings/favorite_page.dart';
 import 'package:flutter_hub/routes/settings/language_page.dart';
+import 'package:flutter_hub/routes/settings/message_page.dart';
 import 'package:flutter_hub/routes/settings/theme_page.dart';
 import 'package:flutter_hub/routes/user/login_page.dart';
 import 'package:flutter_hub/routes/user/signup_page.dart';
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
               Constants.languageRoutePath: (context) => const LanguagePage(),
               Constants.aboutRoutePath: (context) => AboutPage(),
               Constants.favoriteRoutePath: (context) => FavoritePage(),
+              Constants.messageRoutePath: (context) => MessagePage(),
             },
             onGenerateRoute: (settings) {
               final args = settings.arguments as Map<String, dynamic>?;

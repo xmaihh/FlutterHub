@@ -12,3 +12,4 @@ export 'response_model.dart';
 export 'tag.dart';
 export 'user.dart';
 export 'userInfo.dart';
+export 'message.dart';

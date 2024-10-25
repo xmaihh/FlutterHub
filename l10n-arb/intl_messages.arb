@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-10-15T16:09:25.702466",
+  "@@last_modified": "2024-10-25T16:14:20.077867",
   "app_name": "FlutterHub",
   "@app_name": {
     "type": "text",
@@ -444,6 +444,12 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "favorite_page_refresh": "Refresh",
+  "@favorite_page_refresh": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "favorite_page_edit_bookmark": "Edit Bookmark",
   "@favorite_page_edit_bookmark": {
     "type": "text",
@@ -470,6 +476,92 @@
   },
   "favorite_page_edit_bookmark_cancel": "Cancel",
   "@favorite_page_edit_bookmark_cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_message": "Message",
+  "@message_page_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_unread_message": "Message unread",
+  "@message_page_unread_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_no_unread_message": "No messages",
+  "@message_page_no_unread_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_read_message": "Message read",
+  "@message_page_read_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_no_read_message": "No messages",
+  "@message_page_no_read_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_refresh": "Refresh",
+  "@message_page_refresh": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_receive_timeout": "Connection timeout",
+  "@dio_exception_receive_timeout": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_bad_response": "Bad response: {statusCode}",
+  "@dio_exception_bad_response": {
+    "type": "text",
+    "placeholders_order": [
+      "statusCode"
+    ],
+    "placeholders": {
+      "statusCode": {}
+    }
+  },
+  "dio_exception_cancel": "Request cancelled",
+  "@dio_exception_cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_default": "Unknown error occurred",
+  "@dio_exception_default": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_general_error": "An error has occurred. {error}",
+  "@dio_exception_general_error": {
+    "type": "text",
+    "placeholders_order": [
+      "error"
+    ],
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "dio_exception_error_dialog_title": "Error",
+  "@dio_exception_error_dialog_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_error_dialog_ok": "OK",
+  "@dio_exception_error_dialog_ok": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

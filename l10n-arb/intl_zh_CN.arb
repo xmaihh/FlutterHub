@@ -445,6 +445,12 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "favorite_page_refresh": "下拉刷新试试",
+  "@favorite_page_refresh": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "favorite_page_edit_bookmark": "编辑书签",
   "@favorite_page_edit_bookmark": {
     "type": "text",
@@ -471,6 +477,92 @@
   },
   "favorite_page_edit_bookmark_cancel": "取消",
   "@favorite_page_edit_bookmark_cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_message": "消息中心",
+  "@message_page_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_unread_message": "未读消息",
+  "@message_page_unread_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_no_unread_message": "没有未读消息",
+  "@message_page_no_unread_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_read_message": "历史消息",
+  "@message_page_read_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_no_read_message": "没有历史消息",
+  "@message_page_no_read_message": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "message_page_refresh": "下拉刷新试试",
+  "@message_page_refresh": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_receive_timeout": "网络连接超时",
+  "@dio_exception_receive_timeout": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_bad_response": "服务器响应错误：{statusCode}",
+  "@dio_exception_bad_response": {
+    "type": "text",
+    "placeholders_order": [
+      "statusCode"
+    ],
+    "placeholders": {
+      "statusCode": {}
+    }
+  },
+  "dio_exception_cancel": "请求被取消",
+  "@dio_exception_cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_default": "发生未知错误",
+  "@dio_exception_default": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_general_error": "发生错误：{error}",
+  "@dio_exception_general_error": {
+    "type": "text",
+    "placeholders_order": [
+      "error"
+    ],
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "dio_exception_error_dialog_title": "错误",
+  "@dio_exception_error_dialog_title": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dio_exception_error_dialog_ok": "确定",
+  "@dio_exception_error_dialog_ok": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

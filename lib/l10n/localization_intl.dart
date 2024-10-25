@@ -157,6 +157,8 @@ class AppLocalizations {
 
   String get favorite_page_no_bookmarks => Intl.message('No Bookmarks', name: 'favorite_page_no_bookmarks');
 
+  String get favorite_page_refresh => Intl.message('Refresh', name: 'favorite_page_refresh');
+
   String get favorite_page_edit_bookmark => Intl.message('Edit Bookmark', name: 'favorite_page_edit_bookmark');
 
   String get favorite_page_edit_bookmark_name => Intl.message('Name', name: 'favorite_page_edit_bookmark_name');
@@ -166,6 +168,32 @@ class AppLocalizations {
   String get favorite_page_edit_bookmark_confirm => Intl.message('Ok', name: 'favorite_page_edit_bookmark_confirm');
 
   String get favorite_page_edit_bookmark_cancel => Intl.message('Cancel', name: 'favorite_page_edit_bookmark_cancel');
+
+  String get message_page_message => Intl.message('Message', name: 'message_page_message');
+
+  String get message_page_unread_message => Intl.message('Message unread', name: 'message_page_unread_message');
+
+  String get message_page_no_unread_message => Intl.message('No messages', name: 'message_page_no_unread_message');
+
+  String get message_page_read_message => Intl.message('Message read', name: 'message_page_read_message');
+
+  String get message_page_no_read_message => Intl.message('No messages', name: 'message_page_no_read_message');
+
+  String get message_page_refresh => Intl.message('Refresh', name: 'message_page_refresh');
+
+  String get dio_exception_receive_timeout => Intl.message('Connection timeout', name: 'dio_exception_receive_timeout');
+
+  String dio_exception_bad_response(String statusCode) => Intl.message('Bad response: $statusCode', args: [statusCode], name: 'dio_exception_bad_response');
+
+  String get dio_exception_cancel => Intl.message('Request cancelled', name: 'dio_exception_cancel');
+
+  String get dio_exception_default => Intl.message('Unknown error occurred', name: 'dio_exception_default');
+
+  String dio_exception_general_error(String error) => Intl.message('An error has occurred. $error', args: [error], name: 'dio_exception_general_error');
+
+  String get dio_exception_error_dialog_title => Intl.message('Error', name: 'dio_exception_error_dialog_title');
+
+  String get dio_exception_error_dialog_ok => Intl.message('OK', name: 'dio_exception_error_dialog_ok');
 }
 
 //Locale代理类

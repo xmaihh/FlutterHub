@@ -18,6 +18,9 @@ class Constants {
   static String collectArticlesEndpoint(int page) => "lg/collect/list/$page/json";
   static const String bookmarkEndpoint = "lg/collect/usertools/json";
   static const String bannersEndpoint = 'banner/json';
+  static const String msgCountUnreadEndpoint = 'message/lg/count_unread/json';
+  static String msgReadListEndpoint(int page) => "message/lg/readed_list/$page/json";
+  static String msgUnreadListEndpoint(int page) => "message/lg/unread_list/$page/json";
 
   // 缓存相关
   static const String userCacheKey = 'user_cache';
@@ -33,6 +36,7 @@ class Constants {
   static const String aboutRoutePath = '/mine/settings/about';
   static const String articleRoutePath = '/home/article';
   static const String favoriteRoutePath = '/mine/favorite';
+  static const String messageRoutePath = '/mine/message';
 
   // UI相关
   static const double defaultPadding = 16.0;

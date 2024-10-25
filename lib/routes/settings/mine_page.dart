@@ -21,6 +21,21 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   final _authServer = getIt<AuthService>();
+  final _apiServer = getIt<ApiService>();
+  int _unreadMsgCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _retrieveUnreadMessageCount();
+  }
+
+  void _retrieveUnreadMessageCount() async {
+    if (mounted) {
+      _unreadMsgCount = await _apiServer.fetchUnreadMsgCount();
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,8 +193,13 @@ class _MinePageState extends State<MinePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: _singleItemWidget(loc.settings_mine_menu_msg, 'imgs/nav_msg.svg', 0),
             flex: 1,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(Constants.messageRoutePath);
+              },
+              child: _singleItemWidget(loc.settings_mine_menu_msg, 'imgs/nav_msg.svg', _unreadMsgCount),
+            ),
           ),
           Expanded(
             child: _singleItemWidget(loc.settings_mine_menu_todo, 'imgs/nav_todo.svg', 0),
