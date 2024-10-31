@@ -340,6 +340,7 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).message_page_message),
         bottom: TabBar(
+          dividerHeight: 0,
           controller: _tabController,
           tabs: [
             Tab(text: AppLocalizations.of(context).message_page_unread_message),

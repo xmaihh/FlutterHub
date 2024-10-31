@@ -1,6 +1,7 @@
 // empty_state.dart
 
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 class EmptyStateWidget extends StatelessWidget {
   final String message;
@@ -16,7 +17,7 @@ class EmptyStateWidget extends StatelessWidget {
     super.key,
     required this.message,
     this.subMessage,
-    this.icon = Icons.inbox_outlined,
+    this.icon = BoxIcons.bxs_inbox,
     this.iconSize = 64,
     this.iconColor,
     this.height,

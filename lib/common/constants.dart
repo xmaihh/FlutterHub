@@ -21,6 +21,12 @@ class Constants {
   static const String msgCountUnreadEndpoint = 'message/lg/count_unread/json';
   static String msgReadListEndpoint(int page) => "message/lg/readed_list/$page/json";
   static String msgUnreadListEndpoint(int page) => "message/lg/unread_list/$page/json";
+  static const String addTodoEndpoint = 'lg/todo/add/json';
+  static String editTodoEndpoint(int todoId) => "lg/todo/update/$todoId/json";
+  static String deleteTodoEndpoint(int todoId) => "lg/todo/delete/$todoId/json";
+  static String updateTodoCompletionStatusEndpoint(int todoId) => "lg/todo/done/$todoId/json";
+  static String todoListEndpoint(int page) => "lg/todo/v2/list/$page/json";
+
 
   // 缓存相关
   static const String userCacheKey = 'user_cache';
@@ -37,6 +43,7 @@ class Constants {
   static const String articleRoutePath = '/home/article';
   static const String favoriteRoutePath = '/mine/favorite';
   static const String messageRoutePath = '/mine/message';
+  static const String todoRoutePath = '/mine/todo';
 
   // UI相关
   static const double defaultPadding = 16.0;

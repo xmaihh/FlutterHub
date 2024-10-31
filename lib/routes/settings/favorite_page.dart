@@ -199,6 +199,7 @@ class _FavoritePageState extends State<FavoritePage> with SingleTickerProviderSt
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).favorite_page_favorites),
         bottom: TabBar(
+          dividerHeight: 0,
           controller: _tabController,
           tabs: [
             Tab(text: AppLocalizations.of(context).favorite_page_my_favorites),

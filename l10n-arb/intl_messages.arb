@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2024-10-25T16:14:20.077867",
+  "@@last_modified": "2024-10-31T17:30:01.886344",
   "app_name": "FlutterHub",
   "@app_name": {
     "type": "text",
@@ -276,6 +276,18 @@
   },
   "settings_app_license": "License",
   "@settings_app_license": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_code": "Code",
+  "@settings_code": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_issues": "Issue",
+  "@settings_issues": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
@@ -562,6 +574,54 @@
   },
   "dio_exception_error_dialog_ok": "OK",
   "@dio_exception_error_dialog_ok": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_todo": "TODO",
+  "@todo_page_todo": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_add_sheet_title_new_todo": "New Todo",
+  "@todo_page_add_sheet_title_new_todo": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_add_sheet_hint_text": "I have to...",
+  "@todo_page_add_sheet_hint_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_add_sheet_title_edit_todo": "Edit Todo",
+  "@todo_page_add_sheet_title_edit_todo": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_search_sheet_title_search": "Search *",
+  "@todo_page_search_sheet_title_search": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_search_sheet_hint_text": "Search for todo...",
+  "@todo_page_search_sheet_hint_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_empty_todos": "There's nothing here.",
+  "@todo_page_empty_todos": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_empty_todos_refresh": "refresh",
+  "@todo_page_empty_todos_refresh": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}

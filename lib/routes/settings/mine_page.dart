@@ -3,6 +3,7 @@ import 'package:flutter_hub/l10n/localization_intl.dart';
 import 'package:flutter_hub/services/index.dart';
 import 'package:flutter_hub/states/theme_state.dart';
 import 'package:flutter_hub/utils/app_version.dart';
+import 'package:flutter_hub/utils/url_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
@@ -105,12 +106,12 @@ class _MinePageState extends State<MinePage> {
         IconButton(
           icon: Icon(AntDesign.bug_outline),
           tooltip: 'Debug',
-          onPressed: () => debugPrint('Debug button is pressed.'),
+          onPressed: () => UrlLauncher.openUrl('https://github.com/xmaihh/FlutterHub/issues'),
         ),
         IconButton(
           icon: Icon(AntDesign.setting_outline),
           tooltip: 'Settings',
-          onPressed: () => debugPrint('Settings button is pressed.'),
+          onPressed: () => Navigator.pushNamed(context, Constants.aboutRoutePath),
         ),
       ],
     );
@@ -202,8 +203,12 @@ class _MinePageState extends State<MinePage> {
             ),
           ),
           Expanded(
-            child: _singleItemWidget(loc.settings_mine_menu_todo, 'imgs/nav_todo.svg', 0),
             flex: 1,
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(Constants.todoRoutePath);
+                },
+                child: _singleItemWidget(loc.settings_mine_menu_todo, 'imgs/nav_todo.svg', 0)),
           ),
           Expanded(
             flex: 1,

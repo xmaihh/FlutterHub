@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hub/common/constants.dart';
@@ -10,6 +12,8 @@ import '../models/index.dart';
 
 class ApiService {
   final ApiClient _apiClient;
+  bool _isShowingErrorDialog = false;
+  final _errorDialogQueue = Queue<String>();
 
   ApiService(this._apiClient);
 
@@ -51,23 +55,36 @@ class ApiService {
   }
 
   void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context).dio_exception_error_dialog_title),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text(AppLocalizations.of(context).dio_exception_error_dialog_ok),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    _errorDialogQueue.add(message);
+    if (!_isShowingErrorDialog) {
+      _isShowingErrorDialog = true;
+      _showErrorDialogHelper(context);
+    }
+  }
+
+  void _showErrorDialogHelper(BuildContext context) {
+    if (_errorDialogQueue.isNotEmpty) {
+      final msg = _errorDialogQueue.removeFirst(); // Get the next message
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context).dio_exception_error_dialog_title),
+            content: Text(msg),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context).dio_exception_error_dialog_ok),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _isShowingErrorDialog = false;
+                  _showErrorDialogHelper(context); // Show the next dialog if any
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   /// 个人信息接口
@@ -195,6 +212,65 @@ class ApiService {
       print(response.data.toString());
       if (response.statusCode == 200) {
         return ResponseModel<PaginationModel<Message>>.fromJson(response.data, (json) => PaginationModel<Message>.fromJson(json, Message.fromJson));
+      }
+      return null;
+    }, context);
+  }
+
+  /// 新增TODO
+  Future addTodo(BuildContext context, String title, String content, String date, {int type = 0, int priority = 0}) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.post(Constants.addTodoEndpoint,
+          data: FormData.fromMap({
+            "title": title,
+            "content": content,
+            "date": date,
+            "type": type,
+            "priority": priority,
+          }));
+      print(response.data.toString());
+    }, context);
+  }
+
+  /// 编辑TODO
+  Future editTodo(BuildContext context, int todoId, String newTitle, String newContent, String newDate, {int status = 0, int type = 0, int priority = 0}) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.post(Constants.editTodoEndpoint(todoId), data: FormData.fromMap({"title": newTitle, "content": newContent, "date": newDate, "status": status, "type": type, "priority": priority}));
+      print(response.data.toString());
+    }, context);
+  }
+
+  /// 删除TODO
+  Future deleteTodo(BuildContext context, int todoId) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.post(Constants.deleteTodoEndpoint(todoId));
+      print(response.data.toString());
+    }, context);
+  }
+
+  /// 更新TODO完成状态
+  Future updateTodoCompletionStatus(BuildContext context, int todoId, bool isComplete) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.post(Constants.updateTodoCompletionStatusEndpoint(todoId), data: FormData.fromMap({"status": isComplete ? 1 : 0}));
+      print(response.data.toString());
+      if (response.statusCode == 200) {}
+    }, context);
+  }
+
+  /// TODO列表
+  Future<ResponseModel<PaginationModel<Todo>>?> fetchTodoList(BuildContext context, int page) async {
+    return handleApiCall(() async {
+      final response = await _apiClient.post(Constants.todoListEndpoint(page),
+          data: FormData.fromMap({
+            // status 状态， 1-完成；0未完成; 默认全部展示；
+            // type 创建时传入的类型, 默认全部展示
+            // priority 创建时传入的优先级；默认全部展示
+            // orderby 1:完成日期顺序；2.完成日期逆序；3.创建日期顺序；4.创建日期逆序(默认)；
+            'orderby': 3
+          }));
+      print(response.data.toString());
+      if (response.statusCode == 200) {
+        return ResponseModel<PaginationModel<Todo>>.fromJson(response.data, (json) => PaginationModel<Todo>.fromJson(json, Todo.fromJson));
       }
       return null;
     }, context);

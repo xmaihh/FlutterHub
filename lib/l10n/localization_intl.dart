@@ -105,6 +105,10 @@ class AppLocalizations {
 
   String get settings_app_license => Intl.message('License', name: 'settings_app_license');
 
+  String get settings_code => Intl.message('Code', name: 'settings_code');
+
+  String get settings_issues => Intl.message('Issue', name: 'settings_issues');
+
   String get settings_mine_login_title => Intl.message('Login', name: 'settings_mine_login_title');
 
   String get settings_mine_login_subtitle_default => Intl.message('to get access to all the features', name: 'settings_mine_login_subtitle_default');
@@ -194,6 +198,22 @@ class AppLocalizations {
   String get dio_exception_error_dialog_title => Intl.message('Error', name: 'dio_exception_error_dialog_title');
 
   String get dio_exception_error_dialog_ok => Intl.message('OK', name: 'dio_exception_error_dialog_ok');
+
+  String get todo_page_todo => Intl.message('TODO', name: 'todo_page_todo');
+
+  String get todo_page_add_sheet_title_new_todo => Intl.message('New Todo', name: 'todo_page_add_sheet_title_new_todo');
+
+  String get todo_page_add_sheet_hint_text => Intl.message('I have to...', name: 'todo_page_add_sheet_hint_text');
+
+  String get todo_page_add_sheet_title_edit_todo => Intl.message('Edit Todo', name: 'todo_page_add_sheet_title_edit_todo');
+
+  String get todo_page_search_sheet_title_search => Intl.message('Search *', name: 'todo_page_search_sheet_title_search');
+
+  String get todo_page_search_sheet_hint_text => Intl.message('Search for todo...', name: 'todo_page_search_sheet_hint_text');
+
+  String get todo_page_empty_todos => Intl.message("There's nothing here.", name: 'todo_page_empty_todos');
+
+  String get todo_page_empty_todos_refresh => Intl.message('refresh', name: 'todo_page_empty_todos_refresh');
 }
 
 //Locale代理类

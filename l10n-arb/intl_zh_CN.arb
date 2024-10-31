@@ -281,6 +281,18 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "settings_code": "源代码",
+  "@settings_code": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings_issues": "问题反馈",
+  "@settings_issues": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "settings_mine_login_title": "立即登录",
   "@settings_mine_login_title": {
     "type": "text",
@@ -563,6 +575,54 @@
   },
   "dio_exception_error_dialog_ok": "确定",
   "@dio_exception_error_dialog_ok": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_todo": "待办事项",
+  "@todo_page_todo": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_add_sheet_title_new_todo": "新建待办事项",
+  "@todo_page_add_sheet_title_new_todo": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_add_sheet_hint_text": "写点什么…",
+  "@todo_page_add_sheet_hint_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_add_sheet_title_edit_todo": "编辑待办事项",
+  "@todo_page_add_sheet_title_edit_todo": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_search_sheet_title_search": "搜索…",
+  "@todo_page_search_sheet_title_search": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_search_sheet_hint_text": "关键词",
+  "@todo_page_search_sheet_hint_text": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_empty_todos": "没有待办事项",
+  "@todo_page_empty_todos": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "todo_page_empty_todos_refresh": "刷新一下",
+  "@todo_page_empty_todos_refresh": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
