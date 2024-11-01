@@ -5,6 +5,8 @@ import 'package:flutter_hub/l10n/localization_intl.dart';
 import 'package:flutter_hub/models/banner.dart' as hub;
 import 'package:flutter_hub/models/index.dart';
 import 'package:flutter_hub/services/index.dart';
+import 'package:flutter_hub/widgets/empty_state.dart';
+import 'package:flutter_hub/widgets/loading_indicator.dart';
 import 'package:flutter_hub/widgets/searchbar_with_hotwords.dart';
 import 'package:flutter_hub/widgets/show_toast.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -18,18 +20,19 @@ class _HomePageState extends State<HomePage> {
   List<hub.Banner> banners = [];
   List<Article> articles = [];
   int currentPage = 0;
-  bool isLoading = false;
+
+  bool loadingMore = false;
+  bool refreshing = false;
   bool hasMoreData = true;
   bool showTop = false;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   final _apiServer = getIt<ApiService>();
 
   @override
   void initState() {
     super.initState();
     fetchBanners();
-    fetchTopArticles();
-    fetchArticles();
+    fetchArticles(isRefresh: true);
     _scrollController.addListener(_onScroll);
   }
 
@@ -40,9 +43,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-      if (!isLoading && hasMoreData) {
-        fetchArticles();
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 50) {
+      if (!loadingMore && !refreshing && hasMoreData) {
+        fetchArticles(isRefresh: false);
       }
       if (_scrollController.offset < 200 && showTop) {
         setState(() {
@@ -67,61 +70,75 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> fetchTopArticles() async {
-    ResponseListModel<Article>? res = await _apiServer.fetchTopArticles(context);
-    if (res?.data != null) {
-      res?.data?.forEach((article) {
-        article.top = true;
-        debugPrint('置顶: ${article.title}');
-      });
+  Future<void> fetchArticles({required bool isRefresh}) async {
+    if (isRefresh) {
+      if (refreshing) return;
       setState(() {
-        articles.addAll(res?.data ?? []);
+        refreshing = true;
       });
-    }
-  }
-
-  Future<void> fetchArticles() async {
-    if (isLoading) return;
-    setState(() {
-      isLoading = true;
-    });
-
-    ResponseModel<PaginationModel<Article>>? res = await _apiServer.fetchArticles(currentPage, context);
-    if (res?.data != null) {
-      setState(() {
-        currentPage++;
-        articles.addAll(res?.data?.datas ?? []);
-        hasMoreData = !(res?.data?.over == true);
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _refreshData() async {
-    setState(() {
-      currentPage = 0;
-      articles.clear();
-    });
-    await fetchBanners();
-    await fetchTopArticles();
-    await fetchArticles();
-  }
-
-  Future<bool> _collect(int articleId) async {
-    ResponseModel? res = await _apiServer.collect(articleId, context);
-    if (res?.errorCode == 0) {
-      showToast(AppLocalizations.of(context).home_page_added_to_favorites);
-      return true;
     } else {
-      showToast("${res?.errorMsg}${res?.errorCode}");
-      return false;
+      if (loadingMore) return;
+      setState(() {
+        loadingMore = true;
+      });
+    }
+
+    try {
+      if (isRefresh) {
+        currentPage = 0;
+        articles.clear();
+        ResponseListModel<Article>? res = await _apiServer.fetchTopArticles(context, useCache: !isRefresh);
+        if (res?.data != null) {
+          res?.data?.forEach((article) {
+            article.top = true;
+            debugPrint('置顶: ${article.title}');
+          });
+          articles = res?.data ?? [];
+        }
+      }
+
+      List<Article> newArticles = [];
+      ResponseModel<PaginationModel<Article>>? res = await _apiServer.fetchArticles(currentPage, context, useCache: !isRefresh);
+      if (res?.data != null) {
+        setState(() {
+          newArticles = res?.data?.datas ?? [];
+          hasMoreData = !(res?.data?.over == true);
+        });
+      }
+
+      setState(() {
+        articles.addAll(newArticles);
+
+        if (hasMoreData) {
+          currentPage++;
+        }
+      });
+    } finally {
+      setState(() {
+        if (isRefresh) {
+          refreshing = false;
+        } else {
+          loadingMore = false;
+        }
+      });
     }
   }
 
-  Future<bool> _uncollect(int articleId) async {
-    ResponseModel? res = await _apiServer.uncollect(articleId, context);
+  Future<bool> _toggleCollection(int articleId, bool isCollecting) async {
+    ResponseModel? res;
+    if (isCollecting) {
+      res = await _apiServer.collect(articleId, context);
+      if (res?.errorCode == 0) {
+        showToast(AppLocalizations.of(context).home_page_added_to_favorites);
+      }
+    } else {
+      res = await _apiServer.uncollect(articleId, context);
+      if (res?.errorCode == 0) {
+        showToast(AppLocalizations.of(context).home_page_favorite_removed);
+      }
+    }
+
     if (res?.errorCode == 0) {
-      showToast(AppLocalizations.of(context).home_page_favorite_removed);
       return true;
     } else {
       showToast("${res?.errorMsg}${res?.errorCode}");
@@ -135,23 +152,32 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
           child: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: ListView(
+        onRefresh: () async {
+          await fetchBanners();
+          await fetchArticles(isRefresh: true);
+        },
+        child: CustomScrollView(
           controller: _scrollController,
-          padding: EdgeInsets.all(16),
-          children: [
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: SearchBarWithHotWords()),
-            SizedBox(height: 8.0),
-            _buildBanner(),
-            SizedBox(height: 24),
-            Text(
-              AppLocalizations.of(context).home_page_latest_articles,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            const SliverToBoxAdapter(
+              child: Padding(padding: EdgeInsets.all(16), child: SearchBarWithHotWords()),
             ),
-            SizedBox(height: 16),
+            // const SliverToBoxAdapter(child: SizedBox(height: 8.0)),
+            SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: _buildBanner())),
+            SliverToBoxAdapter(
+                child: Padding(
+              padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 16),
+              child: Text(
+                AppLocalizations.of(context).home_page_latest_articles,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            )),
             _buildArticleList(),
-            if (isLoading) Center(child: CircularProgressIndicator()),
-            if (!hasMoreData) Padding(padding: EdgeInsets.all(8.0), child: Center(child: Text(AppLocalizations.of(context).home_page_no_more_data))),
+            // 空状态显示
+            SliverToBoxAdapter(
+              child: articles.isEmpty && !refreshing ? EmptyStateWidget(message: '') : Container(height: 0),
+            )
           ],
         ),
       )),
@@ -180,7 +206,7 @@ class _HomePageState extends State<HomePage> {
         aspectRatio: 16 / 9,
         autoPlayCurve: Curves.fastOutSlowIn,
         enableInfiniteScroll: true,
-        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        autoPlayAnimationDuration: Duration(milliseconds: 900),
         viewportFraction: 0.8,
       ),
       items: banners.map((banner) {
@@ -192,7 +218,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                margin: EdgeInsets.symmetric(horizontal: 2.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
@@ -210,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,124 +270,130 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildArticleList() {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: articles.length,
-      separatorBuilder: (context, index) => SizedBox(height: 16),
-      itemBuilder: (context, index) {
-        final article = articles[index];
-        return InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, Constants.articleRoutePath, arguments: {'url': article.link, 'title': article.title, 'collect': article.collect});
-            },
-            child: Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          if (index == articles.length) {
+            // 只在加载更多时显示底部加载指示器
+            return loadingMore && hasMoreData ? LoadingIndicator() : Container(height: 0);
+          }
+          return _buildArticleItem(articles[index]);
+        },
+        childCount: articles.length + (loadingMore && hasMoreData ? 1 : 0),
+      ),
+    );
+  }
+
+  Widget _buildArticleItem(Article article) {
+    return InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, Constants.articleRoutePath, arguments: {'url': article.link, 'title': article.title, 'collect': article.collect});
+        },
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (article.top)
-                                    Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                      margin: EdgeInsets.only(bottom: 8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Text(
-                                        AppLocalizations.of(context).home_page_article_on_top,
-                                        style: TextStyle(color: Colors.white, fontSize: 12),
-                                      ),
-                                    ),
-                                  Text(
-                                    article.title,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 1, // 限制为一行
-                                    overflow: TextOverflow.ellipsis, // 超出长度时显示省略号
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (article.top)
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  margin: EdgeInsets.only(bottom: 8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
-                                ],
+                                  child: Text(
+                                    AppLocalizations.of(context).home_page_article_on_top,
+                                    style: TextStyle(color: Colors.white, fontSize: 12),
+                                  ),
+                                ),
+                              Text(
+                                article.title,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1, // 限制为一行
+                                overflow: TextOverflow.ellipsis, // 超出长度时显示省略号
                               ),
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                article.collect ? Icons.favorite : Icons.favorite_border,
-                                color: article.collect ? Colors.red : Colors.grey,
-                              ),
-                              onPressed: () async {
-                                // 先执行异步操作，根据结果来更新状态
-                                if (article.collect) {
-                                  // 如果已经收藏，则尝试取消收藏
-                                  bool result = await _uncollect(article.id);
-                                  if (result) {
-                                    setState(() {
-                                      article.collect = false;
-                                    });
-                                  }
-                                } else {
-                                  // 如果未收藏，则尝试收藏
-                                  bool result = await _collect(article.id);
-                                  if (result) {
-                                    setState(() {
-                                      article.collect = true;
-                                    });
-                                  }
-                                }
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          children: article.tags
-                              .map((tag) => Chip(
-                                    label: Text(tag.name, style: TextStyle(fontSize: 12)),
-                                    backgroundColor: Colors.blue.withOpacity(0.1),
-                                  ))
-                              .toList(),
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(Icons.person, size: 16, color: Colors.grey),
-                            SizedBox(width: 4),
-                            Text(
-                              article.author.isNotEmpty ? article.author : (article.shareUser.isNotEmpty ? article.shareUser : "Unknown"),
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            SizedBox(width: 16),
-                            Icon(Icons.access_time, size: 16, color: Colors.grey),
-                            SizedBox(width: 4),
-                            Text(
-                              article.niceDate,
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
+                        IconButton(
+                          icon: Icon(
+                            article.collect ? Icons.favorite : Icons.favorite_border,
+                            color: article.collect ? Colors.red : Colors.grey,
+                          ),
+                          onPressed: () async {
+                            // 先执行异步操作，根据结果来更新状态
+                            if (article.collect) {
+                              // 如果已经收藏，则尝试取消收藏
+                              bool result = await _toggleCollection(article.id, false);
+                              if (result) {
+                                setState(() {
+                                  article.collect = false;
+                                });
+                              }
+                            } else {
+                              // 如果未收藏，则尝试收藏
+                              bool result = await _toggleCollection(article.id, true);
+                              if (result) {
+                                setState(() {
+                                  article.collect = true;
+                                });
+                              }
+                            }
+                          },
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      children: article.tags
+                          .map((tag) => Chip(
+                                label: Text(tag.name, style: TextStyle(fontSize: 12)),
+                                backgroundColor: Colors.blue.withOpacity(0.1),
+                              ))
+                          .toList(),
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.person, size: 16, color: Colors.grey),
+                        SizedBox(width: 4),
+                        Text(
+                          article.author.isNotEmpty ? article.author : (article.shareUser.isNotEmpty ? article.shareUser : "Unknown"),
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        SizedBox(width: 16),
+                        Icon(Icons.access_time, size: 16, color: Colors.grey),
+                        SizedBox(width: 4),
+                        Text(
+                          article.niceDate,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ));
-      },
-    );
+            ],
+          ),
+        ));
   }
 }

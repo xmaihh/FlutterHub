@@ -112,9 +112,9 @@ class ApiService {
   }
 
   /// 首页-置顶文章
-  Future<ResponseListModel<Article>?> fetchTopArticles(BuildContext context) async {
+  Future<ResponseListModel<Article>?> fetchTopArticles(BuildContext context, {required bool useCache}) async {
     return handleApiCall(() async {
-      final response = await _apiClient.get(Constants.topArticlesEndpoint, useCache: false);
+      final response = await _apiClient.get(Constants.topArticlesEndpoint, useCache: useCache);
       Log.info(response.data.toString());
       if (response.statusCode == 200) {
         return ResponseListModel<Article>.fromJson(response.data, (json) => Article.fromJson(json));
@@ -124,9 +124,9 @@ class ApiService {
   }
 
   /// 首页-文章列表
-  Future<ResponseModel<PaginationModel<Article>>?> fetchArticles(int page, BuildContext context) async {
+  Future<ResponseModel<PaginationModel<Article>>?> fetchArticles(int page, BuildContext context, {required bool useCache}) async {
     return handleApiCall(() async {
-      final response = await _apiClient.get(Constants.articlesEndpoint(page), useCache: false);
+      final response = await _apiClient.get(Constants.articlesEndpoint(page), useCache: useCache);
       print(response.data.toString());
       if (response.statusCode == 200) {
         return ResponseModel<PaginationModel<Article>>.fromJson(response.data, (json) => PaginationModel<Article>.fromJson(json, Article.fromJson));
